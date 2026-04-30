@@ -479,7 +479,18 @@ async function generate() {
       return;
     }
 
-    const fullText = await res.text();
+    const rawText = await res.text();
+let fullText = rawText;
+try {
+  const parsed = JSON.parse(rawText);
+  if (Array.isArray(parsed)) {
+    fullText = parsed.map(b => b.text || '').join('');
+  } else if (parsed && parsed.text) {
+    fullText = parsed.text;
+  }
+} catch(e) {
+  fullText = rawText;
+}
 
     if (!fullText || fullText.length < 50) {
       showError('Réponse vide. Vérifiez que le scénario Make est actif et que la connexion Anthropic est configurée.');
