@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liberty FIT — Agent Kensington</title>
+<title>Liberty FIT — Agent IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -13,41 +13,104 @@
     --mid: #5F5E5A; --muted: #888780; --border: #D3D1C7;
     --bg: #F2F0EA; --bgcard: #FAFAF7; --white: #ffffff;
     --red: #791F1F; --redbg: #FCEBEB; --redborder: #F09595;
-    --green: #3B6D11;
+    --green: #3B6D11; --amber: #7A5C00; --amberbg: #FFF8E1; --amberborder: #F0D080;
   }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+
+  /* HEADER */
   header { background: var(--dark); padding: 0 40px; height: 64px; display: flex; align-items: center; gap: 18px; }
   .logo-diamond { width: 36px; height: 36px; background: var(--gold); transform: rotate(45deg); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .logo-diamond span { transform: rotate(-45deg); font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: var(--dark); }
   .header-text h1 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--gold); letter-spacing: 0.3px; }
   .header-text p { font-size: 10px; color: #9A9890; letter-spacing: 1.8px; text-transform: uppercase; margin-top: 1px; }
+
+  /* MAIN */
   .main { max-width: 900px; margin: 0 auto; padding: 36px 24px; }
   .section-label { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 10px; }
+
+  /* MODE SELECTOR */
+  .mode-selector { display: flex; gap: 10px; margin-bottom: 24px; }
+  .mode-btn {
+    flex: 1; padding: 16px 20px; border: 0.5px solid var(--border); border-radius: 10px;
+    background: var(--white); cursor: pointer; text-align: left;
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .mode-btn:hover { border-color: var(--mid); }
+  .mode-btn.active { background: var(--dark); border-color: var(--dark); }
+  .mode-icon {
+    width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; font-size: 16px;
+    background: var(--bg); transition: background 0.2s;
+  }
+  .mode-btn.active .mode-icon { background: rgba(240,233,138,0.15); }
+  .mode-info { display: flex; flex-direction: column; gap: 2px; }
+  .mode-name { font-size: 13px; font-weight: 500; color: var(--dark); transition: color 0.2s; }
+  .mode-btn.active .mode-name { color: var(--gold); }
+  .mode-desc { font-size: 11px; color: var(--muted); transition: color 0.2s; }
+  .mode-btn.active .mode-desc { color: #9A9890; }
+
+  /* INPUT CARD */
   .input-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
-  textarea { width: 100%; min-height: 200px; border: 0.5px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--dark); line-height: 1.7; resize: vertical; background: var(--bgcard); outline: none; transition: border-color 0.2s; }
+  .input-label { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 10px; }
+  textarea {
+    width: 100%; min-height: 200px; border: 0.5px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    color: var(--dark); line-height: 1.7; resize: vertical; background: var(--bgcard);
+    outline: none; transition: border-color 0.2s;
+  }
   textarea:focus { border-color: var(--dark); background: var(--white); }
   textarea::placeholder { color: var(--border); }
   .actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
-  .btn-generate { background: var(--dark); color: var(--gold); border: none; border-radius: 8px; padding: 13px 32px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s, transform 0.1s; }
+  .btn-generate {
+    background: var(--dark); color: var(--gold); border: none; border-radius: 8px;
+    padding: 13px 32px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 10px;
+    transition: background 0.2s, transform 0.1s;
+  }
   .btn-generate:hover { background: var(--dark2); }
   .btn-generate:active { transform: scale(0.98); }
   .btn-generate:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; }
   .spinner { width: 15px; height: 15px; border: 2px solid rgba(240,233,138,0.25); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.75s linear infinite; display: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .hint { font-size: 12px; color: var(--muted); }
-  .error-box { background: var(--redbg); border: 0.5px solid var(--redborder); border-radius: 8px; padding: 13px 16px; font-size: 13px; color: var(--red); margin-top: 16px; display: none; line-height: 1.6; }
+  .error-box {
+    background: var(--redbg); border: 0.5px solid var(--redborder); border-radius: 8px;
+    padding: 13px 16px; font-size: 13px; color: var(--red); margin-top: 16px;
+    display: none; line-height: 1.6;
+  }
+
+  /* WEBHOOK NOTICE */
+  .webhook-notice {
+    background: var(--amberbg); border: 0.5px solid var(--amberborder); border-radius: 8px;
+    padding: 10px 14px; font-size: 12px; color: var(--amber); margin-bottom: 16px;
+    display: none; line-height: 1.6; align-items: flex-start; gap: 8px;
+  }
+  .webhook-notice.visible { display: flex; }
+
+  /* OUTPUT */
   .output-section { display: none; margin-top: 32px; }
   .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .output-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--dark); }
   .output-badge { background: var(--gold); color: var(--dark); font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+  .output-mode-tag { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-left: 10px; }
+
+  /* TABS */
   .tabs { display: flex; border-bottom: 0.5px solid var(--border); }
-  .tab { padding: 11px 24px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: color 0.2s, border-color 0.2s; user-select: none; }
+  .tab {
+    padding: 11px 24px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+    font-weight: 500; color: var(--muted); cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -0.5px;
+    transition: color 0.2s, border-color 0.2s; user-select: none;
+  }
   .tab:hover:not(.active) { color: var(--mid); }
   .tab.active { color: var(--dark); border-bottom-color: var(--dark); }
   .tab-badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 9px; font-weight: 500; padding: 1px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
   .panel { background: var(--white); border: 0.5px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; padding: 24px; display: none; }
   .panel.active { display: block; }
   .content-block { font-size: 13px; color: var(--dark); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
+
+  /* MAIL BLOCKS */
   .mail-block { border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
   .mail-block-header { background: var(--bgcard); border-bottom: 0.5px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
   .mail-number { width: 22px; height: 22px; background: var(--dark); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; flex-shrink: 0; }
@@ -55,12 +118,17 @@
   .mail-meta-service { font-size: 12px; font-weight: 500; color: var(--dark); }
   .mail-meta-dest { font-size: 11px; color: var(--muted); margin-top: 1px; }
   .mail-body { padding: 16px; font-size: 13px; color: var(--dark); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
+
+  /* PANEL FOOTER */
   .panel-footer { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 0.5px solid var(--border); }
   .btn-copy { background: transparent; border: 0.5px solid var(--border); border-radius: 6px; padding: 7px 18px; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
   .btn-copy:hover { border-color: var(--dark); color: var(--dark); }
   .btn-copy.copied { border-color: var(--green); color: var(--green); }
   .btn-reset { background: transparent; border: none; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 7px 0; transition: color 0.2s; }
   .btn-reset:hover { color: var(--dark); }
+
+  /* QUOTES specific — alert email tab */
+  .alert-tag { display: inline-block; background: var(--amberbg); border: 0.5px solid var(--amberborder); color: var(--amber); font-size: 9px; font-weight: 500; padding: 1px 7px; border-radius: 3px; margin-left: 6px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.8px; }
 </style>
 </head>
 <body>
@@ -68,15 +136,39 @@
 <header>
   <div class="logo-diamond"><span>L</span></div>
   <div class="header-text">
-    <h1>Liberty FIT — Agent Kensington</h1>
-    <p>Coordination TMT</p>
+    <h1>Liberty FIT — Agent IA</h1>
+    <p>Coordination &amp; Quotes</p>
   </div>
 </header>
 
 <div class="main">
-  <div class="section-label">Contenu du TMT Kensington</div>
+
+  <div class="section-label">Mode de traitement</div>
+  <div class="mode-selector">
+    <button class="mode-btn active" id="mode-kensington" onclick="setMode('kensington')">
+      <div class="mode-icon">📋</div>
+      <div class="mode-info">
+        <div class="mode-name">Agent Kensington</div>
+        <div class="mode-desc">Parsing TMT → fiche de coordination + mails prestataires</div>
+      </div>
+    </button>
+    <button class="mode-btn" id="mode-quotes" onclick="setMode('quotes')">
+      <div class="mode-icon">✦</div>
+      <div class="mode-info">
+        <div class="mode-name">Agent Quotes</div>
+        <div class="mode-desc">Brief client → itinéraire FIT haut de gamme</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="webhook-notice" id="webhook-notice">
+    <span>⚠</span>
+    <span id="webhook-notice-text"></span>
+  </div>
+
   <div class="input-card">
-    <textarea id="tmt-input" placeholder="Coller ici le texte copié depuis le TMT Kensington (tous les jours du séjour France)..."></textarea>
+    <div class="input-label" id="input-label">Contenu du TMT Kensington</div>
+    <textarea id="main-input" placeholder="Coller ici le texte copié depuis le TMT Kensington (tous les jours du séjour France)..."></textarea>
     <div class="actions">
       <button class="btn-generate" id="gen-btn" onclick="generate()">
         <div class="spinner" id="spinner"></div>
@@ -89,34 +181,82 @@
 
   <div class="output-section" id="output-section">
     <div class="output-header">
-      <span class="output-title">Résultats</span>
+      <div style="display:flex;align-items:baseline;gap:8px;">
+        <span class="output-title">Résultats</span>
+        <span class="output-mode-tag" id="output-mode-tag"></span>
+      </div>
       <span class="output-badge" id="ref-badge"></span>
     </div>
-    <div class="tabs">
-      <div class="tab active" id="tab-fiche" onclick="switchTab('fiche')">Fiche de coordination</div>
-      <div class="tab" id="tab-mails" onclick="switchTab('mails')">Mails prestataires <span class="tab-badge" id="mail-count"></span></div>
-    </div>
-    <div class="panel active" id="panel-fiche">
-      <div class="content-block" id="fiche-content"></div>
-      <div class="panel-footer">
-        <button class="btn-copy" id="copy-fiche" onclick="copyTab('fiche')">Copier</button>
-        <button class="btn-reset" onclick="reset()">Nouveau dossier</button>
+
+    <!-- KENSINGTON TABS -->
+    <div id="kt-tabs-wrapper">
+      <div class="tabs">
+        <div class="tab active" id="tab-fiche" onclick="switchTabKT('fiche')">Fiche de coordination</div>
+        <div class="tab" id="tab-mails" onclick="switchTabKT('mails')">Mails prestataires <span class="tab-badge" id="mail-count"></span></div>
+      </div>
+      <div class="panel active" id="panel-fiche">
+        <div class="content-block" id="fiche-content"></div>
+        <div class="panel-footer">
+          <button class="btn-copy" id="copy-fiche" onclick="copyContent('fiche-content', 'copy-fiche', 'Copier')">Copier</button>
+          <button class="btn-reset" onclick="reset()">Nouveau dossier</button>
+        </div>
+      </div>
+      <div class="panel" id="panel-mails">
+        <div id="mails-content"></div>
+        <div class="panel-footer">
+          <button class="btn-copy" id="copy-mails" onclick="copyRawText('mailsRaw', 'copy-mails', 'Copier tout')">Copier tout</button>
+          <button class="btn-reset" onclick="reset()">Nouveau dossier</button>
+        </div>
       </div>
     </div>
-    <div class="panel" id="panel-mails">
-      <div id="mails-content"></div>
-      <div class="panel-footer">
-        <button class="btn-copy" id="copy-mails" onclick="copyTab('mails')">Copier tout</button>
-        <button class="btn-reset" onclick="reset()">Nouveau dossier</button>
+
+    <!-- QUOTES TABS -->
+    <div id="qt-tabs-wrapper" style="display:none;">
+      <div class="tabs">
+        <div class="tab active" id="qtab-interne" onclick="switchTabQT('interne')">Fiche interne</div>
+        <div class="tab" id="qtab-client" onclick="switchTabQT('client')">Programme client</div>
+        <div class="tab" id="qtab-email" onclick="switchTabQT('email')">Email questions<span class="alert-tag" id="email-alert-tag" style="display:none;">Incomplet</span></div>
+      </div>
+      <div class="panel active" id="qpanel-interne">
+        <div class="content-block" id="quote-interne-content"></div>
+        <div class="panel-footer">
+          <button class="btn-copy" id="copy-interne" onclick="copyContent('quote-interne-content', 'copy-interne', 'Copier')">Copier</button>
+          <button class="btn-reset" onclick="reset()">Nouveau brief</button>
+        </div>
+      </div>
+      <div class="panel" id="qpanel-client">
+        <div class="content-block" id="quote-client-content"></div>
+        <div class="panel-footer">
+          <button class="btn-copy" id="copy-client" onclick="copyContent('quote-client-content', 'copy-client', 'Copier')">Copier</button>
+          <button class="btn-reset" onclick="reset()">Nouveau brief</button>
+        </div>
+      </div>
+      <div class="panel" id="qpanel-email">
+        <div class="content-block" id="quote-email-content"></div>
+        <div class="panel-footer">
+          <button class="btn-copy" id="copy-email" onclick="copyContent('quote-email-content', 'copy-email', 'Copier')">Copier</button>
+          <button class="btn-reset" onclick="reset()">Nouveau brief</button>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
 
 <script>
-const MAKE_WEBHOOK = 'https://hook.eu1.make.com/2mp8ancoa1l53tg75x7wvea45bvbmcw8';
+// ─── CONFIGURATION ───────────────────────────────────────────────────────────
+// Remplacer les valeurs ci-dessous par les vrais webhooks Make
 
-const SYSTEM_PROMPT = `Tu es un assistant opérationnel pour Liberty Incentives & Congresses France, DMC haut de gamme basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 personnes), client principal : Kensington Tours (KT).
+const WEBHOOKS = {
+  kensington: 'https://hook.eu1.make.com/2mp8ancoa1l53tg75x7wvea45bvbmcw8',
+  quotes:     'https://hook.eu1.make.com/vj8jql1msq2ukwkj22o5yc98fx5unhv1'
+};
+
+// ─── PROMPTS ─────────────────────────────────────────────────────────────────
+
+const PROMPTS = {
+
+kensington: `Tu es un assistant opérationnel pour Liberty Incentives & Congresses France, DMC haut de gamme basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 personnes), client principal : Kensington Tours (KT).
 
 PÉRIMÈTRE : France uniquement. Services hors France : ignorer, signaler en début de fiche.
 
@@ -145,19 +285,19 @@ FICHE DE COORDINATION LIBERTY — FIT / Dossier vierge
 RÉFÉRENCE DOSSIER : Référence KT / Titre / Chef de projet [À ASSIGNER] / Date de création / Agent KT / Statut
 Périmètre France / Hors périmètre
 1. PROFIL VOYAGEUR : PAX / Composition / Vols arrivée / Vols départ / Niveau de service / Notes client
-2. SERVICES JOUR PAR JOUR (France uniquement) : pour chaque jour et service : Prod Code / Durée / Horaire / PAX / Véhicule / Statut / Mail à lancer / Notes
-3. POINTS DE VIGILANCE : Services EXCLUDED / Informations manquantes / Notes KT / Demandes spéciales / Délais courts
-4. ACTIONS À LANCER AUJOURD'HUI : Priorité haute / Priorité normale / À faire avant [date]
+2. SERVICES À COORDONNER jour par jour : pour chaque service : intitulé exact, Prod Code, Durée, Horaire, PAX, Véhicule, Statut, Mail à lancer
+   Pour les hôtels : Nom exact, type chambre, configuration, nuits, Statut, Mail à lancer
+3. POINTS DE VIGILANCE : services EXCLUDED / informations manquantes / notes KT / demandes spéciales / délais courts
+4. ACTIONS À LANCER AUJOURD'HUI : priorité haute / priorité normale / avec échéances
 
-FORMAT MAILS (après ===OUTPUT2===) :
-Pour chaque service Mail à lancer OUI :
+FORMAT MAILS (Output 2) :
+Séparer chaque mail par ---MAIL---
+Pour chaque mail :
+SERVICE : [intitulé exact]
+JOUR : [date]
+DESTINATAIRE : [type de prestataire attendu]
 
----MAIL---
-SERVICE : [intitulé exact du service]
-JOUR : [date complète]
-DESTINATAIRE : [À COMPLÉTER — type de prestataire attendu]
-
-Objet : Demande de disponibilité — [intitulé exact] — [DATE] — Réf. [REF KT]
+Objet : Demande de disponibilité — [intitulé exact] — [DATE] — Réf. [RÉFÉRENCE KT]
 
 Madame, Monsieur,
 
@@ -180,36 +320,137 @@ Chef de projet FIT
 Liberty Incentives & Congresses France
 116 avenue Gabriel Péri, 93400 Saint-Ouen
 france@liberty-int.com
-www.liberty-int.com`;
+www.liberty-int.com`,
 
-let ficheText = '';
-let mailsText = '';
+quotes: `Tu es un assistant spécialisé en conception d'itinéraires FIT haut de gamme pour Liberty Incentives & Congresses France, DMC premium basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 voyageurs).
 
-function switchTab(tab) {
+Liberty reçoit des demandes de quote (briefs) de clients variés : tour-opérateurs, agences de voyage, entreprises, particuliers premium. Ces briefs arrivent en anglais ou en français, avec des niveaux de détail très variables.
+
+PÉRIMÈTRE : France uniquement. Si le brief mentionne d'autres pays, traiter uniquement les étapes françaises et le signaler.
+
+RÈGLES ABSOLUES :
+- Ne jamais inventer de tarifs, disponibilités ou références de prestataires spécifiques à Liberty.
+- Si tu suggères un hôtel ou une expérience, préciser : [SUGGESTION — à valider en base Liberty]
+- Signaler toutes les hypothèses avec la mention [HYPOTHÈSE].
+- Ne jamais utiliser de tirets cadratins dans les textes français.
+- Ton premium constant, sobre, sans superlatifs vides.
+- Version interne en français / version client en anglais.
+
+ÉTAPE 0 — ÉVALUATION DU BRIEF :
+Avant tout output, évaluer si le brief contient des manques BLOQUANTS.
+Manque BLOQUANT = sans cette info, impossible de construire un itinéraire cohérent.
+Exemples : dates inconnues, destination trop floue, nombre de voyageurs absent.
+Manque NON BLOQUANT = formuler une hypothèse raisonnable notée [HYPOTHÈSE] et proposer quand même.
+
+SI MANQUES BLOQUANTS : générer uniquement l'email de questions (Output 0), sans itinéraire.
+SI BRIEF SUFFISANT : générer directement Output 1 et Output 2.
+
+Génère les outputs séparés par les marqueurs suivants :
+- Email questions (si nécessaire) : entre ===OUTPUT0_START=== et ===OUTPUT0_END===
+- Fiche interne : entre ===OUTPUT1_START=== et ===OUTPUT1_END===
+- Programme client : entre ===OUTPUT2_START=== et ===OUTPUT2_END===
+
+FORMAT OUTPUT 0 (si brief insuffisant) :
+Email sobre dans la langue du brief. Maximum 5 questions priorisées.
+Objet : Re: [Sujet du brief reçu]
+
+FORMAT OUTPUT 1 — FICHE INTERNE (français) :
+FICHE QUOTE LIBERTY — FIT
+RÉFÉRENCE QUOTE : Client final / Intermédiaire / Chef de projet [À ASSIGNER] / Date de réception / Deadline réponse
+1. PROFIL VOYAGEUR : PAX / Profil / Niveau de service / Budget indiqué / Contraintes / Notes client
+2. SYNTHÈSE DU BRIEF : Destinations France / Dates / Durée totale / Centres d'intérêt / Hébergement souhaité / Services souhaités / Éléments spéciaux / Hypothèses formulées
+3. ITINÉRAIRE PROPOSÉ jour par jour : Hébergement / Matin / Après-midi / Soir / Transferts / Notes
+4. SERVICES À SOURCER : liste consolidée chronologique avec [SUGGESTION] ou [À SOURCER]
+5. POINTS D'ATTENTION : éléments spéciaux / contraintes logistiques / hypothèses à valider / hors périmètre
+
+FORMAT OUTPUT 2 — PROGRAMME CLIENT (anglais) :
+Ton premium, sobre, évocateur. Adapté au profil client. Pas de tarifs, pas de mentions internes.
+Pas de [HYPOTHÈSE] ni [SUGGESTION]. Programme narratif donnant envie.
+[CLIENT NAME] — [TITLE OF THE JOURNEY]
+[DATES] — [N] nights
+DAY [N] — [DATE] — [DESTINATION]
+[Paragraphe narratif 3 à 5 lignes : lieu, expérience, ambiance, points forts]
+Accommodation: [nom ou type]
+Terminer par : Please note: This is a preliminary itinerary proposal. Final programme, inclusions and pricing will be confirmed upon your approval of this outline.
+Liberty Incentives & Congresses France — france@liberty-int.com — www.liberty-int.com`
+
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+
+let currentMode = 'kensington';
+let mailsRaw = '';
+
+// ─── MODE SWITCHING ───────────────────────────────────────────────────────────
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-kensington').classList.toggle('active', mode === 'kensington');
+  document.getElementById('mode-quotes').classList.toggle('active', mode === 'quotes');
+
+  const inputLabel = document.getElementById('input-label');
+  const textarea = document.getElementById('main-input');
+  const btnLabel = document.getElementById('btn-label');
+  const notice = document.getElementById('webhook-notice');
+  const noticeText = document.getElementById('webhook-notice-text');
+
+  if (mode === 'kensington') {
+    inputLabel.textContent = 'Contenu du TMT Kensington';
+    textarea.placeholder = 'Coller ici le texte copié depuis le TMT Kensington (tous les jours du séjour France)...';
+    btnLabel.textContent = 'Générer la fiche et les mails';
+    if (WEBHOOKS.kensington.includes('make.com') && !WEBHOOKS.kensington.includes('ICI')) {
+      notice.classList.remove('visible');
+    } else {
+      noticeText.textContent = 'Webhook Kensington non configuré. Remplacer KENSINGTON_WEBHOOK_URL_ICI dans le code.';
+      notice.classList.add('visible');
+    }
+  } else {
+    inputLabel.textContent = 'Brief client (Quotes)';
+    textarea.placeholder = 'Coller ici le brief reçu (Kensington, autre agence, client direct). Anglais ou français accepté...';
+    btnLabel.textContent = "Générer l'itinéraire";
+    if (WEBHOOKS.quotes.includes('ICI')) {
+      noticeText.textContent = "Webhook Quotes non encore configuré. Créer le scénario Make correspondant et remplacer QUOTES_WEBHOOK_URL_ICI dans le code.";
+      notice.classList.add('visible');
+    } else {
+      notice.classList.remove('visible');
+    }
+  }
+
+  reset(false);
+}
+
+// ─── TAB SWITCHING ────────────────────────────────────────────────────────────
+
+function switchTabKT(tab) {
   ['fiche','mails'].forEach(t => {
     document.getElementById('tab-' + t).classList.toggle('active', t === tab);
     document.getElementById('panel-' + t).classList.toggle('active', t === tab);
   });
 }
 
-function reset() {
-  document.getElementById('tmt-input').value = '';
-  document.getElementById('output-section').style.display = 'none';
-  document.getElementById('error-box').style.display = 'none';
-  ficheText = ''; mailsText = '';
-  switchTab('fiche');
-  window.scrollTo(0, 0);
+function switchTabQT(tab) {
+  ['interne','client','email'].forEach(t => {
+    document.getElementById('qtab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('qpanel-' + t).classList.toggle('active', t === tab);
+  });
 }
 
-function showError(msg) {
-  const box = document.getElementById('error-box');
-  box.textContent = msg;
-  box.style.display = 'block';
-}
+// ─── GENERATE ─────────────────────────────────────────────────────────────────
 
 async function generate() {
-  const input = document.getElementById('tmt-input').value.trim();
-  if (!input) { showError('Veuillez coller le contenu du TMT avant de générer.'); return; }
+  const input = document.getElementById('main-input').value.trim();
+  if (!input) {
+    showError(currentMode === 'kensington'
+      ? 'Veuillez coller le contenu du TMT avant de générer.'
+      : 'Veuillez coller le brief client avant de générer.');
+    return;
+  }
+
+  const webhookUrl = WEBHOOKS[currentMode];
+  if (webhookUrl.includes('ICI')) {
+    showError('Le webhook pour ce mode n\'est pas encore configuré. Voir la notice en haut de page.');
+    return;
+  }
 
   const btn = document.getElementById('gen-btn');
   const spinner = document.getElementById('spinner');
@@ -224,9 +465,10 @@ async function generate() {
   document.getElementById('output-section').style.display = 'none';
 
   try {
-    const payload = SYSTEM_PROMPT + '\n\n===TMT===\n\n' + input;
+    const markerKT = currentMode === 'kensington' ? '\n\n===TMT===\n\n' : '\n\n===BRIEF===\n\n';
+    const payload = PROMPTS[currentMode] + markerKT + input;
 
-    const res = await fetch(MAKE_WEBHOOK, {
+    const res = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: payload
@@ -244,47 +486,13 @@ async function generate() {
       return;
     }
 
-    const marker = '===OUTPUT2===';
-    const idx = fullText.indexOf(marker);
-    ficheText = idx !== -1 ? fullText.substring(0, idx).trim() : fullText.trim();
-    mailsText = idx !== -1 ? fullText.substring(idx + marker.length).trim() : '';
-
-    document.getElementById('fiche-content').textContent = ficheText;
-
-    const refMatch = ficheText.match(/Référence KT\s*:\s*([^\n]+)/);
-    if (refMatch) document.getElementById('ref-badge').textContent = refMatch[1].trim();
-
-    const mailsContainer = document.getElementById('mails-content');
-    mailsContainer.innerHTML = '';
-    let mailCount = 0;
-
-    if (mailsText) {
-      const blocks = mailsText.split('---MAIL---').map(b => b.trim()).filter(b => b.length > 10);
-      mailCount = blocks.length;
-      blocks.forEach((block, i) => {
-        const lines = block.split('\n');
-        let service = '', jour = '', dest = '', bodyLines = [];
-        let inBody = false;
-        lines.forEach(l => {
-          if (!inBody) {
-            if (l.startsWith('SERVICE :')) service = l.replace('SERVICE :', '').trim();
-            else if (l.startsWith('JOUR :')) jour = l.replace('JOUR :', '').trim();
-            else if (l.startsWith('DESTINATAIRE :')) { dest = l.replace('DESTINATAIRE :', '').trim(); inBody = true; }
-          } else { bodyLines.push(l); }
-        });
-        const body = bodyLines.join('\n').trim();
-        const div = document.createElement('div');
-        div.className = 'mail-block';
-        div.innerHTML = `<div class="mail-block-header"><div class="mail-number">${i+1}</div><div class="mail-meta"><div class="mail-meta-service">${service || 'Service ' + (i+1)}</div><div class="mail-meta-dest">${jour}${dest ? ' · ' + dest : ''}</div></div></div><div class="mail-body">${body.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
-        mailsContainer.appendChild(div);
-      });
+    if (currentMode === 'kensington') {
+      renderKensington(fullText);
     } else {
-      mailsContainer.innerHTML = '<p style="font-size:13px;color:#888780;padding:8px 0;">Aucun mail à générer pour ce dossier.</p>';
+      renderQuotes(fullText);
     }
 
-    document.getElementById('mail-count').textContent = mailCount;
     document.getElementById('output-section').style.display = 'block';
-    switchTab('fiche');
     document.getElementById('output-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   } catch(e) {
@@ -292,21 +500,147 @@ async function generate() {
   } finally {
     btn.disabled = false;
     spinner.style.display = 'none';
-    label.textContent = 'Générer la fiche et les mails';
+    label.textContent = currentMode === 'kensington' ? 'Générer la fiche et les mails' : "Générer l'itinéraire";
     hint.textContent = '';
   }
 }
 
-function copyTab(tab) {
-  const text = tab === 'fiche' ? ficheText : mailsText;
-  const btnId = tab === 'fiche' ? 'copy-fiche' : 'copy-mails';
+// ─── RENDER KENSINGTON ────────────────────────────────────────────────────────
+
+function renderKensington(fullText) {
+  document.getElementById('kt-tabs-wrapper').style.display = 'block';
+  document.getElementById('qt-tabs-wrapper').style.display = 'none';
+  document.getElementById('output-mode-tag').textContent = 'Kensington TMT';
+
+  const marker = '===OUTPUT2===';
+  const idx = fullText.indexOf(marker);
+  const ficheText = idx !== -1 ? fullText.substring(0, idx).trim() : fullText.trim();
+  mailsRaw = idx !== -1 ? fullText.substring(idx + marker.length).trim() : '';
+
+  document.getElementById('fiche-content').textContent = ficheText;
+
+  const refMatch = ficheText.match(/Référence KT\s*:\s*([^\n]+)/);
+  if (refMatch) document.getElementById('ref-badge').textContent = refMatch[1].trim();
+
+  const mailsContainer = document.getElementById('mails-content');
+  mailsContainer.innerHTML = '';
+  let mailCount = 0;
+
+  if (mailsRaw) {
+    const blocks = mailsRaw.split('---MAIL---').map(b => b.trim()).filter(b => b.length > 10);
+    mailCount = blocks.length;
+    blocks.forEach((block, i) => {
+      const lines = block.split('\n');
+      let service = '', jour = '', dest = '', bodyLines = [];
+      let inBody = false;
+      lines.forEach(l => {
+        if (!inBody) {
+          if (l.startsWith('SERVICE :')) service = l.replace('SERVICE :', '').trim();
+          else if (l.startsWith('JOUR :')) jour = l.replace('JOUR :', '').trim();
+          else if (l.startsWith('DESTINATAIRE :')) { dest = l.replace('DESTINATAIRE :', '').trim(); inBody = true; }
+        } else { bodyLines.push(l); }
+      });
+      const body = bodyLines.join('\n').trim();
+      const div = document.createElement('div');
+      div.className = 'mail-block';
+      div.innerHTML = `<div class="mail-block-header"><div class="mail-number">${i+1}</div><div class="mail-meta"><div class="mail-meta-service">${service || 'Service ' + (i+1)}</div><div class="mail-meta-dest">${jour}${dest ? ' · ' + dest : ''}</div></div></div><div class="mail-body">${escHtml(body)}</div>`;
+      mailsContainer.appendChild(div);
+    });
+  } else {
+    mailsContainer.innerHTML = '<p style="font-size:13px;color:#888780;padding:8px 0;">Aucun mail à générer pour ce dossier.</p>';
+  }
+
+  document.getElementById('mail-count').textContent = mailCount;
+  switchTabKT('fiche');
+}
+
+// ─── RENDER QUOTES ────────────────────────────────────────────────────────────
+
+function renderQuotes(fullText) {
+  document.getElementById('kt-tabs-wrapper').style.display = 'none';
+  document.getElementById('qt-tabs-wrapper').style.display = 'block';
+  document.getElementById('output-mode-tag').textContent = 'Quote FIT';
+
+  const extract = (start, end) => {
+    const s = fullText.indexOf(start);
+    const e = fullText.indexOf(end);
+    if (s === -1 || e === -1) return '';
+    return fullText.substring(s + start.length, e).trim();
+  };
+
+  const output0 = extract('===OUTPUT0_START===', '===OUTPUT0_END===');
+  const output1 = extract('===OUTPUT1_START===', '===OUTPUT1_END===');
+  const output2 = extract('===OUTPUT2_START===', '===OUTPUT2_END===');
+
+  // Si brief insuffisant : pas d'itinéraire, seulement l'email
+  const briefInsuffisant = output0 && (!output1 && !output2);
+
+  document.getElementById('quote-interne-content').textContent = output1 || '(Aucune fiche interne générée — le brief était insuffisant. Voir l\'onglet "Email questions".)';
+  document.getElementById('quote-client-content').textContent = output2 || '(Aucun programme client généré — le brief était insuffisant. Voir l\'onglet "Email questions".)';
+  document.getElementById('quote-email-content').textContent = output0 || '(Aucun email de questions — le brief était suffisant pour générer un itinéraire.)';
+
+  // Badge alerte sur onglet email si brief insuffisant
+  const alertTag = document.getElementById('email-alert-tag');
+  alertTag.style.display = briefInsuffisant ? 'inline-block' : 'none';
+
+  // Référence depuis la fiche interne
+  if (output1) {
+    const refMatch = output1.match(/Client final\s*:\s*([^\n]+)/);
+    if (refMatch) document.getElementById('ref-badge').textContent = refMatch[1].trim();
+  }
+
+  // Activer le bon onglet par défaut
+  if (briefInsuffisant) {
+    switchTabQT('email');
+  } else {
+    switchTabQT('interne');
+  }
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showError(msg) {
+  const box = document.getElementById('error-box');
+  box.textContent = msg;
+  box.style.display = 'block';
+}
+
+function copyContent(contentId, btnId, defaultLabel) {
+  const text = document.getElementById(contentId).textContent;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById(btnId);
     btn.textContent = 'Copié';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = tab === 'mails' ? 'Copier tout' : 'Copier'; btn.classList.remove('copied'); }, 2000);
+    setTimeout(() => { btn.textContent = defaultLabel; btn.classList.remove('copied'); }, 2000);
   });
 }
+
+function copyRawText(varName, btnId, defaultLabel) {
+  const text = varName === 'mailsRaw' ? mailsRaw : '';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    btn.textContent = 'Copié';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = defaultLabel; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function reset(clearInput = true) {
+  if (clearInput) document.getElementById('main-input').value = '';
+  document.getElementById('output-section').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
+  mailsRaw = '';
+  switchTabKT('fiche');
+  switchTabQT('interne');
+  if (clearInput) window.scrollTo(0, 0);
+}
+
+// Init notice check
+setMode('kensington');
 </script>
 </body>
 </html>
