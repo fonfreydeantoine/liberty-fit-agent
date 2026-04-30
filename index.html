@@ -111,13 +111,29 @@
   .content-block { font-size: 13px; color: var(--dark); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
 
   /* MAIL BLOCKS */
-  .mail-block { border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+  .mail-block { border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; transition: border-color 0.2s; }
+  .mail-block.selected { border-color: var(--dark); }
   .mail-block-header { background: var(--bgcard); border-bottom: 0.5px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .mail-block.selected .mail-block-header { background: var(--dark); }
+  .mail-block.selected .mail-meta-service { color: var(--gold); }
+  .mail-block.selected .mail-meta-dest { color: #9A9890; }
+  .mail-checkbox { width: 16px; height: 16px; accent-color: var(--dark); cursor: pointer; flex-shrink: 0; }
   .mail-number { width: 22px; height: 22px; background: var(--dark); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; flex-shrink: 0; }
+  .mail-block.selected .mail-number { background: var(--gold); color: var(--dark); }
   .mail-meta { flex: 1; }
   .mail-meta-service { font-size: 12px; font-weight: 500; color: var(--dark); }
   .mail-meta-dest { font-size: 11px; color: var(--muted); margin-top: 1px; }
   .mail-body { padding: 16px; font-size: 13px; color: var(--dark); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
+
+  /* REGROUPER */
+  .merge-bar { display: none; background: var(--dark); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; align-items: center; justify-content: space-between; gap: 12px; }
+  .merge-bar.visible { display: flex; }
+  .merge-bar-text { font-size: 12px; color: #9A9890; }
+  .merge-bar-text strong { color: var(--gold); }
+  .btn-merge { background: var(--gold); color: var(--dark); border: none; border-radius: 6px; padding: 8px 18px; font-size: 11px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; }
+  .btn-merge:hover { opacity: 0.85; }
+  .btn-merge:disabled { opacity: 0.4; cursor: not-allowed; }
+  .merge-spinner { width: 13px; height: 13px; border: 2px solid rgba(61,60,58,0.2); border-top-color: var(--dark); border-radius: 50%; animation: spin 0.75s linear infinite; display: none; }
 
   /* PANEL FOOTER */
   .panel-footer { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 0.5px solid var(--border); }
@@ -202,6 +218,13 @@
         </div>
       </div>
       <div class="panel" id="panel-mails">
+        <div class="merge-bar" id="merge-bar">
+          <span class="merge-bar-text"><strong id="merge-count">0</strong> mails sélectionnés</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="merge-spinner" id="merge-spinner"></div>
+            <button class="btn-merge" id="btn-merge" onclick="mergeMails()">Regrouper en 1 mail</button>
+          </div>
+        </div>
         <div id="mails-content"></div>
         <div class="panel-footer">
           <button class="btn-copy" id="copy-mails" onclick="copyRawText('mailsRaw', 'copy-mails', 'Copier tout')">Copier tout</button>
@@ -380,6 +403,8 @@ Liberty Incentives & Congresses France — france@liberty-int.com — www.libert
 
 let currentMode = 'kensington';
 let mailsRaw = '';
+let mailBlocks = [];
+let selectedMails = new Set();
 
 // ─── MODE SWITCHING ───────────────────────────────────────────────────────────
 
@@ -466,7 +491,7 @@ async function generate() {
 
   try {
     const markerKT = currentMode === 'kensington' ? '\n\n===TMT===\n\n' : '\n\n===BRIEF===\n\n';
-    const payload = input;
+    const payload = PROMPTS[currentMode] + markerKT + input;
 
     const res = await fetch(webhookUrl, {
       method: 'POST',
@@ -535,6 +560,7 @@ function renderKensington(fullText) {
 
   const mailsContainer = document.getElementById('mails-content');
   mailsContainer.innerHTML = '';
+  mailBlocks = [];
   let mailCount = 0;
 
   if (mailsRaw) {
@@ -552,9 +578,19 @@ function renderKensington(fullText) {
         } else { bodyLines.push(l); }
       });
       const body = bodyLines.join('\n').trim();
+      mailBlocks.push({ service, jour, dest, body, raw: block });
+
       const div = document.createElement('div');
       div.className = 'mail-block';
-      div.innerHTML = `<div class="mail-block-header"><div class="mail-number">${i+1}</div><div class="mail-meta"><div class="mail-meta-service">${service || 'Service ' + (i+1)}</div><div class="mail-meta-dest">${jour}${dest ? ' · ' + dest : ''}</div></div></div><div class="mail-body">${escHtml(body)}</div>`;
+      div.dataset.idx = i;
+      div.innerHTML = `<div class="mail-block-header">
+        <input type="checkbox" class="mail-checkbox" onchange="toggleMailSelect(${i})" title="Sélectionner pour regrouper">
+        <div class="mail-number">${i+1}</div>
+        <div class="mail-meta">
+          <div class="mail-meta-service">${service || 'Service ' + (i+1)}</div>
+          <div class="mail-meta-dest">${jour}${dest ? ' · ' + dest : ''}</div>
+        </div>
+      </div><div class="mail-body">${escHtml(body)}</div>`;
       mailsContainer.appendChild(div);
     });
   } else {
@@ -562,6 +598,7 @@ function renderKensington(fullText) {
   }
 
   document.getElementById('mail-count').textContent = mailCount;
+  document.getElementById('merge-bar').classList.remove('visible');
   switchTabKT('fiche');
 }
 
@@ -610,6 +647,119 @@ function renderQuotes(fullText) {
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 
+function toggleMailSelect(idx) {
+  const block = document.querySelector(`.mail-block[data-idx="${idx}"]`);
+  if (selectedMails.has(idx)) {
+    selectedMails.delete(idx);
+    block.classList.remove('selected');
+  } else {
+    selectedMails.add(idx);
+    block.classList.add('selected');
+  }
+  const bar = document.getElementById('merge-bar');
+  const count = document.getElementById('merge-count');
+  count.textContent = selectedMails.size;
+  if (selectedMails.size >= 2) {
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+async function mergeMails() {
+  if (selectedMails.size < 2) return;
+
+  const btn = document.getElementById('btn-merge');
+  const spinner = document.getElementById('merge-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'block';
+
+  const selected = Array.from(selectedMails).sort((a,b) => a-b);
+  const selectedData = selected.map(i => mailBlocks[i]);
+
+  const servicesListe = selectedData.map((m, i) => `PRESTATION ${i+1}\nService : ${m.service}\nJour : ${m.jour}\nDestinataire : ${m.dest}\n\n${m.body}`).join('\n\n---\n\n');
+
+  const instruction = `Tu es un assistant opérationnel pour Liberty Incentives & Congresses France.
+
+Regroupe les mails prestataires suivants en un seul mail adressé au même prestataire.
+Le mail fusionné doit :
+- Avoir pour objet : Demande de disponibilité — Plusieurs prestations — Réf. [reprendre la référence si visible]
+- Mentionner "les services suivants" dans l'introduction
+- Présenter chaque prestation dans une section numérotée PRESTATION 1, PRESTATION 2, etc.
+- Conclure par : Merci pour votre retour.
+- Garder la signature Liberty standard
+
+Voici les mails à fusionner :
+
+${servicesListe}
+
+Réponds uniquement avec le mail fusionné, sans commentaire.`;
+
+  try {
+    const res = await fetch(WEBHOOKS.kensington, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: instruction
+    });
+
+    if (!res.ok) { showError('Erreur lors du regroupement : ' + res.status); return; }
+
+    const rawText = await res.text();
+    let mergedText = rawText;
+    try {
+      const parsed = JSON.parse(rawText);
+      if (Array.isArray(parsed)) mergedText = parsed.map(b => b.text || '').join('');
+      else if (parsed && parsed.text) mergedText = parsed.text;
+    } catch(e) { mergedText = rawText; }
+
+    // Remplacer les mails sélectionnés par le mail fusionné
+    const mailsContainer = document.getElementById('mails-content');
+    const allBlocks = mailsContainer.querySelectorAll('.mail-block');
+
+    // Supprimer les blocs sélectionnés sauf le premier
+    const sortedSelected = Array.from(selectedMails).sort((a,b) => a-b);
+    const firstIdx = sortedSelected[0];
+
+    sortedSelected.forEach((idx, pos) => {
+      if (pos > 0) {
+        const el = mailsContainer.querySelector(`.mail-block[data-idx="${idx}"]`);
+        if (el) el.remove();
+      }
+    });
+
+    // Remplacer le premier par le mail fusionné
+    const firstEl = mailsContainer.querySelector(`.mail-block[data-idx="${firstIdx}"]`);
+    if (firstEl) {
+      const serviceLabel = selectedData.map(m => m.service).join(' + ');
+      firstEl.className = 'mail-block';
+      firstEl.innerHTML = `<div class="mail-block-header">
+        <div class="mail-number">✓</div>
+        <div class="mail-meta">
+          <div class="mail-meta-service">${serviceLabel}</div>
+          <div class="mail-meta-dest">Mail regroupé · ${selectedData.length} prestations</div>
+        </div>
+      </div><div class="mail-body">${escHtml(mergedText)}</div>`;
+    }
+
+    // Reset sélection
+    selectedMails.clear();
+    document.getElementById('merge-bar').classList.remove('visible');
+
+    // Renuméroter
+    mailsContainer.querySelectorAll('.mail-block').forEach((el, i) => {
+      const num = el.querySelector('.mail-number');
+      if (num && num.textContent !== '✓') num.textContent = i + 1;
+    });
+    document.getElementById('mail-count').textContent = mailsContainer.querySelectorAll('.mail-block').length;
+
+  } catch(e) {
+    showError('Erreur réseau lors du regroupement : ' + e.message);
+  } finally {
+    btn.disabled = false;
+    spinner.style.display = 'none';
+  }
+}
+
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -645,6 +795,9 @@ function reset(clearInput = true) {
   document.getElementById('output-section').style.display = 'none';
   document.getElementById('error-box').style.display = 'none';
   mailsRaw = '';
+  mailBlocks = [];
+  selectedMails.clear();
+  document.getElementById('merge-bar').classList.remove('visible');
   switchTabKT('fiche');
   switchTabQT('interne');
   if (clearInput) window.scrollTo(0, 0);
