@@ -491,6 +491,7 @@ async function generate() {
 
   try {
     const markerKT = currentMode === 'kensington' ? '\n\n===TMT===\n\n' : '\n\n===BRIEF===\n\n';
+const payload = currentMode === 'kensington' ? PROMPTS[currentMode] + markerKT + input : input;
     const payload = PROMPTS[currentMode] + markerKT + input;
 
     const res = await fetch(webhookUrl, {
