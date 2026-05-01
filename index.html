@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rob — Agent IA · Liberty FIT</title>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -799,21 +796,8 @@ textarea::placeholder { color: var(--g4); }
   </div>
 </div>
 
-<!-- docx.js CDN (unpkg primary, jsDelivr fallback) -->
-<script>
-(function(){
-  function loadDocx(src, fallback) {
-    var s = document.createElement('script');
-    s.src = src;
-    s.onerror = function() { if(fallback) loadDocx(fallback, null); };
-    document.head.appendChild(s);
-  }
-  loadDocx(
-    'https://unpkg.com/docx@8.5.0/build/index.js',
-    'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js'
-  );
-})();
-</script>
+<!-- docx.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
@@ -834,9 +818,15 @@ const ACCOUNTS = {
   'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', active: false, level: 'explorer', display: 'Sandra Verchin',     role: 'Chef de projet FIT' },
 };
 
-// Runtime state (admin can toggle without page reload)
-const accountsState = JSON.parse(localStorage.getItem('rob_accounts') || 'null') || 
-  Object.fromEntries(Object.entries(ACCOUNTS).map(([k,v]) => [k, { active: v.active, level: v.level }]));
+// IMPORTANT : le level est TOUJOURS lu depuis ACCOUNTS (source de vérité), jamais depuis localStorage.
+// Le localStorage stocke uniquement l'état active/inactive que l'admin peut toggler en live.
+const _savedActive = JSON.parse(localStorage.getItem('rob_accounts') || '{}');
+const accountsState = Object.fromEntries(
+  Object.entries(ACCOUNTS).map(([k, v]) => [k, {
+    level: v.level,  // Toujours depuis ACCOUNTS, non surchargeable
+    active: (v.level === 'admin') ? true : (_savedActive[k]?.active ?? v.active)
+  }])
+);
 
 const SIGNATURE = `Bien cordialement,\n\nAntoine Fonfreyde\nJunior Project Manager\nLiberty Incentives & Congresses\n116 avenue Gabriel Péri, 93400 Saint-Ouen\nfrance@liberty-int.com\nwww.liberty-int.com`;
 
@@ -1068,9 +1058,15 @@ function buildAdminPanel() {
 }
 
 function toggleUser(key) {
+  if (ACCOUNTS[key].level === 'admin') return; // Protection : impossible de toucher un admin
   accountsState[key].active = !accountsState[key].active;
-  accountsState[key].level = accountsState[key].active ? 'active' : 'explorer';
-  localStorage.setItem('rob_accounts', JSON.stringify(accountsState));
+  // Persister uniquement l'état active de chaque compte non-admin
+  const toSave = Object.fromEntries(
+    Object.entries(accountsState)
+      .filter(([k]) => ACCOUNTS[k].level !== 'admin')
+      .map(([k, v]) => [k, { active: v.active }])
+  );
+  localStorage.setItem('rob_accounts', JSON.stringify(toSave));
   buildAdminPanel();
 }
 
@@ -1473,16 +1469,8 @@ async function generateDocx() {
   btn.disabled = true; lbl.textContent = 'Génération...';
 
   try {
-    // Wait for docx to load — retry with fallback CDN if needed
-    if (typeof docx === 'undefined') {
-      showErr('qd-err', 'Chargement de la librairie en cours, réessayez dans quelques secondes...');
-      var s = document.createElement('script');
-      s.src = 'https://unpkg.com/docx@8.5.0/build/index.js';
-      s.onload = function() { hideErr('qd-err'); };
-      document.head.appendChild(s);
-      btn.disabled = false; lbl.textContent = 'Générer le devis DOCX';
-      return;
-    }
+    // Wait for docx to load
+    if (typeof docx === 'undefined') { showErr('qd-err','Librairie docx non chargée. Vérifiez votre connexion internet.'); return; }
 
     const {
       Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
