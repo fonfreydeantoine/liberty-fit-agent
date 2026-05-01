@@ -762,7 +762,11 @@ Réponds uniquement avec le mail fusionné, sans commentaire.`;
 }
 
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return str
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
 }
 
 function showError(msg) {
