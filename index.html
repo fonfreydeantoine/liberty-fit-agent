@@ -791,7 +791,7 @@ textarea::placeholder { color: var(--g4); }
     <div class="footer-right">
       <div class="footer-version">ROB v2.0</div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
-      <button class="btn-logout" id="admin-btn" onclick="toggleAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
+      <button class="btn-logout" id="admin-btn" onclick="goAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
     </div>
   </div>
 </div>
@@ -800,7 +800,36 @@ textarea::placeholder { color: var(--g4); }
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
+// ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
+// Remplacer ces deux valeurs après création du projet Supabase
+const SUPABASE_URL  = 'https://biknungxkdxtwhdhhxcm.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpa251bmd4a2R4dHdoZGhoeGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjU2NjgsImV4cCI6MjA5MzI0MTY2OH0.AaRhUd-2sKgqjcYw6jZMii8TISiG6UVT1eT7gGMlF1Q';
+
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+      ...opts.headers
+    },
+    ...opts
+  });
+  if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + await res.text());
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+// ─── ACCOUNTS (mots de passe hashés restent ici, jamais dans Supabase) ────────
+const ACCOUNTS = {
+  'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', level: 'admin',  display: 'Antoine Fonfreyde', role: 'Admin · Liberty FIT' },
+  'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', level: 'active', display: 'Romain Ammari',     role: 'Chef de projet FIT' },
+  'frederique.jehl':   { hash: '64bb3657407463fa1ee427ac336a35b21def6856b308c62136d97edcf9ccf02d', level: 'explorer', display: 'Frederique Jehl',   role: 'Chef de projet FIT' },
+  'cristina.badino':   { hash: '1a4668e998a410adf8503e25ebd4a966f13fb7bf388303383e4b7d74d7734259', level: 'explorer', display: 'Cristina Badino',   role: 'Chef de projet FIT' },
+  'emma.vandenesse':   { hash: '7bc2e9bda7b0fd02c8b5a40701166306ee0aed5d93f486750a0acb51780c3e65', level: 'explorer', display: 'Emma Vandenesse',   role: 'Chef de projet FIT' },
+  'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', level: 'explorer', display: 'Sandra Verchin',    role: 'Chef de projet FIT' },
+};
 
 const WEBHOOKS = {
   kensington: 'https://hook.eu1.make.com/2mp8ancoa1l53tg75x7wvea45bvbmcw8',
@@ -808,27 +837,6 @@ const WEBHOOKS = {
   compta:     'https://hook.eu1.make.com/ovr2e7q79nj1u9y53dl1b6pj8xqasfhg',
   mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio'
 };
-
-const ACCOUNTS = {
-  'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', active: true,  level: 'admin',    display: 'Antoine Fonfreyde',  role: 'Admin · Liberty FIT' },
-  'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', active: true,  level: 'active',   display: 'Romain Ammari',      role: 'Chef de projet FIT' },
-  'frederique.jehl':   { hash: '64bb3657407463fa1ee427ac336a35b21def6856b308c62136d97edcf9ccf02d', active: false, level: 'explorer', display: 'Frederique Jehl',     role: 'Chef de projet FIT' },
-  'cristina.badino':   { hash: '1a4668e998a410adf8503e25ebd4a966f13fb7bf388303383e4b7d74d7734259', active: false, level: 'explorer', display: 'Cristina Badino',    role: 'Chef de projet FIT' },
-  'emma.vandenesse':   { hash: '7bc2e9bda7b0fd02c8b5a40701166306ee0aed5d93f486750a0acb51780c3e65', active: false, level: 'explorer', display: 'Emma Vandenesse',    role: 'Chef de projet FIT' },
-  'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', active: false, level: 'explorer', display: 'Sandra Verchin',     role: 'Chef de projet FIT' },
-};
-
-// IMPORTANT : le level est TOUJOURS lu depuis ACCOUNTS (source de vérité), jamais depuis localStorage.
-// Le localStorage stocke uniquement l'état active/inactive que l'admin peut toggler en live.
-const _savedActive = JSON.parse(localStorage.getItem('rob_accounts') || '{}');
-const accountsState = Object.fromEntries(
-  Object.entries(ACCOUNTS).map(([k, v]) => [k, {
-    level: v.level,  // Toujours depuis ACCOUNTS, non surchargeable
-    active: (v.level === 'admin') ? true : (_savedActive[k]?.active ?? v.active)
-  }])
-);
-
-const SIGNATURE = `Bien cordialement,\n\nAntoine Fonfreyde\nJunior Project Manager\nLiberty Incentives & Congresses\n116 avenue Gabriel Péri, 93400 Saint-Ouen\nfrance@liberty-int.com\nwww.liberty-int.com`;
 
 const PROMPTS = {
 kensington: `Tu es un assistant opérationnel pour Liberty Incentives & Congresses France, DMC haut de gamme basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 personnes), client principal : Kensington Tours (KT).
@@ -866,7 +874,7 @@ Périmètre France / Hors périmètre
 4. ACTIONS À LANCER AUJOURD'HUI : priorité haute / priorité normale / avec échéances
 
 FORMAT MAILS (Output 2) :
-Séparer chaque mail par ---MAIL---
+S�parer chaque mail par ---MAIL---
 Pour chaque mail :
 SERVICE : [intitulé exact]
 JOUR : [date]
@@ -926,9 +934,9 @@ Génère les outputs séparés par les marqueurs suivants :
 - Programme client : entre ===OUTPUT2_START=== et ===OUTPUT2_END===`
 };
 
-// ─── AUTH ─────────────────────────────────────────────────────────────────────
-
+// ─── RUNTIME STATE ────────────────────────────────────────────────────────────
 let currentUser = null;
+let userRecord  = null; // données Supabase de l'utilisateur connecté
 let mailsRaw = '';
 let mailBlocks = [];
 let selectedMails = new Set();
@@ -937,16 +945,19 @@ let currentMailType = 'guide';
 let svcCount = 0;
 let qdSvcCount = 0;
 
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
 async function doLogin() {
-  const user = document.getElementById('login-user').value;
-  const pwd  = document.getElementById('login-pwd').value;
-  const errEl  = document.getElementById('login-error');
-  const lockEl = document.getElementById('login-locked');
+  const user    = document.getElementById('login-user').value;
+  const pwd     = document.getElementById('login-pwd').value;
+  const errEl   = document.getElementById('login-error');
+  const lockEl  = document.getElementById('login-locked');
+  const btn     = document.querySelector('.login-btn');
   errEl.className = 'login-msg';
   lockEl.className = 'login-msg';
 
@@ -958,32 +969,60 @@ async function doLogin() {
   const hash = await sha256(pwd);
   if (hash !== account.hash) { errEl.className = 'login-msg error'; return; }
 
-  const state = accountsState[user];
-  if (!state.active) { lockEl.className = 'login-msg locked'; return; }
+  // Vérification du niveau d'accès dans Supabase
+  btn.textContent = 'Vérification...';
+  btn.disabled = true;
+  try {
+    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level');
+    if (!rows || rows.length === 0) {
+      // Compte non encore dans Supabase : bloquer
+      lockEl.className = 'login-msg locked';
+      return;
+    }
+    const rec = rows[0];
 
-  currentUser = user;
-  logConnection(user);
-  launchApp(account, state);
+    // Le level admin ne peut venir que de ACCOUNTS -- jamais de Supabase
+    const effectiveLevel = account.level === 'admin' ? 'admin' : rec.level;
+    const isActive = account.level === 'admin' ? true : rec.active;
+
+    if (!isActive) { lockEl.className = 'login-msg locked'; return; }
+
+    currentUser = user;
+    userRecord  = { ...rec, level: effectiveLevel, display: account.display, role: account.role };
+
+    // Log connexion dans Supabase
+    await sbFetch('rob_logs', {
+      method: 'POST',
+      body: JSON.stringify({ username: user, connected_at: new Date().toISOString() })
+    }).catch(() => {}); // non bloquant
+
+    launchApp();
+  } catch(e) {
+    errEl.className = 'login-msg error';
+    errEl.textContent = 'Erreur de connexion : ' + e.message;
+  } finally {
+    btn.textContent = 'Se connecter';
+    btn.disabled = false;
+  }
 }
 
-function launchApp(account, state) {
+function launchApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'flex';
 
-  const initials = account.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  const initials = userRecord.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   document.getElementById('footer-avatar').textContent = initials;
-  document.getElementById('footer-name').textContent = account.display;
-  document.getElementById('footer-role').textContent = account.role;
+  document.getElementById('footer-name').textContent   = userRecord.display;
+  document.getElementById('footer-role').textContent   = userRecord.role;
 
-  const isAdmin = state.level === 'admin';
-  const canUse  = state.level === 'admin' || state.level === 'active';
+  const isAdmin = userRecord.level === 'admin';
+  const canUse  = userRecord.level === 'admin' || userRecord.level === 'active';
 
+  // Le bouton Admin mène vers admin.html (page séparée)
   if (isAdmin) {
     document.getElementById('admin-btn').style.display = 'block';
-    buildAdminPanel();
   }
 
-  // Lock modules for explorers
   if (!canUse) {
     ['mod-kensington','mod-quotes','mod-mails','mod-quotepdf','mod-compta'].forEach(id => {
       const btn = document.getElementById(id);
@@ -1004,6 +1043,7 @@ function launchApp(account, state) {
 
 function logout() {
   currentUser = null;
+  userRecord  = null;
   document.getElementById('app-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-pwd').value = '';
@@ -1011,86 +1051,21 @@ function logout() {
   document.getElementById('login-locked').className = 'login-msg';
 }
 
-// ─── CONNECTION LOG ───────────────────────────────────────────────────────────
-
-function logConnection(user) {
-  const logs = JSON.parse(localStorage.getItem('rob_logs') || '[]');
-  logs.unshift({ user, time: new Date().toISOString() });
-  if (logs.length > 50) logs.splice(50);
-  localStorage.setItem('rob_logs', JSON.stringify(logs));
-}
-
-// ─── ADMIN ────────────────────────────────────────────────────────────────────
-
-function buildAdminPanel() {
-  const list = document.getElementById('admin-users-list');
-  list.innerHTML = '';
-  Object.entries(ACCOUNTS).forEach(([key, acc]) => {
-    const state = accountsState[key];
-    const initials = acc.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-    const badgeClass = state.level === 'admin' ? 'badge-admin' : state.active ? 'badge-active' : 'badge-locked';
-    const badgeText  = state.level === 'admin' ? 'Admin' : state.active ? 'Actif' : 'Verrouillé';
-    const row = document.createElement('div');
-    row.className = 'admin-user-row';
-    row.innerHTML = `
-      <div class="admin-avatar">${initials}</div>
-      <div class="admin-user-info">
-        <div class="admin-user-name">${acc.display}</div>
-        <div class="admin-user-role">${key}</div>
-      </div>
-      <span class="admin-status-badge ${badgeClass}" id="badge-${key}">${badgeText}</span>
-      ${state.level !== 'admin' ? `<button class="btn-toggle" onclick="toggleUser('${key}')">${state.active ? 'Désactiver' : 'Activer'}</button>` : ''}
-    `;
-    list.appendChild(row);
-  });
-
-  const logList = document.getElementById('admin-logs-list');
-  const logs = JSON.parse(localStorage.getItem('rob_logs') || '[]');
-  if (logs.length === 0) {
-    logList.innerHTML = '<div class="log-empty">Aucune connexion enregistrée.</div>';
-  } else {
-    logList.innerHTML = logs.slice(0, 20).map(l => {
-      const d = new Date(l.time);
-      const fmt = d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-      return `<div class="log-entry"><span class="log-user">${ACCOUNTS[l.user]?.display || l.user}</span><span class="log-time">${fmt}</span></div>`;
-    }).join('');
-  }
-}
-
-function toggleUser(key) {
-  if (ACCOUNTS[key].level === 'admin') return; // Protection : impossible de toucher un admin
-  accountsState[key].active = !accountsState[key].active;
-  // Persister uniquement l'état active de chaque compte non-admin
-  const toSave = Object.fromEntries(
-    Object.entries(accountsState)
-      .filter(([k]) => ACCOUNTS[k].level !== 'admin')
-      .map(([k, v]) => [k, { active: v.active }])
-  );
-  localStorage.setItem('rob_accounts', JSON.stringify(toSave));
-  buildAdminPanel();
-}
-
-function toggleAdmin() {
-  const panel = document.getElementById('panel-admin');
-  const isVisible = panel.style.display !== 'none';
-  document.querySelectorAll('.panel').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
-  if (!isVisible) { panel.style.display = 'block'; buildAdminPanel(); }
-  else { setMod('kensington'); }
+function goAdmin() {
+  window.location.href = 'admin.html';
 }
 
 // ─── MODULE SWITCHING ─────────────────────────────────────────────────────────
 
 function setMod(mod) {
-  const canUse = accountsState[currentUser]?.active;
-  if (!canUse && mod !== 'admin') return;
-
+  const canUse = userRecord?.level === 'admin' || userRecord?.level === 'active';
+  if (!canUse) return;
   ['kensington','quotes','mails','quotepdf','compta'].forEach(m => {
     const btn = document.getElementById('mod-' + m);
-    if (btn) { btn.classList.toggle('active', m === mod); }
+    if (btn) btn.classList.toggle('active', m === mod);
     const panel = document.getElementById('panel-' + m);
-    if (panel) { panel.classList.toggle('active', m === mod); }
+    if (panel) panel.classList.toggle('active', m === mod);
   });
-  document.getElementById('panel-admin').style.display = 'none';
 }
 
 // ─── KENSINGTON ───────────────────────────────────────────────────────────────
@@ -1803,6 +1778,7 @@ function copyRaw(varName,btnId,defaultLabel){
     setTimeout(()=>{btn.textContent=defaultLabel;btn.classList.remove('copied');},2000);
   });
 }
+</script>
 </script>
 </body>
 </html>

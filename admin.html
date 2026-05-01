@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rob Admin · Liberty FIT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --rob-yellow: #F5E642; --rob-yellow-dark: #EDD820;
+  --g0: #0D0D0C; --g1: #111110; --g2: #1A1918; --g3: #222220;
+  --g4: #2C2C2A; --g5: #3D3C3A; --g6: #5F5E5A; --g7: #888780;
+  --g8: #B4B2A9; --g9: #D3D1C7; --white: #FAFAF7;
+  --red: #791F1F; --redbg: #2A1010; --redborder: #F09595;
+  --green: #3B6D11; --greenbg: #1A2A10; --greenborder: #A8CC80;
+  --amber: #633806; --amberbg: #1F1C10; --amberborder: #FAC775;
+  --font-title: 'Space Grotesk', 'DM Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+body { font-family: var(--font-body); background: var(--g1); color: var(--g9); min-height: 100vh; }
+
+/* ─── LOGIN ─── */
+#login-screen {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 32px 16px;
+  background: var(--g0); position: relative;
+}
+.login-topbar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--rob-yellow); }
+.login-diamond {
+  width: 72px; height: 72px; background: var(--rob-yellow);
+  transform: rotate(45deg); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; border: 2px solid var(--g2); flex-shrink: 0;
+}
+.login-diamond svg { transform: rotate(-45deg); }
+.login-rob-name { font-family: var(--font-title); font-size: 22px; font-weight: 700; color: var(--rob-yellow); letter-spacing: 6px; margin-bottom: 4px; }
+.login-rob-sub { font-size: 9px; color: var(--g6); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 32px; }
+.login-card {
+  background: var(--g2); border: 0.5px solid var(--g4); border-radius: 12px;
+  padding: 28px; width: 100%; max-width: 340px;
+}
+.login-card-title { font-size: 9px; color: var(--g7); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; text-align: center; }
+.lf { margin-bottom: 14px; }
+.lf label { display: block; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 6px; }
+.lf input {
+  width: 100%; background: var(--g1); border: 0.5px solid var(--g4); border-radius: 7px;
+  padding: 11px 14px; font-family: var(--font-body); font-size: 13px; color: var(--g9);
+  outline: none; transition: border-color 0.2s;
+}
+.lf input:focus { border-color: var(--rob-yellow); }
+.lf input::placeholder { color: var(--g4); }
+.login-btn {
+  width: 100%; background: var(--rob-yellow); border: none; border-radius: 7px;
+  padding: 12px; font-family: var(--font-title); font-size: 13px; font-weight: 700;
+  color: var(--g2); cursor: pointer; letter-spacing: 1px; margin-top: 18px;
+  transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.login-btn:hover { background: var(--rob-yellow-dark); }
+.login-btn:disabled { background: var(--g4); color: var(--g6); cursor: not-allowed; }
+.login-msg {
+  border-radius: 7px; padding: 10px 14px; font-size: 12px; margin-top: 12px;
+  text-align: center; display: none; line-height: 1.5;
+}
+.login-msg.error { background: var(--redbg); border: 0.5px solid var(--red); color: var(--redborder); display: block; }
+.login-footer-txt { margin-top: 24px; font-size: 9px; color: var(--g4); letter-spacing: 1px; }
+.spin-sm { width: 13px; height: 13px; border: 2px solid rgba(26,25,24,0.3); border-top-color: var(--g2); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── APP ─── */
+#app-screen { display: none; min-height: 100vh; flex-direction: column; }
+
+.app-header {
+  background: var(--g0); height: 52px; padding: 0 28px;
+  display: flex; align-items: center; gap: 14px;
+  border-bottom: 0.5px solid var(--g4); flex-shrink: 0;
+}
+.hdr-diamond {
+  width: 28px; height: 28px; background: var(--rob-yellow);
+  transform: rotate(45deg); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.hdr-diamond svg { transform: rotate(-45deg); }
+.hdr-name { font-family: var(--font-title); font-size: 13px; font-weight: 700; color: var(--rob-yellow); letter-spacing: 2px; }
+.hdr-sub { font-size: 9px; color: var(--g6); letter-spacing: 2px; text-transform: uppercase; margin-top: 1px; }
+.hdr-text { flex: 1; }
+.hdr-badge { background: rgba(245,230,66,0.1); border: 0.5px solid rgba(245,230,66,0.3); color: var(--rob-yellow); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+
+.app-main { max-width: 800px; margin: 0 auto; width: 100%; padding: 32px 24px; }
+.section-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 16px; }
+
+/* CARDS */
+.card { background: var(--g2); border: 0.5px solid var(--g4); border-radius: 10px; padding: 22px; margin-bottom: 20px; }
+.card-title { font-family: var(--font-title); font-size: 12px; font-weight: 600; color: var(--rob-yellow); margin-bottom: 18px; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; }
+.card-title-count { font-size: 10px; color: var(--g6); font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+/* USER ROWS */
+.user-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--g4); }
+.user-row:last-child { border-bottom: none; }
+.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--g4); display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-size: 10px; font-weight: 700; color: var(--g9); flex-shrink: 0; }
+.user-avatar.admin { background: rgba(245,230,66,0.15); color: var(--rob-yellow); }
+.user-info { flex: 1; }
+.user-name { font-size: 13px; color: var(--g9); }
+.user-id { font-size: 10px; color: var(--g6); letter-spacing: 0.5px; margin-top: 1px; }
+.badge { font-size: 9px; font-weight: 600; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.5px; flex-shrink: 0; }
+.badge-admin  { background: rgba(245,230,66,0.1); color: var(--rob-yellow); border: 0.5px solid rgba(245,230,66,0.3); }
+.badge-active { background: var(--greenbg); color: var(--greenborder); border: 0.5px solid var(--green); }
+.badge-locked { background: var(--amberbg); color: var(--amberborder); border: 0.5px solid var(--amber); }
+
+/* TOGGLE SWITCH */
+.toggle-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.toggle-label { font-size: 10px; color: var(--g6); min-width: 52px; text-align: right; }
+.toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: var(--g4); border-radius: 20px; transition: background 0.2s;
+}
+.toggle-slider::before {
+  content: ''; position: absolute;
+  width: 14px; height: 14px; left: 3px; top: 3px;
+  background: var(--g7); border-radius: 50%; transition: transform 0.2s, background 0.2s;
+}
+.toggle input:checked + .toggle-slider { background: rgba(245,230,66,0.2); border: 0.5px solid rgba(245,230,66,0.4); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--rob-yellow); }
+.toggle input:disabled + .toggle-slider { cursor: not-allowed; opacity: 0.4; }
+
+/* LEVEL SELECT */
+.level-select {
+  background: var(--g3); border: 0.5px solid var(--g4); border-radius: 6px;
+  padding: 5px 10px; font-family: var(--font-body); font-size: 11px; color: var(--g8);
+  outline: none; cursor: pointer; transition: border-color 0.2s; appearance: none;
+}
+.level-select:focus { border-color: var(--rob-yellow); }
+.level-select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* LOGS */
+.log-entry { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 0.5px solid var(--g4); font-size: 12px; }
+.log-entry:last-child { border-bottom: none; }
+.log-user { color: var(--rob-yellow); font-weight: 500; min-width: 160px; }
+.log-time { color: var(--g6); font-size: 11px; }
+.log-empty { font-size: 13px; color: var(--g6); padding: 8px 0; }
+
+/* FOOTER */
+.app-footer {
+  padding: 12px 28px; border-top: 0.5px solid var(--g4);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--g0);
+}
+.footer-name { font-size: 12px; color: var(--g8); }
+.footer-right { display: flex; align-items: center; gap: 12px; }
+.footer-version { font-size: 9px; color: var(--g4); letter-spacing: 1px; }
+.btn-logout {
+  background: transparent; border: 0.5px solid var(--g4); border-radius: 5px;
+  padding: 5px 12px; font-size: 10px; color: var(--g6); cursor: pointer;
+  font-family: var(--font-body); letter-spacing: 0.5px; transition: all 0.2s;
+}
+.btn-logout:hover { border-color: var(--g6); color: var(--g8); }
+.btn-back {
+  background: transparent; border: 0.5px solid var(--g4); border-radius: 5px;
+  padding: 5px 12px; font-size: 10px; color: var(--g6); cursor: pointer;
+  font-family: var(--font-body); letter-spacing: 0.5px; transition: all 0.2s;
+}
+.btn-back:hover { border-color: var(--rob-yellow); color: var(--rob-yellow); }
+
+/* REFRESH */
+.btn-refresh {
+  background: transparent; border: 0.5px solid var(--g4); border-radius: 6px;
+  padding: 5px 12px; font-size: 10px; color: var(--g6); cursor: pointer;
+  font-family: var(--font-body); transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+}
+.btn-refresh:hover { border-color: var(--g7); color: var(--g8); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--g3); border: 0.5px solid var(--g5); border-radius: 8px;
+  padding: 10px 20px; font-size: 12px; color: var(--g9);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
+}
+.toast.visible { opacity: 1; }
+.toast.ok { border-color: var(--green); color: var(--greenborder); background: var(--greenbg); }
+.toast.err { border-color: var(--red); color: var(--redborder); background: var(--redbg); }
+
+/* LOADING STATE */
+.loading-row { padding: 16px 0; color: var(--g6); font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ LOGIN ═══════════════════════ -->
+<div id="login-screen">
+  <div class="login-topbar"></div>
+  <div class="login-diamond">
+    <svg width="38" height="38" viewBox="0 0 48 48">
+      <circle cx="17" cy="19" r="4.5" fill="#1A1918"/>
+      <circle cx="31" cy="19" r="4.5" fill="#1A1918"/>
+      <circle cx="18.8" cy="17.2" r="1.6" fill="#F5E642"/>
+      <circle cx="32.8" cy="17.2" r="1.6" fill="#F5E642"/>
+      <path d="M16 29 Q24 36 32 29" fill="none" stroke="#1A1918" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="16" cy="29" r="3" fill="#EDD820" opacity="0.5"/>
+      <circle cx="32" cy="29" r="3" fill="#EDD820" opacity="0.5"/>
+      <line x1="24" y1="6" x2="24" y2="12" stroke="#1A1918" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="24" cy="4.5" r="3.5" fill="#1A1918"/>
+    </svg>
+  </div>
+  <div class="login-rob-name">ROB</div>
+  <div class="login-rob-sub">Console Admin · Acces restreint</div>
+
+  <div class="login-card">
+    <div class="login-card-title">Authentification administrateur</div>
+    <div class="lf">
+      <label>Mot de passe admin</label>
+      <input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+    </div>
+    <button class="login-btn" id="admin-login-btn" onclick="doAdminLogin()">
+      <div class="spin-sm" id="login-spin"></div>
+      <span id="login-lbl">Acceder a la console</span>
+    </button>
+    <div class="login-msg" id="login-error">Mot de passe incorrect ou accès refusé.</div>
+  </div>
+  <div class="login-footer-txt">ROB v2.0 · Liberty Incentives &amp; Congresses France</div>
+</div>
+
+<!-- ═══════════════════════ APP ═══════════════════════ -->
+<div id="app-screen">
+  <div class="app-header">
+    <div class="hdr-diamond">
+      <svg width="16" height="16" viewBox="0 0 20 20">
+        <circle cx="7" cy="8" r="2.2" fill="#1A1918"/>
+        <circle cx="13" cy="8" r="2.2" fill="#1A1918"/>
+        <circle cx="7.9" cy="7.1" r="0.9" fill="#F5E642"/>
+        <circle cx="13.9" cy="7.1" r="0.9" fill="#F5E642"/>
+        <path d="M6.5 12.5 Q10 15.5 13.5 12.5" fill="none" stroke="#1A1918" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="10" y1="2" x2="10" y2="5" stroke="#1A1918" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="10" cy="1.5" r="1.5" fill="#1A1918"/>
+      </svg>
+    </div>
+    <div class="hdr-text">
+      <div class="hdr-name">ROB</div>
+      <div class="hdr-sub">Console Admin · Liberty FIT</div>
+    </div>
+    <div class="hdr-badge">Admin</div>
+  </div>
+
+  <div class="app-main">
+
+    <!-- GESTION DES ACCES -->
+    <div class="section-label">Gestion des acces</div>
+    <div class="card">
+      <div class="card-title">
+        Utilisateurs
+        <button class="btn-refresh" onclick="loadUsers()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Actualiser
+        </button>
+      </div>
+      <div id="users-list"><div class="loading-row">Chargement...</div></div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="section-label" style="margin-top:8px;">Journal de connexions</div>
+    <div class="card">
+      <div class="card-title">
+        Connexions recentes
+        <button class="btn-refresh" onclick="loadLogs()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Actualiser
+        </button>
+      </div>
+      <div id="logs-list"><div class="loading-row">Chargement...</div></div>
+    </div>
+
+  </div>
+
+  <div class="app-footer">
+    <div class="footer-name">Antoine Fonfreyde · Admin</div>
+    <div class="footer-right">
+      <span class="footer-version">ROB v2.0</span>
+      <button class="btn-back" onclick="window.location.href='index.html'">Retour a Rob</button>
+      <button class="btn-logout" onclick="doLogout()">Deconnexion</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://biknungxkdxtwhdhhxcm.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpa251bmd4a2R4dHdoZGhoeGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjU2NjgsImV4cCI6MjA5MzI0MTY2OH0.AaRhUd-2sKgqjcYw6jZMii8TISiG6UVT1eT7gGMlF1Q';
+
+// Hash du mot de passe admin (antoine.fonfreyde)
+const ADMIN_HASH = 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec';
+
+// Profils locaux (noms, roles) — les hash de mdp ne sont pas nécessaires ici
+const PROFILES = {
+  'antoine.fonfreyde': { display: 'Antoine Fonfreyde', role: 'Admin' },
+  'romain.ammari':     { display: 'Romain Ammari',     role: 'Chef de projet FIT' },
+  'frederique.jehl':   { display: 'Frederique Jehl',   role: 'Chef de projet FIT' },
+  'cristina.badino':   { display: 'Cristina Badino',   role: 'Chef de projet FIT' },
+  'emma.vandenesse':   { display: 'Emma Vandenesse',   role: 'Chef de projet FIT' },
+  'sandra.verchin':    { display: 'Sandra Verchin',    role: 'Chef de projet FIT' },
+};
+
+// ─── SUPABASE ─────────────────────────────────────────────────────────────────
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+      ...opts.headers
+    },
+    ...opts
+  });
+  if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + await res.text());
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function doAdminLogin() {
+  const pwd = document.getElementById('admin-pwd').value;
+  const btn = document.getElementById('admin-login-btn');
+  const spin = document.getElementById('login-spin');
+  const lbl = document.getElementById('login-lbl');
+  const err = document.getElementById('login-error');
+  err.className = 'login-msg';
+
+  if (!pwd) return;
+  btn.disabled = true; spin.style.display = 'block'; lbl.textContent = 'Verification...';
+
+  try {
+    const hash = await sha256(pwd);
+    if (hash !== ADMIN_HASH) {
+      err.className = 'login-msg error';
+      return;
+    }
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    await Promise.all([loadUsers(), loadLogs()]);
+  } catch(e) {
+    err.className = 'login-msg error';
+    err.textContent = 'Erreur : ' + e.message;
+  } finally {
+    btn.disabled = false; spin.style.display = 'none'; lbl.textContent = 'Acceder a la console';
+  }
+}
+
+function doLogout() {
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-pwd').value = '';
+}
+
+// ─── USERS ────────────────────────────────────────────────────────────────────
+async function loadUsers() {
+  const list = document.getElementById('users-list');
+  list.innerHTML = '<div class="loading-row">Chargement...</div>';
+  try {
+    const rows = await sbFetch('rob_users?select=username,active,level&order=username');
+    if (!rows || rows.length === 0) { list.innerHTML = '<div class="loading-row">Aucun utilisateur trouvé.</div>'; return; }
+    list.innerHTML = '';
+    rows.forEach(row => {
+      const profile = PROFILES[row.username] || { display: row.username, role: '' };
+      const isAdmin = row.level === 'admin';
+      const initials = profile.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+      const badgeClass = isAdmin ? 'badge-admin' : row.active ? 'badge-active' : 'badge-locked';
+      const badgeText  = isAdmin ? 'Admin' : row.active ? 'Actif' : 'Verrouille';
+
+      const div = document.createElement('div');
+      div.className = 'user-row';
+      div.innerHTML = `
+        <div class="user-avatar ${isAdmin?'admin':''}">${initials}</div>
+        <div class="user-info">
+          <div class="user-name">${profile.display}</div>
+          <div class="user-id">${row.username} · ${profile.role}</div>
+        </div>
+        <span class="badge ${badgeClass}" id="badge-${row.username}">${badgeText}</span>
+        ${!isAdmin ? `
+        <select class="level-select" id="level-${row.username}" onchange="changeLevel('${row.username}', this.value)">
+          <option value="active" ${row.level==='active'?'selected':''}>Actif</option>
+          <option value="explorer" ${row.level==='explorer'?'selected':''}>Explorer</option>
+        </select>
+        <label class="toggle" title="${row.active ? 'Désactiver' : 'Activer'}">
+          <input type="checkbox" id="toggle-${row.username}" ${row.active?'checked':''} onchange="toggleUser('${row.username}', this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+        ` : ''}
+      `;
+      list.appendChild(div);
+    });
+  } catch(e) {
+    list.innerHTML = '<div class="loading-row" style="color:var(--redborder);">Erreur : ' + e.message + '</div>';
+  }
+}
+
+async function toggleUser(username, active) {
+  try {
+    await sbFetch('rob_users?username=eq.' + encodeURIComponent(username), {
+      method: 'PATCH',
+      body: JSON.stringify({ active })
+    });
+    const badge = document.getElementById('badge-' + username);
+    const lvlEl = document.getElementById('level-' + username);
+    const currentLevel = lvlEl ? lvlEl.value : 'active';
+    if (badge) {
+      badge.className = 'badge ' + (active ? 'badge-active' : 'badge-locked');
+      badge.textContent = active ? 'Actif' : 'Verrouille';
+    }
+    showToast(active ? 'Acces active' : 'Acces desactive', 'ok');
+  } catch(e) {
+    showToast('Erreur : ' + e.message, 'err');
+    // Revert toggle
+    const toggle = document.getElementById('toggle-' + username);
+    if (toggle) toggle.checked = !active;
+  }
+}
+
+async function changeLevel(username, level) {
+  try {
+    await sbFetch('rob_users?username=eq.' + encodeURIComponent(username), {
+      method: 'PATCH',
+      body: JSON.stringify({ level })
+    });
+    showToast('Niveau mis a jour : ' + level, 'ok');
+  } catch(e) {
+    showToast('Erreur : ' + e.message, 'err');
+    await loadUsers();
+  }
+}
+
+// ─── LOGS ─────────────────────────────────────────────────────────────────────
+async function loadLogs() {
+  const list = document.getElementById('logs-list');
+  list.innerHTML = '<div class="loading-row">Chargement...</div>';
+  try {
+    const rows = await sbFetch('rob_logs?select=username,connected_at&order=connected_at.desc&limit=30');
+    if (!rows || rows.length === 0) { list.innerHTML = '<div class="log-empty">Aucune connexion enregistree.</div>'; return; }
+    list.innerHTML = rows.map(l => {
+      const profile = PROFILES[l.username] || { display: l.username };
+      const d = new Date(l.connected_at);
+      const fmt = d.toLocaleDateString('fr-FR') + ' a ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+      return `<div class="log-entry"><span class="log-user">${profile.display}</span><span class="log-time">${fmt}</span></div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="loading-row" style="color:var(--redborder);">Erreur : ' + e.message + '</div>';
+  }
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast visible ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 2500);
+}
+</script>
+</body>
+</html>
