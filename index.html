@@ -796,8 +796,21 @@ textarea::placeholder { color: var(--g4); }
   </div>
 </div>
 
-<!-- docx.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
+<!-- docx.js CDN (unpkg, fallback jsDelivr) -->
+<script>
+(function(){
+  function loadDocx(src, fallback) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onerror = function() { if(fallback) loadDocx(fallback, null); };
+    document.head.appendChild(s);
+  }
+  loadDocx(
+    'https://unpkg.com/docx@8.5.0/build/index.js',
+    'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js'
+  );
+})();
+</script>
 
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
@@ -1457,8 +1470,16 @@ async function generateDocx() {
   btn.disabled = true; lbl.textContent = 'Génération...';
 
   try {
-    // Wait for docx to load
-    if (typeof docx === 'undefined') { showErr('qd-err','Librairie docx non chargée. Vérifiez votre connexion internet.'); return; }
+    // Wait for docx to load — retry with fallback CDN if needed
+    if (typeof docx === 'undefined') {
+      showErr('qd-err', 'Chargement de la librairie en cours, réessayez dans quelques secondes...');
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/docx@8.5.0/build/index.js';
+      s.onload = function() { hideErr('qd-err'); };
+      document.head.appendChild(s);
+      btn.disabled = false; lbl.textContent = 'Générer le devis DOCX';
+      return;
+    }
 
     const {
       Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
