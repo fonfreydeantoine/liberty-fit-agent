@@ -678,7 +678,7 @@ textarea::placeholder { color: var(--g4); }
 
           <hr class="form-divider">
           <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-            <button class="btn-send" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
+            <button class="btn-send" id="mail-preview-btn" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
             <button class="btn-send" id="mail-send-btn" onclick="sendMail()">
               <div class="send-spinner" id="mail-spin"></div>
               <span id="mail-lbl">Envoyer</span>
@@ -1041,6 +1041,14 @@ function launchApp() {
         el.style.cursor = 'not-allowed';
         el.style.pointerEvents = 'none';
       });
+      // Réactiver uniquement le bouton Aperçu
+      const previewBtn = document.getElementById('mail-preview-btn');
+      if (previewBtn) {
+        previewBtn.disabled = false;
+        previewBtn.style.opacity = '1';
+        previewBtn.style.cursor = 'pointer';
+        previewBtn.style.pointerEvents = 'auto';
+      }
     }, 150);
   }
 
