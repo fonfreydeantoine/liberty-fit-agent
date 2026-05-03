@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="shortcut icon" href="favicon.svg">
 <title>Rob — Agent IA · Liberty FIT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -272,13 +270,15 @@ textarea::placeholder { color: var(--g4); }
 .form-row { margin-bottom: 14px; }
 .form-label { display: block; font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 7px; }
 .form-input {
-  width: 100%; border: 0.5px solid var(--g4); border-radius: 7px;
+  width: 100%; max-width: 100%; border: 0.5px solid var(--g4); border-radius: 7px;
   padding: 11px 14px; font-family: var(--font-body); font-size: 13px;
   color: var(--g9); background: var(--g1); outline: none; transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 .form-input:focus { border-color: var(--rob-yellow); }
 .form-input::placeholder { color: var(--g4); }
 .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-row-2 > div { min-width: 0; }
 .file-drop { border: 0.5px dashed var(--g4); border-radius: 8px; background: var(--g1); padding: 20px 16px; text-align: center; cursor: pointer; transition: border-color 0.2s; position: relative; }
 .file-drop:hover { border-color: var(--g7); }
 .file-drop input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -390,7 +390,6 @@ textarea::placeholder { color: var(--g4); }
           <option value="cristina.badino">cristina.badino</option>
           <option value="emma.vandenesse">emma.vandenesse</option>
           <option value="sandra.verchin">sandra.verchin</option>
-          <option value="guest.liberty">guest.liberty</option>
         </select>
         <div class="select-arrow">
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -678,7 +677,7 @@ textarea::placeholder { color: var(--g4); }
 
           <hr class="form-divider">
           <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-            <button class="btn-send" id="mail-preview-btn" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
+            <button class="btn-send" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
             <button class="btn-send" id="mail-send-btn" onclick="sendMail()">
               <div class="send-spinner" id="mail-spin"></div>
               <span id="mail-lbl">Envoyer</span>
@@ -794,7 +793,7 @@ textarea::placeholder { color: var(--g4); }
     <div class="footer-right">
       <div class="footer-version">ROB v2.0</div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
-      <button class="btn-logout" id="admin-btn" onclick="goAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
+      <button class="btn-logout" id="admin-btn" onclick="toggleAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
     </div>
   </div>
 </div>
@@ -803,37 +802,7 @@ textarea::placeholder { color: var(--g4); }
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 
 <script>
-// ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
-// Remplacer ces deux valeurs après création du projet Supabase
-const SUPABASE_URL  = 'https://biknungxkdxtwhdhhxcm.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpa251bmd4a2R4dHdoZGhoeGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjU2NjgsImV4cCI6MjA5MzI0MTY2OH0.AaRhUd-2sKgqjcYw6jZMii8TISiG6UVT1eT7gGMlF1Q';
-
-async function sbFetch(path, opts = {}) {
-  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
-    headers: {
-      'apikey': SUPABASE_ANON,
-      'Authorization': 'Bearer ' + SUPABASE_ANON,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      ...opts.headers
-    },
-    ...opts
-  });
-  if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + await res.text());
-  const txt = await res.text();
-  return txt ? JSON.parse(txt) : null;
-}
-
-// ─── ACCOUNTS (mots de passe hashés restent ici, jamais dans Supabase) ────────
-const ACCOUNTS = {
-  'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', level: 'admin',  display: 'Antoine Fonfreyde', role: 'Admin · Liberty FIT' },
-  'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', level: 'active', display: 'Romain Ammari',     role: 'Chef de projet FIT' },
-  'frederique.jehl':   { hash: '64bb3657407463fa1ee427ac336a35b21def6856b308c62136d97edcf9ccf02d', level: 'explorer', display: 'Frederique Jehl',   role: 'Chef de projet FIT' },
-  'cristina.badino':   { hash: '1a4668e998a410adf8503e25ebd4a966f13fb7bf388303383e4b7d74d7734259', level: 'explorer', display: 'Cristina Badino',   role: 'Chef de projet FIT' },
-  'emma.vandenesse':   { hash: '7bc2e9bda7b0fd02c8b5a40701166306ee0aed5d93f486750a0acb51780c3e65', level: 'explorer', display: 'Emma Vandenesse',   role: 'Chef de projet FIT' },
-  'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', level: 'explorer', display: 'Sandra Verchin',    role: 'Chef de projet FIT' },
-  'guest.liberty':     { hash: 'ffa98f1fd5bc4f6ef2973a85fa16b1c4e8c442736b6cb1989e2052893ee723ec', level: 'explorer', display: 'Invite Liberty',    role: 'Acces demonstration' },
-};
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
 
 const WEBHOOKS = {
   kensington: 'https://hook.eu1.make.com/2mp8ancoa1l53tg75x7wvea45bvbmcw8',
@@ -841,6 +810,21 @@ const WEBHOOKS = {
   compta:     'https://hook.eu1.make.com/ovr2e7q79nj1u9y53dl1b6pj8xqasfhg',
   mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio'
 };
+
+const ACCOUNTS = {
+  'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', active: true,  level: 'admin',    display: 'Antoine Fonfreyde',  role: 'Admin · Liberty FIT' },
+  'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', active: true,  level: 'active',   display: 'Romain Ammari',      role: 'Chef de projet FIT' },
+  'frederique.jehl':   { hash: '64bb3657407463fa1ee427ac336a35b21def6856b308c62136d97edcf9ccf02d', active: false, level: 'explorer', display: 'Frederique Jehl',     role: 'Chef de projet FIT' },
+  'cristina.badino':   { hash: '1a4668e998a410adf8503e25ebd4a966f13fb7bf388303383e4b7d74d7734259', active: false, level: 'explorer', display: 'Cristina Badino',    role: 'Chef de projet FIT' },
+  'emma.vandenesse':   { hash: '7bc2e9bda7b0fd02c8b5a40701166306ee0aed5d93f486750a0acb51780c3e65', active: false, level: 'explorer', display: 'Emma Vandenesse',    role: 'Chef de projet FIT' },
+  'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', active: false, level: 'explorer', display: 'Sandra Verchin',     role: 'Chef de projet FIT' },
+};
+
+// Runtime state (admin can toggle without page reload)
+const accountsState = JSON.parse(localStorage.getItem('rob_accounts') || 'null') || 
+  Object.fromEntries(Object.entries(ACCOUNTS).map(([k,v]) => [k, { active: v.active, level: v.level }]));
+
+const SIGNATURE = `Bien cordialement,\n\nAntoine Fonfreyde\nJunior Project Manager\nLiberty Incentives & Congresses\n116 avenue Gabriel Péri, 93400 Saint-Ouen\nfrance@liberty-int.com\nwww.liberty-int.com`;
 
 const PROMPTS = {
 kensington: `Tu es un assistant opérationnel pour Liberty Incentives & Congresses France, DMC haut de gamme basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 personnes), client principal : Kensington Tours (KT).
@@ -878,7 +862,7 @@ Périmètre France / Hors périmètre
 4. ACTIONS À LANCER AUJOURD'HUI : priorité haute / priorité normale / avec échéances
 
 FORMAT MAILS (Output 2) :
-S�parer chaque mail par ---MAIL---
+Séparer chaque mail par ---MAIL---
 Pour chaque mail :
 SERVICE : [intitulé exact]
 JOUR : [date]
@@ -938,9 +922,9 @@ Génère les outputs séparés par les marqueurs suivants :
 - Programme client : entre ===OUTPUT2_START=== et ===OUTPUT2_END===`
 };
 
-// ─── RUNTIME STATE ────────────────────────────────────────────────────────────
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+
 let currentUser = null;
-let userRecord  = null; // données Supabase de l'utilisateur connecté
 let mailsRaw = '';
 let mailBlocks = [];
 let selectedMails = new Set();
@@ -949,19 +933,16 @@ let currentMailType = 'guide';
 let svcCount = 0;
 let qdSvcCount = 0;
 
-// ─── AUTH ─────────────────────────────────────────────────────────────────────
-
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
 async function doLogin() {
-  const user    = document.getElementById('login-user').value;
-  const pwd     = document.getElementById('login-pwd').value;
-  const errEl   = document.getElementById('login-error');
-  const lockEl  = document.getElementById('login-locked');
-  const btn     = document.querySelector('.login-btn');
+  const user = document.getElementById('login-user').value;
+  const pwd  = document.getElementById('login-pwd').value;
+  const errEl  = document.getElementById('login-error');
+  const lockEl = document.getElementById('login-locked');
   errEl.className = 'login-msg';
   lockEl.className = 'login-msg';
 
@@ -973,83 +954,44 @@ async function doLogin() {
   const hash = await sha256(pwd);
   if (hash !== account.hash) { errEl.className = 'login-msg error'; return; }
 
-  // Vérification du niveau d'accès dans Supabase
-  btn.textContent = 'Vérification...';
-  btn.disabled = true;
-  try {
-    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level');
-    if (!rows || rows.length === 0) {
-      // Compte non encore dans Supabase : bloquer
-      lockEl.className = 'login-msg locked';
-      return;
-    }
-    const rec = rows[0];
+  const state = accountsState[user];
+  if (!state.active) { lockEl.className = 'login-msg locked'; return; }
 
-    // Le level admin ne peut venir que de ACCOUNTS -- jamais de Supabase
-    const effectiveLevel = account.level === 'admin' ? 'admin' : rec.level;
-    const isActive = account.level === 'admin' ? true : rec.active;
-
-    if (!isActive) { lockEl.className = 'login-msg locked'; return; }
-
-    currentUser = user;
-    userRecord  = { ...rec, level: effectiveLevel, display: account.display, role: account.role };
-
-    // Log connexion dans Supabase
-    await sbFetch('rob_logs', {
-      method: 'POST',
-      body: JSON.stringify({ username: user, connected_at: new Date().toISOString() })
-    }).catch(() => {}); // non bloquant
-
-    launchApp();
-  } catch(e) {
-    errEl.className = 'login-msg error';
-    errEl.textContent = 'Erreur de connexion : ' + e.message;
-  } finally {
-    btn.textContent = 'Se connecter';
-    btn.disabled = false;
-  }
+  currentUser = user;
+  logConnection(user);
+  launchApp(account, state);
 }
 
-function launchApp() {
+function launchApp(account, state) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'flex';
 
-  const initials = userRecord.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  const initials = account.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   document.getElementById('footer-avatar').textContent = initials;
-  document.getElementById('footer-name').textContent   = userRecord.display;
-  document.getElementById('footer-role').textContent   = userRecord.role;
+  document.getElementById('footer-name').textContent = account.display;
+  document.getElementById('footer-role').textContent = account.role;
 
-  const isAdmin = userRecord.level === 'admin';
-  const canUse  = userRecord.level === 'admin' || userRecord.level === 'active';
+  const isAdmin = state.level === 'admin';
+  const canUse  = state.level === 'admin' || state.level === 'active';
 
-  // Le bouton Admin mène vers admin.html (page séparée)
   if (isAdmin) {
     document.getElementById('admin-btn').style.display = 'block';
+    buildAdminPanel();
   }
 
+  // Lock modules for explorers
   if (!canUse) {
-    // Mode lecture : bandeau + desactivation boutons d'action uniquement
-    setTimeout(() => {
-      const banner = document.createElement('div');
-      banner.id = 'readonly-banner';
-      banner.style.cssText = 'background:var(--amberbg);border-bottom:0.5px solid var(--amber);padding:9px 28px;font-size:11px;color:var(--amberborder);letter-spacing:0.5px;text-align:center;';
-      banner.textContent = 'Mode consultation -- Generation desactivee sur ce compte';
-      document.querySelector('.app-header').after(banner);
-      document.querySelectorAll('.btn-send, .btn-gen, .btn-gen-docx').forEach(el => {
-        el.disabled = true;
-        el.style.opacity = '0.3';
-        el.style.cursor = 'not-allowed';
-        el.style.pointerEvents = 'none';
-      });
-      // Réactiver uniquement le bouton Aperçu
-      const previewBtn = document.getElementById('mail-preview-btn');
-      if (previewBtn) {
-        previewBtn.disabled = false;
-        previewBtn.style.opacity = '1';
-        previewBtn.style.cursor = 'pointer';
-        previewBtn.style.pointerEvents = 'auto';
+    ['mod-kensington','mod-quotes','mod-mails','mod-quotepdf','mod-compta'].forEach(id => {
+      const btn = document.getElementById(id);
+      btn.classList.add('locked');
+      if (!btn.querySelector('.locked-badge')) {
+        const badge = document.createElement('div');
+        badge.className = 'locked-badge';
+        badge.textContent = 'Accès en attente';
+        btn.querySelector('.mod-info').appendChild(badge);
       }
-    }, 150);
+    });
+    document.getElementById('panel-kensington').innerHTML = `<div class="locked-panel"><p>Ce module n'est pas encore activé pour votre compte.<br>Contactez l'administrateur pour obtenir l'accès.</p></div>`;
   }
 
   if (svcCount === 0) addSvc();
@@ -1058,7 +1000,6 @@ function launchApp() {
 
 function logout() {
   currentUser = null;
-  userRecord  = null;
   document.getElementById('app-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-pwd').value = '';
@@ -1066,19 +1007,80 @@ function logout() {
   document.getElementById('login-locked').className = 'login-msg';
 }
 
-function goAdmin() {
-  window.location.href = 'admin.html';
+// ─── CONNECTION LOG ───────────────────────────────────────────────────────────
+
+function logConnection(user) {
+  const logs = JSON.parse(localStorage.getItem('rob_logs') || '[]');
+  logs.unshift({ user, time: new Date().toISOString() });
+  if (logs.length > 50) logs.splice(50);
+  localStorage.setItem('rob_logs', JSON.stringify(logs));
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+
+function buildAdminPanel() {
+  const list = document.getElementById('admin-users-list');
+  list.innerHTML = '';
+  Object.entries(ACCOUNTS).forEach(([key, acc]) => {
+    const state = accountsState[key];
+    const initials = acc.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const badgeClass = state.level === 'admin' ? 'badge-admin' : state.active ? 'badge-active' : 'badge-locked';
+    const badgeText  = state.level === 'admin' ? 'Admin' : state.active ? 'Actif' : 'Verrouillé';
+    const row = document.createElement('div');
+    row.className = 'admin-user-row';
+    row.innerHTML = `
+      <div class="admin-avatar">${initials}</div>
+      <div class="admin-user-info">
+        <div class="admin-user-name">${acc.display}</div>
+        <div class="admin-user-role">${key}</div>
+      </div>
+      <span class="admin-status-badge ${badgeClass}" id="badge-${key}">${badgeText}</span>
+      ${state.level !== 'admin' ? `<button class="btn-toggle" onclick="toggleUser('${key}')">${state.active ? 'Désactiver' : 'Activer'}</button>` : ''}
+    `;
+    list.appendChild(row);
+  });
+
+  const logList = document.getElementById('admin-logs-list');
+  const logs = JSON.parse(localStorage.getItem('rob_logs') || '[]');
+  if (logs.length === 0) {
+    logList.innerHTML = '<div class="log-empty">Aucune connexion enregistrée.</div>';
+  } else {
+    logList.innerHTML = logs.slice(0, 20).map(l => {
+      const d = new Date(l.time);
+      const fmt = d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+      return `<div class="log-entry"><span class="log-user">${ACCOUNTS[l.user]?.display || l.user}</span><span class="log-time">${fmt}</span></div>`;
+    }).join('');
+  }
+}
+
+function toggleUser(key) {
+  accountsState[key].active = !accountsState[key].active;
+  accountsState[key].level = accountsState[key].active ? 'active' : 'explorer';
+  localStorage.setItem('rob_accounts', JSON.stringify(accountsState));
+  buildAdminPanel();
+}
+
+function toggleAdmin() {
+  const panel = document.getElementById('panel-admin');
+  const isVisible = panel.style.display !== 'none';
+  document.querySelectorAll('.panel').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  if (!isVisible) { panel.style.display = 'block'; buildAdminPanel(); }
+  else { setMod('kensington'); }
 }
 
 // ─── MODULE SWITCHING ─────────────────────────────────────────────────────────
 
 function setMod(mod) {
+  const canUse = accountsState[currentUser]?.active;
+  if (!canUse && mod !== 'admin') return;
+
   ['kensington','quotes','mails','quotepdf','compta'].forEach(m => {
     const btn = document.getElementById('mod-' + m);
-    if (btn) btn.classList.toggle('active', m === mod);
+    if (btn) { btn.classList.toggle('active', m === mod); }
     const panel = document.getElementById('panel-' + m);
-    if (panel) panel.classList.toggle('active', m === mod);
+    if (panel) { panel.classList.toggle('active', m === mod); }
   });
+  document.getElementById('panel-admin').style.display = 'none';
 }
 
 // ─── KENSINGTON ───────────────────────────────────────────────────────────────
@@ -1791,7 +1793,6 @@ function copyRaw(varName,btnId,defaultLabel){
     setTimeout(()=>{btn.textContent=defaultLabel;btn.classList.remove('copied');},2000);
   });
 }
-</script>
 </script>
 </body>
 </html>
