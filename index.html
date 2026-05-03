@@ -1483,7 +1483,7 @@ async function sendComms() {
     const res = await fetch(WEBHOOKS.commsSend, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ subject, body })
+      body: JSON.stringify({ subject, body, sender: userRecord ? userRecord.display : '' })
     });
     if (!res.ok) { showErr('comms-send-err', 'Erreur envoi : ' + res.status); return; }
     const successEl = document.getElementById('comms-success');
