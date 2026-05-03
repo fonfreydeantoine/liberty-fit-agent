@@ -604,7 +604,6 @@ async function createUser() {
 
     await sbFetch('rob_users', {
       method: 'POST',
-      headers: { 'Prefer': 'return=minimal' },
       body: JSON.stringify({
         username,
         display_name: displayName,
