@@ -840,8 +840,14 @@ textarea::placeholder { color: var(--g4); }
           <div class="content-block" id="comms-result"></div>
           <div class="panel-footer">
             <button class="btn-copy" id="comms-copy-btn" onclick="copyEl('comms-result','comms-copy-btn','Copier')">Copier</button>
+            <button class="btn-send" id="comms-send-btn" onclick="sendComms()" style="margin-left:8px;">
+              <div class="send-spinner" id="comms-send-spin"></div>
+              <span id="comms-send-lbl">Envoyer à l'équipe</span>
+            </button>
             <button class="btn-reset" onclick="resetComms()">Nouveau message</button>
           </div>
+          <div class="msg-success" id="comms-success"><span>✓</span><span id="comms-success-txt"></span></div>
+          <div class="msg-error" id="comms-send-err"></div>
         </div>
       </div>
 
@@ -917,7 +923,8 @@ const WEBHOOKS = {
   quotes:     'https://hook.eu1.make.com/vj8jql1msq2ukwkj22o5yc98fx5unhv1',
   compta:     'https://hook.eu1.make.com/ovr2e7q79nj1u9y53dl1b6pj8xqasfhg',
   mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio',
-  comms:      'https://hook.eu1.make.com/5wnesfvbhudi0k6sl92qwmxc46u0alt9'
+  comms:      'https://hook.eu1.make.com/5wnesfvbhudi0k6sl92qwmxc46u0alt9',
+  commsSend:  'https://hook.eu1.make.com/s1r8k4akr5ltn3anf6734p3wrk4chhz3'
 };
 
 const PROMPTS = {
@@ -1457,6 +1464,40 @@ function resetComms() {
   incidentCount = 0;
   document.getElementById('comms-output').style.display = 'none';
   window.scrollTo(0,0);
+}
+
+async function sendComms() {
+  const resultEl = document.getElementById('comms-result');
+  const body = resultEl.textContent.trim();
+  if (!body) return;
+  const subjectMatch = body.match(/^Objet\s*:\s*(.+)/m);
+  const subject = subjectMatch ? subjectMatch[1].trim() : 'Information équipe FIT';
+  const btn = document.getElementById('comms-send-btn');
+  const spin = document.getElementById('comms-send-spin');
+  const lbl = document.getElementById('comms-send-lbl');
+  btn.disabled = true;
+  if (spin) spin.style.display = 'block';
+  lbl.textContent = 'Envoi en cours...';
+  hideErr('comms-send-err');
+  try {
+    const res = await fetch(WEBHOOKS.commsSend, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ subject, body })
+    });
+    if (!res.ok) { showErr('comms-send-err', 'Erreur envoi : ' + res.status); return; }
+    const successEl = document.getElementById('comms-success');
+    const successTxt = document.getElementById('comms-success-txt');
+    successTxt.textContent = 'Mail envoyé à l\'équipe.';
+    successEl.style.display = 'flex';
+    btn.style.display = 'none';
+    setTimeout(() => { successEl.style.display = 'none'; }, 4000);
+  } catch(e) { showErr('comms-send-err', 'Erreur réseau : ' + e.message);
+  } finally {
+    btn.disabled = false;
+    if (spin) spin.style.display = 'none';
+    lbl.textContent = 'Envoyer à l\'équipe';
+  }
 }
 
 // ─── MAILS DISPO ─────────────────────────────────────────────────────────────
