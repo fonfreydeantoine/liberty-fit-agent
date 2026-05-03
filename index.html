@@ -1472,6 +1472,7 @@ async function sendComms() {
   if (!body) return;
   const subjectMatch = body.match(/^Objet\s*:\s*(.+)/m);
   const subject = subjectMatch ? subjectMatch[1].trim() : 'Information équipe FIT';
+  const bodyClean = body.replace(/^Objet\s*:.*(\r?\n)+/m, '').trim();
   const btn = document.getElementById('comms-send-btn');
   const spin = document.getElementById('comms-send-spin');
   const lbl = document.getElementById('comms-send-lbl');
@@ -1483,7 +1484,7 @@ async function sendComms() {
     const res = await fetch(WEBHOOKS.commsSend, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ subject, body, sender: userRecord ? userRecord.display : '' })
+      body: JSON.stringify({ subject, body: bodyClean, sender: userRecord ? userRecord.display : '' })
     });
     if (!res.ok) { showErr('comms-send-err', 'Erreur envoi : ' + res.status); return; }
     const successEl = document.getElementById('comms-success');
