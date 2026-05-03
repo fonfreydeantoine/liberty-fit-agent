@@ -977,7 +977,7 @@ async function doLogin() {
   btn.textContent = 'Vérification...';
   btn.disabled = true;
   try {
-    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level');
+    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level,permissions');
     if (!rows || rows.length === 0) {
       // Compte non encore dans Supabase : bloquer
       lockEl.className = 'login-msg locked';
@@ -1010,6 +1010,8 @@ async function doLogin() {
   }
 }
 
+let permissionsPolling = null;
+
 function launchApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'flex';
@@ -1019,40 +1021,68 @@ function launchApp() {
   document.getElementById('footer-name').textContent   = userRecord.display;
   document.getElementById('footer-role').textContent   = userRecord.role;
 
-  const isAdmin = userRecord.level === 'admin';
-  const canUse  = userRecord.level === 'admin' || userRecord.level === 'active';
-
-  // Le bouton Admin mène vers admin.html (page séparée)
-  if (isAdmin) {
+  if (userRecord.level === 'admin') {
     document.getElementById('admin-btn').style.display = 'block';
-  }
-
-  if (!canUse) {
-    // Mode lecture : bandeau + desactivation boutons d'action uniquement
-    setTimeout(() => {
-      const banner = document.createElement('div');
-      banner.id = 'readonly-banner';
-      banner.style.cssText = 'background:var(--amberbg);border-bottom:0.5px solid var(--amber);padding:9px 28px;font-size:11px;color:var(--amberborder);letter-spacing:0.5px;text-align:center;';
-      banner.textContent = 'Mode consultation -- Generation desactivee sur ce compte';
-      document.querySelector('.app-header').after(banner);
-      // Désactiver uniquement : envoi mails, envoi compta, DOCX
-      ['mail-send-btn', 'ct-btn', 'qd-btn'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.disabled = true;
-          el.style.opacity = '0.3';
-          el.style.cursor = 'not-allowed';
-          el.style.pointerEvents = 'none';
-        }
-      });
-    }, 150);
   }
 
   if (svcCount === 0) addSvc();
   if (qdSvcCount === 0) addQdSvc();
+
+  // Appliquer permissions initiales puis polling toutes les 30s
+  setTimeout(() => applyPermissions(userRecord.permissions), 150);
+  permissionsPolling = setInterval(async () => {
+    if (!currentUser) return;
+    try {
+      const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(currentUser) + '&select=permissions,active');
+      if (rows && rows[0]) {
+        if (!rows[0].active && userRecord.level !== 'admin') { logout(); return; }
+        userRecord.permissions = rows[0].permissions;
+        applyPermissions(rows[0].permissions);
+      }
+    } catch(e) {}
+  }, 30000);
+}
+
+// Map permission -> { btnId, label }
+const PERM_BUTTONS = {
+  kensington:    { id: 'kt-btn',         label: 'Generer la fiche et les mails' },
+  quotes:        { id: 'qt-btn',         label: "Generer l'itineraire" },
+  mails_apercu:  { id: 'mail-preview-btn', label: 'Apercu' },
+  mails_envoyer: { id: 'mail-send-btn',  label: 'Envoyer' },
+  compta:        { id: 'ct-btn',         label: 'Envoyer la facture' },
+  docx:          { id: 'qd-btn',         label: 'Generer le devis DOCX' },
+};
+
+function applyPermissions(perms) {
+  if (!perms) return;
+  // Supprimer banneau existant
+  const existing = document.getElementById('readonly-banner');
+  if (existing) existing.remove();
+
+  const allDisabled = Object.values(perms).every(v => !v);
+  const someDisabled = Object.values(perms).some(v => !v);
+
+  if (someDisabled) {
+    const banner = document.createElement('div');
+    banner.id = 'readonly-banner';
+    banner.style.cssText = 'background:var(--amberbg);border-bottom:0.5px solid var(--amber);padding:9px 28px;font-size:11px;color:var(--amberborder);letter-spacing:0.5px;text-align:center;';
+    banner.textContent = 'Certaines fonctionnalites sont desactivees sur ce compte';
+    document.querySelector('.app-header').after(banner);
+  }
+
+  Object.entries(PERM_BUTTONS).forEach(([key, { id }]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const allowed = perms[key] !== false;
+    el.disabled = !allowed;
+    el.style.opacity = allowed ? '' : '0.3';
+    el.style.cursor = allowed ? '' : 'not-allowed';
+    el.style.pointerEvents = allowed ? '' : 'none';
+  });
 }
 
 function logout() {
+  if (permissionsPolling) { clearInterval(permissionsPolling); permissionsPolling = null; }
   currentUser = null;
   userRecord  = null;
   document.getElementById('app-screen').style.display = 'none';
