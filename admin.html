@@ -203,6 +203,69 @@ body { font-family: var(--font-body); background: var(--g1); color: var(--g9); m
 
 /* LOADING STATE */
 .loading-row { padding: 16px 0; color: var(--g6); font-size: 12px; text-align: center; }
+
+/* ─── CREATE USER ─── */
+.create-form { display: none; margin-top: 18px; padding-top: 18px; border-top: 0.5px solid var(--g4); }
+.create-form.visible { display: block; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-admin { margin-bottom: 13px; }
+.form-row-admin label { display: block; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 6px; }
+.form-row-admin input {
+  width: 100%; background: var(--g1); border: 0.5px solid var(--g4); border-radius: 7px;
+  padding: 10px 13px; font-family: var(--font-body); font-size: 13px; color: var(--g9);
+  outline: none; transition: border-color 0.2s;
+}
+.form-row-admin input:focus { border-color: var(--rob-yellow); }
+.form-row-admin input::placeholder { color: var(--g5); }
+.preview-box {
+  background: var(--g3); border: 0.5px solid var(--g4); border-radius: 7px;
+  padding: 12px 14px; margin-bottom: 14px;
+}
+.preview-box-label { font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--g6); margin-bottom: 8px; }
+.preview-line { font-size: 12px; color: var(--g7); margin-bottom: 3px; }
+.preview-line span { color: var(--rob-yellow); font-weight: 600; font-family: var(--font-title); }
+.btn-create {
+  background: var(--rob-yellow); border: none; border-radius: 7px;
+  padding: 10px 20px; font-family: var(--font-title); font-size: 12px; font-weight: 700;
+  color: var(--g2); cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.btn-create:hover { background: var(--rob-yellow-dark); }
+.btn-create:disabled { background: var(--g4); color: var(--g6); cursor: not-allowed; }
+.btn-toggle-create {
+  background: transparent; border: 0.5px solid rgba(245,230,66,0.3); border-radius: 6px;
+  padding: 4px 12px; font-size: 10px; color: var(--rob-yellow); cursor: pointer;
+  font-family: var(--font-body); letter-spacing: 0.5px; transition: all 0.2s;
+}
+.btn-toggle-create:hover { background: rgba(245,230,66,0.08); }
+
+/* ─── PASSWORD REVEAL ─── */
+.pwd-reveal {
+  background: var(--greenbg); border: 0.5px solid var(--green); border-radius: 8px;
+  padding: 14px 16px; display: none; margin-top: 12px;
+}
+.pwd-reveal.visible { display: block; }
+.pwd-reveal-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--greenborder); margin-bottom: 6px; font-weight: 500; }
+.pwd-reveal-user { font-size: 11px; color: var(--greenborder); opacity: 0.8; margin-bottom: 8px; }
+.pwd-reveal-value { font-family: var(--font-title); font-size: 17px; font-weight: 700; color: var(--white); letter-spacing: 1px; margin-bottom: 10px; }
+.pwd-reveal-hint { font-size: 10px; color: var(--greenborder); opacity: 0.6; margin-bottom: 10px; }
+.btn-copy-pwd {
+  background: rgba(168,204,128,0.12); border: 0.5px solid var(--green); border-radius: 5px;
+  padding: 5px 14px; font-size: 11px; color: var(--greenborder); cursor: pointer;
+  font-family: var(--font-body); transition: all 0.2s;
+}
+.btn-copy-pwd:hover { background: rgba(168,204,128,0.22); }
+.btn-copy-pwd.copied { border-color: var(--greenborder); }
+
+/* ─── RESET PWD BTN ─── */
+.btn-reset-pwd {
+  background: transparent; border: 0.5px solid var(--g4); border-radius: 5px;
+  padding: 4px 10px; font-size: 10px; color: var(--g6); cursor: pointer;
+  font-family: var(--font-body); transition: all 0.2s; flex-shrink: 0;
+}
+.btn-reset-pwd:hover { border-color: var(--rob-yellow); color: var(--rob-yellow); }
+.user-block-reveal { padding: 0 0 10px 0; display: none; }
+.user-block-reveal.visible { display: block; }
 </style>
 </head>
 <body>
@@ -265,16 +328,49 @@ body { font-family: var(--font-body); background: var(--g1); color: var(--g9); m
   <div class="app-main">
 
     <!-- GESTION DES ACCES -->
-    <div class="section-label">Gestion des acces</div>
+    <div class="section-label">Gestion des accès</div>
     <div class="card">
       <div class="card-title">
         Utilisateurs
-        <button class="btn-refresh" onclick="loadUsers()">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          Actualiser
-        </button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-toggle-create" id="btn-toggle-create" onclick="toggleCreateForm()">+ Créer un compte</button>
+          <button class="btn-refresh" onclick="loadUsers()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Actualiser
+          </button>
+        </div>
       </div>
       <div id="users-list"><div class="loading-row">Chargement...</div></div>
+
+      <!-- FORMULAIRE CRÉATION -->
+      <div class="create-form" id="create-form">
+        <div class="form-row-2">
+          <div class="form-row-admin">
+            <label>Prénom</label>
+            <input type="text" id="new-prenom" placeholder="Julie" oninput="updatePreview()"/>
+          </div>
+          <div class="form-row-admin">
+            <label>Nom</label>
+            <input type="text" id="new-nom" placeholder="Martin" oninput="updatePreview()"/>
+          </div>
+        </div>
+        <div class="form-row-admin">
+          <label>Rôle <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label>
+          <input type="text" id="new-role" placeholder="Chef de projet FIT"/>
+        </div>
+        <div class="preview-box">
+          <div class="preview-box-label">Aperçu du compte</div>
+          <div class="preview-line">Identifiant : <span id="preview-username">—</span></div>
+          <div class="preview-line">Mot de passe : <span id="preview-pwd">—</span></div>
+          <div class="preview-line">Mail copie : <span id="preview-email">—</span></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn-create" id="btn-create-submit" onclick="createUser()">Créer le compte</button>
+          <button class="btn-refresh" onclick="toggleCreateForm()">Annuler</button>
+        </div>
+        <div class="pwd-reveal" id="create-reveal"></div>
+        <div class="login-msg" id="create-error" style="margin-top:10px;"></div>
+      </div>
     </div>
 
     <!-- JOURNAL -->
@@ -390,15 +486,175 @@ const PERM_LABELS = {
   docx:          'DOCX',
 };
 
+// ─── ANIMAUX POUR LES MOTS DE PASSE ──────────────────────────────────────────
+const ANIMALS = [
+  'renard','lapin','loutre','castor','hibou','lynx','bison','panda',
+  'koala','tigre','jaguar','puma','loup','aigle','faucon','dauphin',
+  'baleine','phoque','pingouin','zèbre','girafe','okapi','tapir',
+  'capybara','raton','blaireau','putois','belette','vison','hermine',
+  'sanglier','cerf','chamois','bouquetin','marmotte','écureuil',
+  'hérisson','taupe','musaraigne','lérot','gerbille','chinchilla',
+  'alpaga','lama','vigogne','flamant','pélican','cigogne','héron',
+  'martin-pêcheur','roitelet','mésange','sitelle','geai','pie',
+];
+
+function slugify(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]/g, '');
+}
+
+function generatePassword(prenom) {
+  const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+  const num    = Math.floor(Math.random() * 90) + 10;
+  return slugify(prenom) + '_' + animal + '-' + num;
+}
+
+function updatePreview() {
+  const prenom = document.getElementById('new-prenom').value.trim();
+  const nom    = document.getElementById('new-nom').value.trim();
+  if (!prenom && !nom) {
+    document.getElementById('preview-username').textContent = '—';
+    document.getElementById('preview-pwd').textContent = '—';
+    document.getElementById('preview-email').textContent = '—';
+    return;
+  }
+  const username = slugify(prenom) + (nom ? '.' + slugify(nom) : '');
+  const pwd = generatePassword(prenom || 'user');
+  document.getElementById('preview-username').textContent = username || '—';
+  document.getElementById('preview-pwd').textContent = prenom ? pwd : '—';
+  document.getElementById('preview-email').textContent = username ? username + '@liberty-int.com' : '—';
+  // Stocker le mdp pour réutilisation au submit
+  window._previewPwd = pwd;
+}
+
+function toggleCreateForm() {
+  const form = document.getElementById('create-form');
+  const btn  = document.getElementById('btn-toggle-create');
+  const visible = form.classList.toggle('visible');
+  btn.textContent = visible ? '× Fermer' : '+ Créer un compte';
+  if (!visible) {
+    document.getElementById('new-prenom').value = '';
+    document.getElementById('new-nom').value    = '';
+    document.getElementById('new-role').value   = '';
+    document.getElementById('preview-username').textContent = '—';
+    document.getElementById('preview-pwd').textContent = '—';
+    document.getElementById('preview-email').textContent = '—';
+    document.getElementById('create-reveal').className = 'pwd-reveal';
+    document.getElementById('create-error').className  = 'login-msg';
+    window._previewPwd = null;
+  }
+}
+
+async function createUser() {
+  const prenom = document.getElementById('new-prenom').value.trim();
+  const nom    = document.getElementById('new-nom').value.trim();
+  const role   = document.getElementById('new-role').value.trim() || 'Utilisateur';
+  const errEl  = document.getElementById('create-error');
+  errEl.className = 'login-msg';
+
+  if (!prenom || !nom) {
+    errEl.className = 'login-msg error'; errEl.textContent = 'Prénom et nom obligatoires.'; return;
+  }
+
+  const username     = slugify(prenom) + '.' + slugify(nom);
+  const displayName  = prenom + ' ' + nom;
+  const pwd          = window._previewPwd || generatePassword(prenom);
+  const hash         = await sha256(pwd);
+  const btn          = document.getElementById('btn-create-submit');
+  btn.disabled = true;
+
+  try {
+    // Vérifier si l'utilisateur existe déjà
+    const existing = await sbFetch('rob_users?username=eq.' + encodeURIComponent(username) + '&select=username');
+    if (existing && existing.length > 0) {
+      errEl.className = 'login-msg error';
+      errEl.textContent = 'L\'identifiant ' + username + ' existe déjà.';
+      return;
+    }
+
+    await sbFetch('rob_users', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        username,
+        display_name: displayName,
+        role_label: role,
+        password_hash: hash,
+        active: true,
+        level: 'active',
+        permissions: {}
+      })
+    });
+
+    showReveal('create-reveal', displayName, username, pwd, 'Compte créé');
+    document.getElementById('new-prenom').value = '';
+    document.getElementById('new-nom').value    = '';
+    document.getElementById('new-role').value   = '';
+    document.getElementById('preview-username').textContent = '—';
+    document.getElementById('preview-pwd').textContent = '—';
+    document.getElementById('preview-email').textContent = '—';
+    window._previewPwd = null;
+    await loadUsers();
+    showToast('Compte créé : ' + username, 'ok');
+  } catch(e) {
+    errEl.className = 'login-msg error';
+    errEl.textContent = 'Erreur : ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function resetPassword(username, displayName) {
+  const prenom = (displayName || username).split(' ')[0];
+  const pwd    = generatePassword(prenom);
+  const hash   = await sha256(pwd);
+  try {
+    await sbFetch('rob_users?username=eq.' + encodeURIComponent(username), {
+      method: 'PATCH',
+      body: JSON.stringify({ password_hash: hash })
+    });
+    const revealEl = document.getElementById('reveal-' + username);
+    if (revealEl) showReveal('reveal-' + username, displayName, username, pwd, 'Nouveau mot de passe');
+    showToast('Mot de passe réinitialisé', 'ok');
+  } catch(e) {
+    showToast('Erreur : ' + e.message, 'err');
+  }
+}
+
+function showReveal(elId, displayName, username, pwd, label) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = `
+    <div class="pwd-reveal-label">${label}</div>
+    <div class="pwd-reveal-user">${displayName} · ${username}</div>
+    <div class="pwd-reveal-value" id="${elId}-val">${pwd}</div>
+    <div class="pwd-reveal-hint">À communiquer à l'utilisateur — ne sera plus affiché ensuite.</div>
+    <button class="btn-copy-pwd" onclick="copyPwd('${elId}-val', this)">Copier</button>
+  `;
+  el.className = 'pwd-reveal visible';
+}
+
+function copyPwd(valId, btn) {
+  const text = document.getElementById(valId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copié ✓'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
 async function loadUsers() {
   const list = document.getElementById('users-list');
   list.innerHTML = '<div class="loading-row">Chargement...</div>';
   try {
-    const rows = await sbFetch('rob_users?select=username,active,level,permissions&order=username');
+    const rows = await sbFetch('rob_users?select=username,active,level,permissions,display_name,role_label&order=username');
     if (!rows || rows.length === 0) { list.innerHTML = '<div class="loading-row">Aucun utilisateur.</div>'; return; }
     list.innerHTML = '';
     rows.forEach(row => {
-      const profile = PROFILES[row.username] || { display: row.username, role: '' };
+      const profile = {
+        display: row.display_name || (PROFILES[row.username] || {}).display || row.username,
+        role:    row.role_label   || (PROFILES[row.username] || {}).role    || ''
+      };
       const isAdmin = row.level === 'admin';
       const initials = profile.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
       const badgeClass = isAdmin ? 'badge-admin' : row.active ? 'badge-active' : 'badge-locked';
@@ -416,11 +672,13 @@ async function loadUsers() {
           </div>
           <span class="badge ${badgeClass}" id="badge-${row.username}">${badgeText}</span>
           ${!isAdmin ? `
+          <button class="btn-reset-pwd" onclick="resetPassword('${row.username}', '${profile.display.replace(/'/g,'')}')">Réinitialiser mdp</button>
           <label class="toggle" title="${row.active ? 'Desactiver' : 'Activer'}">
             <input type="checkbox" id="toggle-${row.username}" ${row.active?'checked':''} onchange="toggleUser('${row.username}', this.checked)">
             <span class="toggle-slider"></span>
           </label>` : ''}
         </div>
+        ${!isAdmin ? `<div class="user-block-reveal" id="reveal-${row.username}"></div>` : ''}
         <div class="perm-row" id="perms-${row.username}">
           ${Object.entries(PERM_LABELS).map(([key, label]) => `
             <label class="perm-chip ${perms[key]===false?'':'active'}" id="chip-${row.username}-${key}">

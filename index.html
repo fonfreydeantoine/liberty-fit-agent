@@ -383,14 +383,7 @@ textarea::placeholder { color: var(--g4); }
       <label>Identifiant</label>
       <div class="select-wrap">
         <select id="login-user">
-          <option value="">Sélectionner...</option>
-          <option value="antoine.fonfreyde">antoine.fonfreyde</option>
-          <option value="romain.ammari">romain.ammari</option>
-          <option value="frederique.jehl">frederique.jehl</option>
-          <option value="cristina.badino">cristina.badino</option>
-          <option value="emma.vandenesse">emma.vandenesse</option>
-          <option value="sandra.verchin">sandra.verchin</option>
-          <option value="guest.liberty">guest.liberty</option>
+          <option value="">Chargement...</option>
         </select>
         <div class="select-arrow">
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -907,15 +900,16 @@ async function sbFetch(path, opts = {}) {
   return txt ? JSON.parse(txt) : null;
 }
 
-// ─── ACCOUNTS (mots de passe hashés restent ici, jamais dans Supabase) ────────
+// ─── ACCOUNTS (hashes migrés vers Supabase — colonne password_hash) ──────────
+// Conservé uniquement pour compatibilité ascendante (display/role en fallback)
 const ACCOUNTS = {
-  'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', level: 'admin',  display: 'Antoine Fonfreyde', role: 'Admin · Liberty FIT' },
-  'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', level: 'active', display: 'Romain Ammari',     role: 'Chef de projet FIT' },
-  'frederique.jehl':   { hash: '64bb3657407463fa1ee427ac336a35b21def6856b308c62136d97edcf9ccf02d', level: 'explorer', display: 'Frederique Jehl',   role: 'Chef de projet FIT' },
-  'cristina.badino':   { hash: '1a4668e998a410adf8503e25ebd4a966f13fb7bf388303383e4b7d74d7734259', level: 'explorer', display: 'Cristina Badino',   role: 'Chef de projet FIT' },
-  'emma.vandenesse':   { hash: '7bc2e9bda7b0fd02c8b5a40701166306ee0aed5d93f486750a0acb51780c3e65', level: 'explorer', display: 'Emma Vandenesse',   role: 'Chef de projet FIT' },
-  'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', level: 'explorer', display: 'Sandra Verchin',    role: 'Chef de projet FIT' },
-  'guest.liberty':     { hash: 'ffa98f1fd5bc4f6ef2973a85fa16b1c4e8c442736b6cb1989e2052893ee723ec', level: 'explorer', display: 'Invite Liberty',    role: 'Acces demonstration' },
+  'antoine.fonfreyde': { display: 'Antoine Fonfreyde', role: 'Admin · Liberty FIT' },
+  'romain.ammari':     { display: 'Romain Ammari',     role: 'Chef de projet FIT' },
+  'frederique.jehl':   { display: 'Frederique Jehl',   role: 'Chef de projet FIT' },
+  'cristina.badino':   { display: 'Cristina Badino',   role: 'Chef de projet FIT' },
+  'emma.vandenesse':   { display: 'Emma Vandenesse',   role: 'Chef de projet FIT' },
+  'sandra.verchin':    { display: 'Sandra Verchin',    role: 'Chef de projet FIT' },
+  'guest.liberty':     { display: 'Invite Liberty',    role: 'Acces demonstration' },
 };
 
 const WEBHOOKS = {
@@ -1052,38 +1046,35 @@ async function doLogin() {
 
   if (!user || !pwd) { errEl.className = 'login-msg error'; return; }
 
-  const account = ACCOUNTS[user];
-  if (!account) { errEl.className = 'login-msg error'; return; }
-
-  const hash = await sha256(pwd);
-  if (hash !== account.hash) { errEl.className = 'login-msg error'; return; }
-
-  // Vérification du niveau d'accès dans Supabase
   btn.textContent = 'Vérification...';
   btn.disabled = true;
   try {
-    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level,permissions');
-    if (!rows || rows.length === 0) {
-      // Compte non encore dans Supabase : bloquer
-      lockEl.className = 'login-msg locked';
-      return;
-    }
+    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level,permissions,password_hash,display_name,role_label');
+    if (!rows || rows.length === 0) { errEl.className = 'login-msg error'; return; }
+
     const rec = rows[0];
 
-    // Le level admin ne peut venir que de ACCOUNTS -- jamais de Supabase
-    const effectiveLevel = account.level === 'admin' ? 'admin' : rec.level;
-    const isActive = account.level === 'admin' ? true : rec.active;
+    if (!rec.password_hash) { errEl.className = 'login-msg error'; return; }
 
-    if (!isActive) { lockEl.className = 'login-msg locked'; return; }
+    const hash = await sha256(pwd);
+    if (hash !== rec.password_hash) { errEl.className = 'login-msg error'; return; }
+
+    if (!rec.active && rec.level !== 'admin') { lockEl.className = 'login-msg locked'; return; }
 
     currentUser = user;
-    userRecord  = { ...rec, level: effectiveLevel, display: account.display, role: account.role };
+    // Fallback sur ACCOUNTS pour display/role si pas encore migré dans Supabase
+    const fallback = ACCOUNTS[user] || {};
+    userRecord = {
+      ...rec,
+      display: rec.display_name || fallback.display || user,
+      role:    rec.role_label   || fallback.role    || 'Utilisateur'
+    };
 
     // Log connexion dans Supabase
     await sbFetch('rob_logs', {
       method: 'POST',
       body: JSON.stringify({ username: user, connected_at: new Date().toISOString() })
-    }).catch(() => {}); // non bloquant
+    }).catch(() => {});
 
     launchApp();
   } catch(e) {
@@ -1094,6 +1085,32 @@ async function doLogin() {
     btn.disabled = false;
   }
 }
+
+async function loadLoginUsers() {
+  const select = document.getElementById('login-user');
+  try {
+    const rows = await sbFetch('rob_users?select=username,display_name&order=username');
+    if (rows && rows.length > 0) {
+      select.innerHTML = '<option value="">Sélectionner...</option>';
+      rows.forEach(row => {
+        const opt = document.createElement('option');
+        opt.value = row.username;
+        opt.textContent = row.username;
+        select.appendChild(opt);
+      });
+    }
+  } catch(e) {
+    // Fallback sur les comptes connus si Supabase inaccessible
+    select.innerHTML = '<option value="">Sélectionner...</option>';
+    Object.keys(ACCOUNTS).forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u; opt.textContent = u;
+      select.appendChild(opt);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadLoginUsers);
 
 let permissionsPolling = null;
 
