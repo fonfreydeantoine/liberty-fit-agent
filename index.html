@@ -527,6 +527,23 @@ textarea::placeholder { color: var(--g4); }
       </button>
     </div>
 
+    <!-- 6th module: Comms Internes -->
+    <div class="mod-row5">
+      <button class="mod-btn-wide" id="mod-comms" onclick="setMod('comms')">
+        <div class="mod-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 3h12v8H9l-3 2v-2H2V3z" stroke="#888780" stroke-width="1" fill="none" stroke-linejoin="round"/>
+            <line x1="4.5" y1="6.5" x2="11.5" y2="6.5" stroke="#888780" stroke-width="0.75"/>
+            <line x1="4.5" y1="8.5" x2="8.5" y2="8.5" stroke="#888780" stroke-width="0.75"/>
+          </svg>
+        </div>
+        <div class="mod-info">
+          <div class="mod-name">Comms internes</div>
+          <div class="mod-desc">Info presta · récap astreinte · mails équipe</div>
+        </div>
+      </button>
+    </div>
+
     <!-- PANEL AREA -->
     <div class="panel-area">
 
@@ -768,6 +785,66 @@ textarea::placeholder { color: var(--g4); }
         </div>
       </div>
 
+      <!-- COMMS INTERNES -->
+      <div class="panel" id="panel-comms">
+        <div class="form-card">
+          <div class="type-row">
+            <button class="type-btn active" id="comms-type-presta" onclick="setCommsType('presta')">Info presta</button>
+            <button class="type-btn" id="comms-type-astreinte" onclick="setCommsType('astreinte')">Récap astreinte</button>
+          </div>
+          <hr class="form-divider">
+
+          <!-- INFO PRESTA fields -->
+          <div id="comms-presta-fields">
+            <div class="form-row"><label class="form-label" for="cp-prestataire">Prestataire</label><input class="form-input" type="text" id="cp-prestataire" placeholder="Ex : Bateaux Parisiens"></div>
+            <div class="form-row"><label class="form-label" for="cp-destination">Destination / Région</label><input class="form-input" type="text" id="cp-destination" placeholder="Ex : Paris, Lyon, Côte d'Azur..."></div>
+            <div class="form-row">
+              <label class="form-label" for="cp-type">Type d'information</label>
+              <select class="form-input" id="cp-type">
+                <option value="Nouveau tarif">Nouveau tarif</option>
+                <option value="Travaux / Fermeture">Travaux / Fermeture</option>
+                <option value="Nouveau fournisseur">Nouveau fournisseur</option>
+                <option value="Info opérationnelle">Info opérationnelle</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-row"><label class="form-label" for="cp-contenu">Contenu</label><textarea class="form-input" id="cp-contenu" rows="4" placeholder="Décris l'information à communiquer à l'équipe..."></textarea></div>
+            <div class="form-row"><label class="form-label" for="cp-emplacement">Emplacement serveur / BDD <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><input class="form-input" type="text" id="cp-emplacement" placeholder="Ex : FOURNISSEUR_BDD / 14 PACA / SAINT-TROPEZ"></div>
+          </div>
+
+          <!-- RECAP ASTREINTE fields -->
+          <div id="comms-astreinte-fields" style="display:none;">
+            <div class="form-row"><label class="form-label" for="ca-periode">Période d'astreinte</label><input class="form-input" type="text" id="ca-periode" placeholder="Ex : Vendredi 1 - Lundi 4 mai 2026"></div>
+            <hr class="form-divider">
+            <div style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g5);font-weight:500;margin-bottom:12px;">Incidents</div>
+            <div id="comms-incidents-container"></div>
+            <button class="btn-add-svc" onclick="addIncident()">+ Ajouter un incident</button>
+            <hr class="form-divider">
+            <div class="form-row"><label class="form-label" for="ca-note">Note générale <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><textarea class="form-input" id="ca-note" rows="3" placeholder="Ex : point d'amélioration, observation générale..."></textarea></div>
+          </div>
+
+          <hr class="form-divider">
+          <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
+            <button class="btn-gen" id="comms-btn" onclick="runComms()">
+              <div class="spinner" id="comms-spin"></div>
+              <span id="comms-lbl">Générer le mail</span>
+            </button>
+          </div>
+          <div class="error-box" id="comms-err"></div>
+        </div>
+        <div class="output-section" id="comms-output" style="display:none;">
+          <div class="output-hdr">
+            <span class="output-title">Résultats</span>
+            <span class="output-mode-tag">Comms internes</span>
+          </div>
+          <div class="content-block" id="comms-result"></div>
+          <div class="panel-footer">
+            <button class="btn-copy" id="comms-copy-btn" onclick="copyEl('comms-result','comms-copy-btn','Copier')">Copier</button>
+            <button class="btn-reset" onclick="resetComms()">Nouveau message</button>
+          </div>
+        </div>
+      </div>
+
       <!-- ADMIN -->
       <div class="panel" id="panel-admin" style="display:none;">
         <div class="admin-card">
@@ -839,7 +916,8 @@ const WEBHOOKS = {
   kensington: 'https://hook.eu1.make.com/2mp8ancoa1l53tg75x7wvea45bvbmcw8',
   quotes:     'https://hook.eu1.make.com/vj8jql1msq2ukwkj22o5yc98fx5unhv1',
   compta:     'https://hook.eu1.make.com/ovr2e7q79nj1u9y53dl1b6pj8xqasfhg',
-  mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio'
+  mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio',
+  comms:      'https://hook.eu1.make.com/5wnesfvbhudi0k6sl92qwmxc46u0alt9'
 };
 
 const PROMPTS = {
@@ -1099,7 +1177,7 @@ function goAdmin() {
 // ─── MODULE SWITCHING ─────────────────────────────────────────────────────────
 
 function setMod(mod) {
-  ['kensington','quotes','mails','quotepdf','compta'].forEach(m => {
+  ['kensington','quotes','mails','quotepdf','compta','comms'].forEach(m => {
     const btn = document.getElementById('mod-' + m);
     if (btn) btn.classList.toggle('active', m === mod);
     const panel = document.getElementById('panel-' + m);
@@ -1267,6 +1345,117 @@ function switchQT(tab) {
 function resetQT() {
   document.getElementById('qt-input').value = '';
   document.getElementById('qt-output').style.display = 'none';
+  window.scrollTo(0,0);
+}
+
+// ─── COMMS INTERNES ───────────────────────────────────────────────────────────
+
+let commsType = 'presta';
+
+function setCommsType(type) {
+  commsType = type;
+  document.getElementById('comms-type-presta').classList.toggle('active', type === 'presta');
+  document.getElementById('comms-type-astreinte').classList.toggle('active', type === 'astreinte');
+  document.getElementById('comms-presta-fields').style.display = type === 'presta' ? '' : 'none';
+  document.getElementById('comms-astreinte-fields').style.display = type === 'astreinte' ? '' : 'none';
+  document.getElementById('comms-output').style.display = 'none';
+}
+
+let incidentCount = 0;
+
+function addIncident() {
+  incidentCount++;
+  const c = document.getElementById('comms-incidents-container');
+  const div = document.createElement('div');
+  div.className = 'form-card';
+  div.style.cssText = 'margin-bottom:12px;padding:12px;background:var(--g2);border-radius:6px;';
+  div.id = 'incident-' + incidentCount;
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g5);font-weight:500;">Incident ${incidentCount}</span>
+      <button onclick="removeIncident(${incidentCount})" style="background:none;border:none;color:var(--g5);cursor:pointer;font-size:14px;">×</button>
+    </div>
+    <div class="form-row-2">
+      <div><label class="form-label">Date</label><input class="form-input" type="text" id="inc-date-${incidentCount}" placeholder="Ex : Samedi 2 mai 2026"></div>
+      <div><label class="form-label">Heure</label><input class="form-input" type="text" id="inc-heure-${incidentCount}" placeholder="Ex : 14h30"></div>
+    </div>
+    <div class="form-row"><label class="form-label">N° dossier</label><input class="form-input" type="text" id="inc-dossier-${incidentCount}" placeholder="Ex : FJ 14983 Kno2T-512884 KNODEL"></div>
+    <div class="form-row"><label class="form-label">Description</label><textarea class="form-input" id="inc-desc-${incidentCount}" rows="3" placeholder="Décris la situation et les actions prises..."></textarea></div>
+    <div class="form-row"><label class="form-label">Résolution</label><input class="form-input" type="text" id="inc-resolution-${incidentCount}" placeholder="Ex : Problème résolu après contact avec Hacène"></div>
+  `;
+  c.appendChild(div);
+}
+
+function removeIncident(n) {
+  const el = document.getElementById('incident-' + n);
+  if (el) el.remove();
+}
+
+function buildCommsPayload() {
+  if (commsType === 'presta') {
+    const prestataire = document.getElementById('cp-prestataire').value.trim();
+    const destination = document.getElementById('cp-destination').value.trim();
+    const type = document.getElementById('cp-type').value;
+    const contenu = document.getElementById('cp-contenu').value.trim();
+    const emplacement = document.getElementById('cp-emplacement').value.trim();
+    if (!prestataire || !contenu) return null;
+    let payload = `TYPE_MODULE: INFO_PRESTA\nPRESTATAIRE: ${prestataire}\nDESTINATION: ${destination}\nTYPE: ${type}\nCONTENU: ${contenu}`;
+    if (emplacement) payload += `\nEMPLACEMENT: ${emplacement}`;
+    return payload;
+  } else {
+    const periode = document.getElementById('ca-periode').value.trim();
+    const note = document.getElementById('ca-note').value.trim();
+    if (!periode) return null;
+    let incidents = '';
+    let n = 0;
+    document.querySelectorAll('[id^="incident-"]').forEach(el => {
+      const id = el.id.replace('incident-', '');
+      const date = document.getElementById('inc-date-' + id)?.value.trim() || '';
+      const heure = document.getElementById('inc-heure-' + id)?.value.trim() || '';
+      const dossier = document.getElementById('inc-dossier-' + id)?.value.trim() || '';
+      const desc = document.getElementById('inc-desc-' + id)?.value.trim() || '';
+      const resolution = document.getElementById('inc-resolution-' + id)?.value.trim() || '';
+      if (date || dossier || desc) {
+        n++;
+        incidents += `\nINCIDENT ${n}\n  DATE: ${date}\n  HEURE: ${heure}\n  DOSSIER: ${dossier}\n  DESCRIPTION: ${desc}\n  RESOLUTION: ${resolution || '[À PRÉCISER]'}`;
+      }
+    });
+    if (!incidents) return null;
+    let payload = `TYPE_MODULE: RECAP_ASTREINTE\nPERIODE: ${periode}${incidents}`;
+    if (note) payload += `\nNOTE_GENERALE: ${note}`;
+    return payload;
+  }
+}
+
+async function runComms() {
+  const payload = buildCommsPayload();
+  if (!payload) { showErr('comms-err', 'Veuillez remplir les champs obligatoires.'); return; }
+  setLoading('comms-btn','comms-spin','comms-lbl','Génération en cours...','','');
+  document.getElementById('comms-output').style.display = 'none';
+  hideErr('comms-err');
+  try {
+    const res = await fetch(WEBHOOKS.comms, { method:'POST', headers:{'Content-Type':'text/plain'}, body: payload });
+    if (!res.ok) { showErr('comms-err', 'Erreur Make : ' + res.status); return; }
+    const raw = await res.text();
+    const text = parseWebhookText(raw);
+    if (!text || text.length < 10) { showErr('comms-err', 'Réponse vide.'); return; }
+    document.getElementById('comms-result').textContent = text;
+    document.getElementById('comms-output').style.display = 'block';
+    document.getElementById('comms-output').scrollIntoView({behavior:'smooth', block:'start'});
+  } catch(e) { showErr('comms-err', 'Erreur réseau : ' + e.message);
+  } finally { clearLoading('comms-btn','comms-spin','comms-lbl','Générer le mail',''); }
+}
+
+function resetComms() {
+  document.getElementById('cp-prestataire').value = '';
+  document.getElementById('cp-destination').value = '';
+  document.getElementById('cp-contenu').value = '';
+  document.getElementById('cp-emplacement').value = '';
+  document.getElementById('ca-periode').value = '';
+  document.getElementById('ca-note').value = '';
+  document.getElementById('comms-incidents-container').innerHTML = '';
+  incidentCount = 0;
+  document.getElementById('comms-output').style.display = 'none';
   window.scrollTo(0,0);
 }
 
