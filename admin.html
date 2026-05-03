@@ -373,6 +373,35 @@ body { font-family: var(--font-body); background: var(--g1); color: var(--g9); m
       </div>
     </div>
 
+    <!-- MON MOT DE PASSE -->
+    <div class="section-label" style="margin-top:8px;">Mon compte</div>
+    <div class="card">
+      <div class="card-title">
+        Changer mon mot de passe
+        <button class="btn-toggle-create" id="btn-toggle-chgpwd" onclick="toggleChgPwd()">Modifier</button>
+      </div>
+      <div class="create-form" id="chgpwd-form">
+        <div class="form-row-admin">
+          <label>Mot de passe actuel</label>
+          <input type="password" id="chgpwd-current" placeholder="••••••••"/>
+        </div>
+        <div class="form-row-admin">
+          <label>Nouveau mot de passe</label>
+          <input type="password" id="chgpwd-new" placeholder="••••••••"/>
+        </div>
+        <div class="form-row-admin">
+          <label>Confirmer le nouveau mot de passe</label>
+          <input type="password" id="chgpwd-confirm" placeholder="••••••••" onkeydown="if(event.key==='Enter')changeMyPassword()"/>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
+          <button class="btn-create" id="btn-chgpwd-submit" onclick="changeMyPassword()">Enregistrer</button>
+          <button class="btn-refresh" onclick="toggleChgPwd()">Annuler</button>
+        </div>
+        <div class="login-msg" id="chgpwd-error" style="margin-top:10px;"></div>
+        <div class="pwd-reveal" id="chgpwd-success" style="margin-top:12px;"></div>
+      </div>
+    </div>
+
     <!-- JOURNAL -->
     <div class="section-label" style="margin-top:8px;">Journal de connexions</div>
     <div class="card">
@@ -750,6 +779,72 @@ async function togglePerm(username, key, value) {
       const cb = chip.querySelector('input');
       if (cb) cb.checked = !value;
     }
+  }
+}
+
+// ─── MON MOT DE PASSE ────────────────────────────────────────────────────────
+function toggleChgPwd() {
+  const form = document.getElementById('chgpwd-form');
+  const btn  = document.getElementById('btn-toggle-chgpwd');
+  const visible = form.classList.toggle('visible');
+  btn.textContent = visible ? '× Fermer' : 'Modifier';
+  if (!visible) {
+    document.getElementById('chgpwd-current').value  = '';
+    document.getElementById('chgpwd-new').value      = '';
+    document.getElementById('chgpwd-confirm').value  = '';
+    document.getElementById('chgpwd-error').className   = 'login-msg';
+    document.getElementById('chgpwd-success').className = 'pwd-reveal';
+  }
+}
+
+async function changeMyPassword() {
+  const current  = document.getElementById('chgpwd-current').value;
+  const newPwd   = document.getElementById('chgpwd-new').value;
+  const confirm  = document.getElementById('chgpwd-confirm').value;
+  const errEl    = document.getElementById('chgpwd-error');
+  errEl.className = 'login-msg';
+  document.getElementById('chgpwd-success').className = 'pwd-reveal';
+
+  if (!current || !newPwd || !confirm) {
+    errEl.className = 'login-msg error'; errEl.textContent = 'Tous les champs sont obligatoires.'; return;
+  }
+  if (newPwd !== confirm) {
+    errEl.className = 'login-msg error'; errEl.textContent = 'Les deux mots de passe ne correspondent pas.'; return;
+  }
+  if (newPwd.length < 6) {
+    errEl.className = 'login-msg error'; errEl.textContent = 'Le mot de passe doit faire au moins 6 caractères.'; return;
+  }
+
+  const btn = document.getElementById('btn-chgpwd-submit');
+  btn.disabled = true;
+  try {
+    // Vérifier le mot de passe actuel
+    const currentHash = await sha256(current);
+    const rows = await sbFetch('rob_users?username=eq.antoine.fonfreyde&select=password_hash');
+    if (!rows || rows.length === 0 || rows[0].password_hash !== currentHash) {
+      errEl.className = 'login-msg error'; errEl.textContent = 'Mot de passe actuel incorrect.'; return;
+    }
+
+    const newHash = await sha256(newPwd);
+    await sbFetch('rob_users?username=eq.antoine.fonfreyde', {
+      method: 'PATCH',
+      body: JSON.stringify({ password_hash: newHash })
+    });
+
+    const successEl = document.getElementById('chgpwd-success');
+    successEl.innerHTML = `
+      <div class="pwd-reveal-label">Mot de passe mis à jour</div>
+      <div class="pwd-reveal-hint">Nouveau mot de passe actif. Tu peux fermer ce formulaire.</div>
+    `;
+    successEl.className = 'pwd-reveal visible';
+    document.getElementById('chgpwd-current').value = '';
+    document.getElementById('chgpwd-new').value     = '';
+    document.getElementById('chgpwd-confirm').value = '';
+    showToast('Mot de passe mis à jour', 'ok');
+  } catch(e) {
+    errEl.className = 'login-msg error'; errEl.textContent = 'Erreur : ' + e.message;
+  } finally {
+    btn.disabled = false;
   }
 }
 
