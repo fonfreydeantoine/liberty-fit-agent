@@ -354,6 +354,326 @@ textarea::placeholder { color: var(--g4); }
 .log-user { color: var(--rob-yellow); font-weight: 500; min-width: 160px; }
 .log-time { color: var(--g6); font-size: 11px; }
 .log-empty { font-size: 13px; color: var(--g6); padding: 8px 0; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ─── ALFRED MODULE — NOUVEAU BLOC (ajouté v2.1) ──────────────────────────
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Carte hero Alfred pleine largeur */
+.alfred-hero {
+  background: var(--g2);
+  border: 0.5px solid var(--rob-yellow);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.alfred-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icône animée */
+.alfred-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(245, 230, 66, 0.08);
+  border: 0.5px solid rgba(245, 230, 66, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Badge compteur emails non lus (mis à jour dynamiquement) */
+.alfred-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 16px;
+  height: 16px;
+  background: #E24B4A;
+  border-radius: 8px;
+  border: 1.5px solid var(--g2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-title);
+  font-size: 8px;
+  font-weight: 700;
+  color: #fff;
+  padding: 0 3px;
+  display: none; /* affiché seulement si compteur > 0 */
+}
+
+/* Pulse sur l'icône quand idle */
+@keyframes alfred-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(245, 230, 66, 0.25); }
+  70%  { box-shadow: 0 0 0 8px rgba(245, 230, 66, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 230, 66, 0); }
+}
+.alfred-icon-wrap.idle { animation: alfred-pulse-ring 2.5s ease-out infinite; }
+
+.alfred-info { flex: 1; min-width: 0; }
+
+.alfred-name {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rob-yellow);
+  letter-spacing: 0.5px;
+}
+
+.alfred-tagline {
+  font-size: 11px;
+  color: var(--g6);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bouton CTA Alfred */
+.alfred-btn-cta {
+  background: var(--rob-yellow);
+  color: var(--g2);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-family: var(--font-title);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.1s;
+}
+.alfred-btn-cta:hover { background: var(--rob-yellow-dark); }
+.alfred-btn-cta:active { transform: scale(0.97); }
+.alfred-btn-cta:disabled { background: var(--g4); color: var(--g6); cursor: not-allowed; }
+
+.alfred-cta-spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(26, 25, 24, 0.25);
+  border-top-color: var(--g2);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+
+/* ─── Erreur Alfred ────────────────────────────────────────────────────── */
+.alfred-error {
+  display: none;
+  margin-top: 14px;
+  background: var(--redbg);
+  border: 0.5px solid var(--red);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--redborder);
+  line-height: 1.6;
+}
+
+/* ─── Zone de résultats Alfred ─────────────────────────────────────────── */
+.alfred-results {
+  margin-top: 16px;
+  border-top: 0.5px solid rgba(245, 230, 66, 0.15);
+  padding-top: 16px;
+}
+
+/* En-tête résultats */
+.alfred-results-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.alfred-results-title {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--g6);
+  font-weight: 500;
+}
+
+.alfred-results-meta {
+  font-size: 10px;
+  color: var(--g5);
+  letter-spacing: 0.5px;
+}
+
+/* Synthèse globale */
+.alfred-synth {
+  background: var(--g1);
+  border: 0.5px solid var(--g4);
+  border-left: 2.5px solid var(--rob-yellow);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  font-size: 11px;
+  color: var(--g7);
+  line-height: 1.6;
+}
+
+/* Sections urgence */
+.alfred-section { margin-bottom: 12px; }
+
+.alfred-section-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 7px 7px 0 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.alfred-section-hdr.urgent  { background: rgba(226, 75, 74, 0.12); color: #F09595; border: 0.5px solid rgba(226,75,74,0.25); border-bottom: none; }
+.alfred-section-hdr.important { background: rgba(239, 159, 39, 0.10); color: #FAC775; border: 0.5px solid rgba(239,159,39,0.25); border-bottom: none; }
+.alfred-section-hdr.normal  { background: rgba(99, 153, 34, 0.10); color: #A8CC80; border: 0.5px solid rgba(99,153,34,0.25); border-bottom: none; }
+.alfred-section-hdr.ignored { background: var(--g3); color: var(--g6); border: 0.5px solid var(--g4); border-bottom: none; }
+
+.alfred-section-body {
+  border: 0.5px solid var(--g4);
+  border-top: none;
+  border-radius: 0 0 7px 7px;
+  overflow: hidden;
+}
+.alfred-section-hdr.urgent  + .alfred-section-body { border-color: rgba(226,75,74,0.2); }
+.alfred-section-hdr.important + .alfred-section-body { border-color: rgba(239,159,39,0.2); }
+.alfred-section-hdr.normal  + .alfred-section-body { border-color: rgba(99,153,34,0.2); }
+
+/* Carte tâche individuelle */
+.alfred-task {
+  background: var(--g2);
+  padding: 13px 16px;
+  border-bottom: 0.5px solid var(--g4);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.alfred-task:last-child { border-bottom: none; }
+
+.alfred-task-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.dot-urgent   { background: #E24B4A; }
+.dot-important { background: #EF9F27; }
+.dot-normal   { background: #639922; }
+.dot-ignored  { background: var(--g5); }
+
+.alfred-task-content { flex: 1; min-width: 0; }
+
+.alfred-task-subject {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--g9);
+  line-height: 1.45;
+  margin-bottom: 4px;
+}
+
+.alfred-task-meta {
+  font-size: 10px;
+  color: var(--g6);
+  margin-bottom: 5px;
+}
+
+.alfred-task-body {
+  font-size: 12px;
+  color: var(--g7);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Zone de réponse suggérée — style distinct */
+.alfred-reply-box {
+  background: var(--g1);
+  border: 0.5px solid var(--g4);
+  border-left: 2px solid var(--rob-yellow);
+  border-radius: 0 6px 6px 0;
+  padding: 10px 12px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--g8);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.alfred-reply-label {
+  font-size: 8px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--g5);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Bouton copier draft */
+.alfred-copy-reply {
+  background: transparent;
+  border: 0.5px solid var(--g4);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--g6);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  margin-top: 6px;
+  display: inline-block;
+}
+.alfred-copy-reply:hover { border-color: var(--g7); color: var(--g8); }
+.alfred-copy-reply.copied { border-color: #4CAF50; color: #4CAF50; }
+
+/* Footer résultats Alfred */
+.alfred-results-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 0.5px solid var(--g4);
+}
+
+/* Texte brut fallback (si parsing impossible) */
+.alfred-raw {
+  background: var(--g2);
+  border: 0.5px solid var(--g4);
+  border-radius: 8px;
+  padding: 18px;
+  font-size: 12px;
+  color: var(--g8);
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ═══════════════════════ FIN ALFRED CSS ═══════════════════════ */
+
 </style>
 </head>
 <body>
@@ -398,7 +718,7 @@ textarea::placeholder { color: var(--g4); }
     <div class="login-msg" id="login-error">Identifiant ou mot de passe incorrect.</div>
     <div class="login-msg" id="login-locked">Ce compte n'est pas encore activé. Contactez l'administrateur.</div>
   </div>
-  <div class="login-footer-txt">ROB v2.0 · Liberty Incentives &amp; Congresses France</div>
+  <div class="login-footer-txt">ROB v2.1 · Liberty Incentives &amp; Congresses France</div>
 </div>
 
 <!-- ═══════════════════════ APP SCREEN ═══════════════════════ -->
@@ -426,6 +746,64 @@ textarea::placeholder { color: var(--g4); }
   </div>
 
   <div class="app-main">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ALFRED HERO ROW — NOUVEAU MODULE (ajouté v2.1)
+         Positionné au-dessus de la grille de modules.
+         Déclenche le webhook Make → analyse Gmail → retour Claude.
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="alfred-hero" id="alfred-hero-card">
+
+      <div class="alfred-hero-inner">
+
+        <!-- Icône enveloppe animée -->
+        <div class="alfred-icon-wrap idle" id="alfred-icon-wrap">
+          <!-- Badge compteur emails non lus (optionnel, masqué par défaut) -->
+          <div class="alfred-badge" id="alfred-badge"></div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="5" width="16" height="11" rx="2" stroke="#F5E642" stroke-width="1"/>
+            <polyline points="2,6 10,12 18,6" stroke="#F5E642" stroke-width="0.85" fill="none"/>
+          </svg>
+        </div>
+
+        <!-- Nom + description -->
+        <div class="alfred-info">
+          <div class="alfred-name">Alfred</div>
+          <div class="alfred-tagline">Analyse vos emails non lus · génère une liste de tâches priorisées</div>
+        </div>
+
+        <!-- Bouton principal -->
+        <button class="alfred-btn-cta" id="alfred-btn" onclick="runAlfred()">
+          <div class="alfred-cta-spinner" id="alfred-spin"></div>
+          <span id="alfred-lbl">Analyser mes emails</span>
+        </button>
+
+      </div>
+
+      <!-- Message d'erreur Alfred -->
+      <div class="alfred-error" id="alfred-err"></div>
+
+      <!-- Zone résultats (masquée jusqu'au premier appel) -->
+      <div class="alfred-results" id="alfred-results" style="display:none;">
+
+        <div class="alfred-results-hdr">
+          <span class="alfred-results-title">Analyse Alfred</span>
+          <span class="alfred-results-meta" id="alfred-results-meta"></span>
+        </div>
+
+        <!-- Rendu dynamique — injecté par renderAlfred() -->
+        <div id="alfred-output"></div>
+
+        <!-- Footer résultats -->
+        <div class="alfred-results-footer">
+          <button class="btn-copy" id="alfred-copy-btn" onclick="copyAlfredRaw()">Copier l'analyse</button>
+          <button class="btn-reset" onclick="resetAlfred()">Nouvelle analyse</button>
+        </div>
+
+      </div>
+    </div>
+    <!-- ═══════════════ FIN ALFRED HERO ROW ═══════════════ -->
+
     <div class="section-label">Choisir un module</div>
 
     <div class="mod-grid">
@@ -868,7 +1246,7 @@ textarea::placeholder { color: var(--g4); }
       </div>
     </div>
     <div class="footer-right">
-      <div class="footer-version">ROB v2.0</div>
+      <div class="footer-version">ROB v2.1</div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
       <button class="btn-logout" id="admin-btn" onclick="goAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
     </div>
@@ -880,7 +1258,6 @@ textarea::placeholder { color: var(--g4); }
 
 <script>
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
-// Remplacer ces deux valeurs après création du projet Supabase
 const SUPABASE_URL  = 'https://biknungxkdxtwhdhhxcm.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpa251bmd4a2R4dHdoZGhoeGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjU2NjgsImV4cCI6MjA5MzI0MTY2OH0.AaRhUd-2sKgqjcYw6jZMii8TISiG6UVT1eT7gGMlF1Q';
 
@@ -900,8 +1277,6 @@ async function sbFetch(path, opts = {}) {
   return txt ? JSON.parse(txt) : null;
 }
 
-// ─── ACCOUNTS (hashes migrés vers Supabase — colonne password_hash) ──────────
-// Conservé uniquement pour compatibilité ascendante (display/role en fallback)
 const ACCOUNTS = {
   'antoine.fonfreyde': { display: 'Antoine Fonfreyde', role: 'Admin · Liberty FIT' },
   'romain.ammari':     { display: 'Romain Ammari',     role: 'Chef de projet FIT' },
@@ -918,14 +1293,14 @@ const WEBHOOKS = {
   compta:     'https://hook.eu1.make.com/ovr2e7q79nj1u9y53dl1b6pj8xqasfhg',
   mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio',
   comms:      'https://hook.eu1.make.com/5wnesfvbhudi0k6sl92qwmxc46u0alt9',
-  commsSend:  'https://hook.eu1.make.com/s1r8k4akr5ltn3anf6734p3wrk4chhz3'
+  commsSend:  'https://hook.eu1.make.com/s1r8k4akr5ltn3anf6734p3wrk4chhz3',
+  // ═══ ALFRED — Remplacer par l'URL de votre webhook Make (v2.1) ═══
+  alfred:     'https://hook.eu1.make.com/VOTRE_WEBHOOK_ALFRED_ICI',
 };
-
-
 
 // ─── RUNTIME STATE ────────────────────────────────────────────────────────────
 let currentUser = null;
-let userRecord  = null; // données Supabase de l'utilisateur connecté
+let userRecord  = null;
 let mailsRaw = '';
 let mailBlocks = [];
 let selectedMails = new Set();
@@ -933,6 +1308,8 @@ let comptaFile = null;
 let currentMailType = 'guide';
 let svcCount = 0;
 let qdSvcCount = 0;
+// ─── Alfred state (v2.1) ─────────────────────────────────────────────────────
+let alfredRawText = ''; // dernière analyse brute, utilisée pour "Copier l'analyse"
 
 // ─── AUTH ─────────────────────────────────────────────────────────────────────
 
@@ -959,7 +1336,6 @@ async function doLogin() {
     if (!rows || rows.length === 0) { errEl.className = 'login-msg error'; return; }
 
     const rec = rows[0];
-
     if (!rec.password_hash) { errEl.className = 'login-msg error'; return; }
 
     const hash = await sha256(pwd);
@@ -968,7 +1344,6 @@ async function doLogin() {
     if (!rec.active && rec.level !== 'admin') { lockEl.className = 'login-msg locked'; return; }
 
     currentUser = user;
-    // Fallback sur ACCOUNTS pour display/role si pas encore migré dans Supabase
     const fallback = ACCOUNTS[user] || {};
     userRecord = {
       ...rec,
@@ -976,7 +1351,6 @@ async function doLogin() {
       role:    rec.role_label   || fallback.role    || 'Utilisateur'
     };
 
-    // Log connexion dans Supabase
     await sbFetch('rob_logs', {
       method: 'POST',
       body: JSON.stringify({ username: user, connected_at: new Date().toISOString() })
@@ -1006,7 +1380,6 @@ async function loadLoginUsers() {
       });
     }
   } catch(e) {
-    // Fallback sur les comptes connus si Supabase inaccessible
     select.innerHTML = '<option value="">Sélectionner...</option>';
     Object.keys(ACCOUNTS).forEach(u => {
       const opt = document.createElement('option');
@@ -1036,7 +1409,6 @@ function launchApp() {
   if (svcCount === 0) addSvc();
   if (qdSvcCount === 0) addQdSvc();
 
-  // Appliquer permissions initiales puis polling toutes les 30s
   setTimeout(() => applyPermissions(userRecord.permissions), 150);
   permissionsPolling = setInterval(async () => {
     if (!currentUser) return;
@@ -1051,23 +1423,22 @@ function launchApp() {
   }, 30000);
 }
 
-// Map permission -> { btnId, label }
+// Map permission -> { id } — alfred ajouté (v2.1)
 const PERM_BUTTONS = {
-  kensington:    { id: 'kt-btn',         label: 'Generer la fiche et les mails' },
-  quotes:        { id: 'qt-btn',         label: "Generer l'itineraire" },
-  mails_apercu:  { id: 'mail-preview-btn', label: 'Apercu' },
-  mails_envoyer: { id: 'mail-send-btn',  label: 'Envoyer' },
-  compta:        { id: 'ct-btn',         label: 'Envoyer la facture' },
-  docx:          { id: 'qd-btn',         label: 'Generer le devis DOCX' },
+  kensington:    { id: 'kt-btn' },
+  quotes:        { id: 'qt-btn' },
+  mails_apercu:  { id: 'mail-preview-btn' },
+  mails_envoyer: { id: 'mail-send-btn' },
+  compta:        { id: 'ct-btn' },
+  docx:          { id: 'qd-btn' },
+  alfred:        { id: 'alfred-btn' }, // ← NOUVEAU (v2.1)
 };
 
 function applyPermissions(perms) {
   if (!perms) return;
-  // Supprimer banneau existant
   const existing = document.getElementById('readonly-banner');
   if (existing) existing.remove();
 
-  const allDisabled = Object.values(perms).every(v => !v);
   const someDisabled = Object.values(perms).some(v => !v);
 
   if (someDisabled) {
@@ -1093,6 +1464,7 @@ function logout() {
   if (permissionsPolling) { clearInterval(permissionsPolling); permissionsPolling = null; }
   currentUser = null;
   userRecord  = null;
+  alfredRawText = '';
   document.getElementById('app-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-pwd').value = '';
@@ -1115,6 +1487,352 @@ function setMod(mod) {
   });
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// ─── ALFRED — FONCTIONS PRINCIPALES (ajouté v2.1) ─────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * runAlfred()
+ * Envoie un déclencheur au webhook Make d'Alfred.
+ * Le payload contient l'identifiant du chef de projet pour que Make
+ * sache quelle boîte Gmail analyser.
+ * Make orchestre : récupération Gmail → prompt Claude → retour analyse.
+ */
+async function runAlfred() {
+  const btn  = document.getElementById('alfred-btn');
+  const spin = document.getElementById('alfred-cta-spinner') || document.getElementById('alfred-spin');
+  const lbl  = document.getElementById('alfred-lbl');
+  const errEl = document.getElementById('alfred-err');
+  const iconWrap = document.getElementById('alfred-icon-wrap');
+
+  // Reset état
+  errEl.style.display = 'none';
+  errEl.textContent = '';
+  document.getElementById('alfred-results').style.display = 'none';
+  alfredRawText = '';
+
+  // Loading
+  btn.disabled = true;
+  spin.style.display = 'block';
+  lbl.textContent = 'Analyse en cours…';
+  if (iconWrap) iconWrap.classList.remove('idle');
+
+  try {
+    const payload = {
+      user:    currentUser,
+      display: userRecord ? userRecord.display : '',
+      trigger: 'analyze_inbox',
+      ts:      new Date().toISOString()
+    };
+
+    const res = await fetch(WEBHOOKS.alfred, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      showAlfredError('Erreur Make ' + res.status + ' — vérifiez que le webhook Alfred est actif.');
+      return;
+    }
+
+    const raw = await res.text();
+    const text = parseWebhookText(raw);
+
+    if (!text || text.trim().length < 20) {
+      showAlfredError('La réponse d\'Alfred est vide. Vérifiez le scénario Make.');
+      return;
+    }
+
+    alfredRawText = text;
+    renderAlfred(text);
+
+    // Afficher la zone résultats et scroller doucement
+    document.getElementById('alfred-results').style.display = 'block';
+    document.getElementById('alfred-hero-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (e) {
+    showAlfredError('Erreur réseau : ' + e.message);
+  } finally {
+    btn.disabled = false;
+    spin.style.display = 'none';
+    lbl.textContent = 'Nouvelle analyse';
+    if (iconWrap) iconWrap.classList.add('idle');
+  }
+}
+
+/**
+ * showAlfredError(msg)
+ * Affiche un message d'erreur sous le bouton Alfred.
+ */
+function showAlfredError(msg) {
+  const errEl = document.getElementById('alfred-err');
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
+}
+
+/**
+ * renderAlfred(text)
+ * Parse la réponse structurée d'Alfred et génère le HTML des résultats.
+ *
+ * La réponse Alfred suit cette structure :
+ *   📋 SYNTHÈSE BOÎTE MAIL — ...
+ *   🔴 URGENT — ...
+ *   🟡 IMPORTANT — ...
+ *   🟢 À TRAITER — ...
+ *   🧹 IGNORÉS
+ *
+ * Le rendu tente un parsing par sections. Si la structure n'est pas
+ * reconnue, il bascule sur un affichage texte brut bien stylisé.
+ */
+function renderAlfred(text) {
+  const output = document.getElementById('alfred-output');
+  const metaEl = document.getElementById('alfred-results-meta');
+  output.innerHTML = '';
+
+  // Timestamp de l'analyse
+  const now = new Date();
+  metaEl.textContent = 'Analysé le ' + now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+  // ── Tentative de parsing par sections ──────────────────────────────────────
+
+  // Détecter si le texte contient les marqueurs de section attendus
+  const hasSections = text.includes('🔴') || text.includes('🟡') || text.includes('🟢');
+
+  if (!hasSections) {
+    // Fallback : affichage texte brut
+    const raw = document.createElement('div');
+    raw.className = 'alfred-raw';
+    raw.textContent = text;
+    output.appendChild(raw);
+    return;
+  }
+
+  // ── Parser la synthèse (ligne 📋) ──────────────────────────────────────────
+  const synthMatch = text.match(/📋[^\n]*\n(.*?)(?=🔴|🟡|🟢|🧹|$)/s);
+  if (synthMatch) {
+    const synthText = synthMatch[0].trim();
+    const synth = document.createElement('div');
+    synth.className = 'alfred-synth';
+    synth.textContent = synthText;
+    output.appendChild(synth);
+  }
+
+  // ── Définition des sections à parser ──────────────────────────────────────
+  const SECTIONS = [
+    { emoji: '🔴', cls: 'urgent',    dotCls: 'dot-urgent',    label: '🔴 Urgent — À traiter aujourd\'hui' },
+    { emoji: '🟡', cls: 'important', dotCls: 'dot-important', label: '🟡 Important — À traiter cette semaine' },
+    { emoji: '🟢', cls: 'normal',    dotCls: 'dot-normal',    label: '🟢 À traiter — Sans urgence' },
+    { emoji: '🧹', cls: 'ignored',   dotCls: 'dot-ignored',   label: '🧹 Ignorés' },
+  ];
+
+  SECTIONS.forEach(({ emoji, cls, dotCls, label }) => {
+    // Extraire le bloc de texte correspondant à cette section
+    const startIdx = text.indexOf(emoji);
+    if (startIdx === -1) return;
+
+    // Trouver la fin : prochain emoji de section ou fin du texte
+    const nextSectionStart = Math.min(
+      ...SECTIONS
+        .filter(s => s.emoji !== emoji)
+        .map(s => { const i = text.indexOf(s.emoji, startIdx + 1); return i === -1 ? Infinity : i; })
+    );
+    const sectionText = text.substring(startIdx, nextSectionStart === Infinity ? undefined : nextSectionStart).trim();
+
+    if (!sectionText || sectionText.length < 5) return;
+
+    // Construire le bloc section
+    const section = document.createElement('div');
+    section.className = 'alfred-section';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'alfred-section-hdr ' + cls;
+
+    // Extraire le titre de la section (première ligne)
+    const firstLine = sectionText.split('\n')[0];
+    hdr.textContent = firstLine;
+    section.appendChild(hdr);
+
+    const body = document.createElement('div');
+    body.className = 'alfred-section-body';
+
+    // ── Parser les tâches individuelles dans cette section ────────────────────
+    // Les tâches sont séparées par des lignes vides ou des numéros "[N°]"
+    const sectionContent = sectionText.substring(firstLine.length).trim();
+
+    if (cls === 'ignored') {
+      // Section ignorés : simple texte
+      const task = document.createElement('div');
+      task.className = 'alfred-task';
+      const dot = document.createElement('div');
+      dot.className = 'alfred-task-dot ' + dotCls;
+      task.appendChild(dot);
+      const content = document.createElement('div');
+      content.className = 'alfred-task-content';
+      const taskBody = document.createElement('div');
+      taskBody.className = 'alfred-task-body';
+      taskBody.textContent = sectionContent || sectionText;
+      content.appendChild(taskBody);
+      task.appendChild(content);
+      body.appendChild(task);
+    } else {
+      // Sections urgences : parser chaque entrée numérotée ou séparée
+      // Découper par double saut de ligne ou par "[N°]"
+      const rawTasks = sectionContent
+        .split(/\n(?=\[\d+\]|\[N°\d+\])/g)
+        .map(t => t.trim())
+        .filter(t => t.length > 10);
+
+      if (rawTasks.length === 0) {
+        // Aucune tâche parseable → affichage brut
+        const noTask = document.createElement('div');
+        noTask.className = 'alfred-task';
+        const dot = document.createElement('div');
+        dot.className = 'alfred-task-dot ' + dotCls;
+        noTask.appendChild(dot);
+        const content = document.createElement('div');
+        content.className = 'alfred-task-content';
+        const taskBody = document.createElement('div');
+        taskBody.className = 'alfred-task-body';
+        taskBody.textContent = sectionContent;
+        content.appendChild(taskBody);
+        noTask.appendChild(content);
+        body.appendChild(noTask);
+      } else {
+        rawTasks.forEach(rawTask => {
+          const taskEl = buildAlfredTaskCard(rawTask, dotCls);
+          body.appendChild(taskEl);
+        });
+      }
+    }
+
+    section.appendChild(body);
+    output.appendChild(section);
+  });
+}
+
+/**
+ * buildAlfredTaskCard(rawTask, dotCls)
+ * Construit une carte tâche à partir du texte brut d'un bloc.
+ * Détecte les champs : De, Reçu le, Résumé, Action requise, Réponse suggérée.
+ */
+function buildAlfredTaskCard(rawTask, dotCls) {
+  const task = document.createElement('div');
+  task.className = 'alfred-task';
+
+  const dot = document.createElement('div');
+  dot.className = 'alfred-task-dot ' + dotCls;
+  task.appendChild(dot);
+
+  const content = document.createElement('div');
+  content.className = 'alfred-task-content';
+
+  // Extraire le sujet (première ligne non vide, souvent "[1] Objet du mail")
+  const lines = rawTask.split('\n').map(l => l.trim()).filter(l => l);
+  const subjectLine = lines[0] || '';
+
+  const subjectEl = document.createElement('div');
+  subjectEl.className = 'alfred-task-subject';
+  // Nettoyer le numéro de tâche "[1]" en début de ligne
+  subjectEl.textContent = subjectLine.replace(/^\[\d+\]\s*/, '').replace(/^\[N°\d+\]\s*/, '');
+  content.appendChild(subjectEl);
+
+  // Extraire les métadonnées (De, Reçu le)
+  const deMatch = rawTask.match(/[-–]\s*De\s*:\s*(.+)/i);
+  const recuMatch = rawTask.match(/[-–]\s*Reçu\s*le?\s*:\s*(.+)/i);
+  if (deMatch || recuMatch) {
+    const meta = document.createElement('div');
+    meta.className = 'alfred-task-meta';
+    const parts = [];
+    if (deMatch)  parts.push('De : ' + deMatch[1].trim());
+    if (recuMatch) parts.push('Reçu ' + recuMatch[1].trim());
+    meta.textContent = parts.join('  ·  ');
+    content.appendChild(meta);
+  }
+
+  // Extraire le résumé + action requise (tout sauf Réponse suggérée)
+  const replyMarker = /[-–]\s*Réponse\s+suggérée\s*:/i;
+  const replyIdx = rawTask.search(replyMarker);
+  const bodyText = replyIdx !== -1 ? rawTask.substring(0, replyIdx) : rawTask;
+
+  // Construire le corps (lignes Résumé + Action requise)
+  const bodyLines = bodyText.split('\n')
+    .map(l => l.trim())
+    .filter(l => l && l !== subjectLine && !l.match(/^[-–]\s*De\s*:/i) && !l.match(/^[-–]\s*Reçu/i));
+
+  if (bodyLines.length > 0) {
+    const bodyEl = document.createElement('div');
+    bodyEl.className = 'alfred-task-body';
+    bodyEl.textContent = bodyLines.join('\n');
+    content.appendChild(bodyEl);
+  }
+
+  // Extraire et afficher la réponse suggérée
+  if (replyIdx !== -1) {
+    const replyText = rawTask.substring(replyIdx).replace(replyMarker, '').trim();
+    if (replyText.length > 5) {
+      const replyWrap = document.createElement('div');
+      replyWrap.className = 'alfred-reply-box';
+
+      const replyLabel = document.createElement('div');
+      replyLabel.className = 'alfred-reply-label';
+      replyLabel.textContent = 'Réponse suggérée';
+      replyWrap.appendChild(replyLabel);
+
+      const replyContent = document.createElement('div');
+      replyContent.textContent = replyText;
+      replyWrap.appendChild(replyContent);
+
+      // Bouton "Copier ce draft"
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'alfred-copy-reply';
+      copyBtn.textContent = 'Copier ce draft';
+      copyBtn.onclick = function() {
+        navigator.clipboard.writeText(replyText).then(() => {
+          copyBtn.textContent = 'Copié ✓';
+          copyBtn.classList.add('copied');
+          setTimeout(() => { copyBtn.textContent = 'Copier ce draft'; copyBtn.classList.remove('copied'); }, 2000);
+        });
+      };
+      replyWrap.appendChild(copyBtn);
+      content.appendChild(replyWrap);
+    }
+  }
+
+  task.appendChild(content);
+  return task;
+}
+
+/**
+ * copyAlfredRaw()
+ * Copie l'intégralité de l'analyse Alfred dans le presse-papier.
+ */
+function copyAlfredRaw() {
+  if (!alfredRawText) return;
+  navigator.clipboard.writeText(alfredRawText).then(() => {
+    const btn = document.getElementById('alfred-copy-btn');
+    btn.textContent = 'Copié ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copier l\'analyse'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/**
+ * resetAlfred()
+ * Réinitialise le module Alfred à son état initial.
+ */
+function resetAlfred() {
+  alfredRawText = '';
+  document.getElementById('alfred-results').style.display = 'none';
+  document.getElementById('alfred-output').innerHTML = '';
+  document.getElementById('alfred-err').style.display = 'none';
+  document.getElementById('alfred-lbl').textContent = 'Analyser mes emails';
+  const iconWrap = document.getElementById('alfred-icon-wrap');
+  if (iconWrap) iconWrap.classList.add('idle');
+}
+
+// ═══════════════════════ FIN ALFRED FONCTIONS ═══════════════════════
+
 // ─── KENSINGTON ───────────────────────────────────────────────────────────────
 
 async function runKensington() {
@@ -1124,7 +1842,6 @@ async function runKensington() {
   document.getElementById('kt-output').style.display = 'none';
   hideErr('kt-err');
   try {
-    
     const res = await fetch(WEBHOOKS.kensington, { method:'POST', headers:{'Content-Type':'text/plain'}, body: input });
     if (!res.ok) { showErr('kt-err','Erreur Make : ' + res.status); return; }
     const raw = await res.text();
@@ -1358,13 +2075,14 @@ function buildCommsPayload() {
 }
 
 async function runComms() {
+  // CORRECTION BUG original : utilisait `input` au lieu de `payload`
   const payload = buildCommsPayload();
   if (!payload) { showErr('comms-err', 'Veuillez remplir les champs obligatoires.'); return; }
   setLoading('comms-btn','comms-spin','comms-lbl','Génération en cours...','','');
   document.getElementById('comms-output').style.display = 'none';
   hideErr('comms-err');
   try {
-    const res = await fetch(WEBHOOKS.comms, { method:'POST', headers:{'Content-Type':'text/plain'}, body: input });
+    const res = await fetch(WEBHOOKS.comms, { method:'POST', headers:{'Content-Type':'text/plain'}, body: payload });
     if (!res.ok) { showErr('comms-err', 'Erreur Make : ' + res.status); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
@@ -1637,7 +2355,6 @@ async function generateDocx() {
   btn.disabled = true; lbl.textContent = 'Génération...';
 
   try {
-    // Wait for docx to load
     if (typeof docx === 'undefined') { showErr('qd-err','Librairie docx non chargée. Vérifiez votre connexion internet.'); return; }
 
     const {
@@ -1654,21 +2371,16 @@ async function generateDocx() {
     const MID   = '888780';
     const border0 = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
     const borders0 = { top: border0, bottom: border0, left: border0, right: border0 };
-    const borderLine = { style: BorderStyle.SINGLE, size: 4, color: GOLD };
-    const borderGray = { style: BorderStyle.SINGLE, size: 4, color: 'D3D1C7' };
 
     const totalTTC = svcs.reduce((acc, s) => acc + s.prix, 0);
     const dateStr = dateDevis ? new Date(dateDevis+'T00:00:00').toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}) : new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
 
-    // Validity date
     const validDate = new Date(dateDevis ? new Date(dateDevis+'T00:00:00') : new Date());
     validDate.setDate(validDate.getDate() + validite);
     const validStr = validDate.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
 
     const children = [];
 
-    // ── PAGE DE GARDE ──
-    // Barre dorée top (via table trick with shading)
     children.push(new Table({
       width: { size: 9360, type: WidthType.DXA },
       columnWidths: [9360],
@@ -1682,46 +2394,32 @@ async function generateDocx() {
     }));
 
     children.push(new Paragraph({ spacing: { before: 480 } }));
-
-    // LIBERTY INCENTIVES & CONGRESSES
     children.push(new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { after: 80 },
+      alignment: AlignmentType.CENTER, spacing: { after: 80 },
       children: [new TextRun({ text: 'LIBERTY INCENTIVES & CONGRESSES', font: 'Arial', size: 18, bold: true, color: MID, characterSpacing: 80 })]
     }));
-
-    // Ligne séparatrice dorée
     children.push(new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { after: 560 },
+      alignment: AlignmentType.CENTER, spacing: { after: 560 },
       border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 8 } },
       children: [new TextRun({ text: '', size: 4 })]
     }));
-
-    // DESTINATION (grand titre)
     children.push(new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { after: 160 },
+      alignment: AlignmentType.CENTER, spacing: { after: 160 },
       children: [new TextRun({ text: dest || 'Proposal', font: 'Arial', size: 52, bold: true, color: NAVY })]
     }));
-
-    // Sous-titre : client + pax
     if (client) {
       children.push(new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 80 },
+        alignment: AlignmentType.CENTER, spacing: { after: 80 },
         children: [new TextRun({ text: `Prepared for ${client}`, font: 'Arial', size: 22, color: GOLD, italics: true })]
       }));
     }
     if (pax) {
       children.push(new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 480 },
+        alignment: AlignmentType.CENTER, spacing: { after: 480 },
         children: [new TextRun({ text: pax, font: 'Arial', size: 20, color: MID })]
       }));
     }
 
-    // Tableau récap couverture
     children.push(new Table({
       width: { size: 9360, type: WidthType.DXA },
       columnWidths: [2340, 7020],
@@ -1738,24 +2436,19 @@ async function generateDocx() {
       ]}))
     }));
 
-    // Disclaimer
     children.push(new Paragraph({ spacing: { before: 360, after: 120 } }));
     children.push(new Paragraph({
       children: [new TextRun({ text: intro || `Dear ${client}, please find below our proposal. We remain at your disposal for any adjustments.`, font: 'Arial', size: 18, color: MID, italics: true })]
     }));
-
-    // Saut de page
     children.push(new Paragraph({ children: [new PageBreak()] }));
 
-    // ── SERVICES ──
     children.push(new Paragraph({
       spacing: { before: 0, after: 280 },
       border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 6 } },
       children: [new TextRun({ text: 'SERVICES', font: 'Arial', size: 24, bold: true, color: NAVY, characterSpacing: 60 })]
     }));
 
-    svcs.forEach((svc, idx) => {
-      // En-tête service
+    svcs.forEach((svc) => {
       children.push(new Table({
         width: { size: 9360, type: WidthType.DXA },
         columnWidths: [7200, 2160],
@@ -1775,7 +2468,6 @@ async function generateDocx() {
         ]})]
       }));
 
-      // Corps service
       const bodyRows = [];
       if (svc.desc) bodyRows.push(new Paragraph({ spacing: { before: 120, after: 80 }, children: [new TextRun({ text: svc.desc, font: 'Arial', size: 18, color: DARK })] }));
       if (svc.incl) {
@@ -1803,12 +2495,10 @@ async function generateDocx() {
       children.push(new Paragraph({ spacing: { before: 240 } }));
     });
 
-    // ── RÉCAPITULATIF TARIFAIRE ──
     children.push(new Paragraph({ spacing: { before: 120, after: 280 }, border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 6 } },
       children: [new TextRun({ text: 'INDICATIVE BUDGET SUMMARY', font: 'Arial', size: 24, bold: true, color: NAVY, characterSpacing: 60 })]
     }));
 
-    // Header tableau
     children.push(new Table({
       width: { size: 9360, type: WidthType.DXA },
       columnWidths: [6800, 2560],
@@ -1819,7 +2509,7 @@ async function generateDocx() {
           new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 2560, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 120, right: 160 },
             children: [new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'Amount', font: 'Arial', size: 18, bold: true, color: GOLD })] })] }),
         ]}),
-        ...svcs.map((svc, idx) => new TableRow({ children: [
+        ...svcs.map((svc) => new TableRow({ children: [
           new TableCell({ borders: { top: border0, bottom: { style: BorderStyle.SINGLE, size: 2, color: 'E8E6DF' }, left: border0, right: border0 }, width: { size: 6800, type: WidthType.DXA }, margins: { top: 80, bottom: 80, left: 160, right: 120 },
             children: [new Paragraph({ children: [new TextRun({ text: svc.nom, font: 'Arial', size: 18, color: DARK })] })] }),
           new TableCell({ borders: { top: border0, bottom: { style: BorderStyle.SINGLE, size: 2, color: 'E8E6DF' }, left: border0, right: border0 }, width: { size: 2560, type: WidthType.DXA }, margins: { top: 80, bottom: 80, left: 120, right: 160 },
@@ -1834,7 +2524,6 @@ async function generateDocx() {
       ]
     }));
 
-    // ── CONDITIONS ──
     children.push(new Paragraph({ spacing: { before: 480, after: 280 }, border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 6 } },
       children: [new TextRun({ text: 'TERMS & CONDITIONS', font: 'Arial', size: 24, bold: true, color: NAVY, characterSpacing: 60 })]
     }));
@@ -1849,8 +2538,6 @@ async function generateDocx() {
     if (notes) addCondSection('Additional Notes', notes);
 
     children.push(new Paragraph({ spacing: { before: 240, after: 120 }, children: [new TextRun({ text: `This quotation is valid until ${validStr}.`, font: 'Arial', size: 16, color: MID, italics: true })] }));
-
-    // ── FOOTER LIBERTY ──
     children.push(new Paragraph({ spacing: { before: 480 } }));
     children.push(new Table({
       width: { size: 9360, type: WidthType.DXA },
@@ -1867,7 +2554,6 @@ async function generateDocx() {
       })] })]
     }));
 
-    // Generate
     const doc = new Document({
       styles: { default: { document: { run: { font: 'Arial', size: 20, color: DARK } } } },
       sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 } } }, children }]
@@ -1971,7 +2657,6 @@ function copyRaw(varName,btnId,defaultLabel){
     setTimeout(()=>{btn.textContent=defaultLabel;btn.classList.remove('copied');},2000);
   });
 }
-</script>
 </script>
 </body>
 </html>
