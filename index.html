@@ -1295,7 +1295,7 @@ const WEBHOOKS = {
   comms:      'https://hook.eu1.make.com/5wnesfvbhudi0k6sl92qwmxc46u0alt9',
   commsSend:  'https://hook.eu1.make.com/s1r8k4akr5ltn3anf6734p3wrk4chhz3',
   // ═══ ALFRED — Remplacer par l'URL de votre webhook Make (v2.1) ═══
-  alfred:     'https://hook.eu1.make.com/VOTRE_WEBHOOK_ALFRED_ICI',
+  alfred:     'https://hook.eu1.make.com/s4v3otb73bfupx3wla4p42m6efep6vxh',
 };
 
 // ─── RUNTIME STATE ────────────────────────────────────────────────────────────
@@ -1518,17 +1518,13 @@ async function runAlfred() {
   if (iconWrap) iconWrap.classList.remove('idle');
 
   try {
-    const payload = {
-      user:    currentUser,
-      display: userRecord ? userRecord.display : '',
-      trigger: 'analyze_inbox',
-      ts:      new Date().toISOString()
-    };
+    // Envoi en text/plain pour éviter le preflight CORS (cohérent avec les autres webhooks Rob)
+    const payload = `user:${currentUser}\ndisplay:${userRecord ? userRecord.display : ''}\ntrigger:analyze_inbox\nts:${new Date().toISOString()}`;
 
     const res = await fetch(WEBHOOKS.alfred, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'text/plain' },
+      body: payload
     });
 
     if (!res.ok) {
