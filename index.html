@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="shortcut icon" href="favicon.svg">
 <title>Rob — Agent IA · Liberty FIT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -354,326 +352,6 @@ textarea::placeholder { color: var(--g4); }
 .log-user { color: var(--rob-yellow); font-weight: 500; min-width: 160px; }
 .log-time { color: var(--g6); font-size: 11px; }
 .log-empty { font-size: 13px; color: var(--g6); padding: 8px 0; }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ─── ALFRED MODULE — NOUVEAU BLOC (ajouté v2.1) ──────────────────────────
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Carte hero Alfred pleine largeur */
-.alfred-hero {
-  background: var(--g2);
-  border: 0.5px solid var(--rob-yellow);
-  border-radius: 12px;
-  padding: 18px 20px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.alfred-hero-inner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* Icône animée */
-.alfred-icon-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: rgba(245, 230, 66, 0.08);
-  border: 0.5px solid rgba(245, 230, 66, 0.28);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-}
-
-/* Badge compteur emails non lus (mis à jour dynamiquement) */
-.alfred-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  min-width: 16px;
-  height: 16px;
-  background: #E24B4A;
-  border-radius: 8px;
-  border: 1.5px solid var(--g2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-title);
-  font-size: 8px;
-  font-weight: 700;
-  color: #fff;
-  padding: 0 3px;
-  display: none; /* affiché seulement si compteur > 0 */
-}
-
-/* Pulse sur l'icône quand idle */
-@keyframes alfred-pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(245, 230, 66, 0.25); }
-  70%  { box-shadow: 0 0 0 8px rgba(245, 230, 66, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(245, 230, 66, 0); }
-}
-.alfred-icon-wrap.idle { animation: alfred-pulse-ring 2.5s ease-out infinite; }
-
-.alfred-info { flex: 1; min-width: 0; }
-
-.alfred-name {
-  font-family: var(--font-title);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--rob-yellow);
-  letter-spacing: 0.5px;
-}
-
-.alfred-tagline {
-  font-size: 11px;
-  color: var(--g6);
-  margin-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Bouton CTA Alfred */
-.alfred-btn-cta {
-  background: var(--rob-yellow);
-  color: var(--g2);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-family: var(--font-title);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.2s, transform 0.1s;
-}
-.alfred-btn-cta:hover { background: var(--rob-yellow-dark); }
-.alfred-btn-cta:active { transform: scale(0.97); }
-.alfred-btn-cta:disabled { background: var(--g4); color: var(--g6); cursor: not-allowed; }
-
-.alfred-cta-spinner {
-  width: 13px;
-  height: 13px;
-  border: 2px solid rgba(26, 25, 24, 0.25);
-  border-top-color: var(--g2);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: none;
-}
-
-/* ─── Erreur Alfred ────────────────────────────────────────────────────── */
-.alfred-error {
-  display: none;
-  margin-top: 14px;
-  background: var(--redbg);
-  border: 0.5px solid var(--red);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 12px;
-  color: var(--redborder);
-  line-height: 1.6;
-}
-
-/* ─── Zone de résultats Alfred ─────────────────────────────────────────── */
-.alfred-results {
-  margin-top: 16px;
-  border-top: 0.5px solid rgba(245, 230, 66, 0.15);
-  padding-top: 16px;
-}
-
-/* En-tête résultats */
-.alfred-results-hdr {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.alfred-results-title {
-  font-size: 9px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--g6);
-  font-weight: 500;
-}
-
-.alfred-results-meta {
-  font-size: 10px;
-  color: var(--g5);
-  letter-spacing: 0.5px;
-}
-
-/* Synthèse globale */
-.alfred-synth {
-  background: var(--g1);
-  border: 0.5px solid var(--g4);
-  border-left: 2.5px solid var(--rob-yellow);
-  border-radius: 0 8px 8px 0;
-  padding: 12px 16px;
-  margin-bottom: 14px;
-  font-size: 11px;
-  color: var(--g7);
-  line-height: 1.6;
-}
-
-/* Sections urgence */
-.alfred-section { margin-bottom: 12px; }
-
-.alfred-section-hdr {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 7px 7px 0 0;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-}
-.alfred-section-hdr.urgent  { background: rgba(226, 75, 74, 0.12); color: #F09595; border: 0.5px solid rgba(226,75,74,0.25); border-bottom: none; }
-.alfred-section-hdr.important { background: rgba(239, 159, 39, 0.10); color: #FAC775; border: 0.5px solid rgba(239,159,39,0.25); border-bottom: none; }
-.alfred-section-hdr.normal  { background: rgba(99, 153, 34, 0.10); color: #A8CC80; border: 0.5px solid rgba(99,153,34,0.25); border-bottom: none; }
-.alfred-section-hdr.ignored { background: var(--g3); color: var(--g6); border: 0.5px solid var(--g4); border-bottom: none; }
-
-.alfred-section-body {
-  border: 0.5px solid var(--g4);
-  border-top: none;
-  border-radius: 0 0 7px 7px;
-  overflow: hidden;
-}
-.alfred-section-hdr.urgent  + .alfred-section-body { border-color: rgba(226,75,74,0.2); }
-.alfred-section-hdr.important + .alfred-section-body { border-color: rgba(239,159,39,0.2); }
-.alfred-section-hdr.normal  + .alfred-section-body { border-color: rgba(99,153,34,0.2); }
-
-/* Carte tâche individuelle */
-.alfred-task {
-  background: var(--g2);
-  padding: 13px 16px;
-  border-bottom: 0.5px solid var(--g4);
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.alfred-task:last-child { border-bottom: none; }
-
-.alfred-task-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 5px;
-}
-.dot-urgent   { background: #E24B4A; }
-.dot-important { background: #EF9F27; }
-.dot-normal   { background: #639922; }
-.dot-ignored  { background: var(--g5); }
-
-.alfred-task-content { flex: 1; min-width: 0; }
-
-.alfred-task-subject {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--g9);
-  line-height: 1.45;
-  margin-bottom: 4px;
-}
-
-.alfred-task-meta {
-  font-size: 10px;
-  color: var(--g6);
-  margin-bottom: 5px;
-}
-
-.alfred-task-body {
-  font-size: 12px;
-  color: var(--g7);
-  line-height: 1.65;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-/* Zone de réponse suggérée — style distinct */
-.alfred-reply-box {
-  background: var(--g1);
-  border: 0.5px solid var(--g4);
-  border-left: 2px solid var(--rob-yellow);
-  border-radius: 0 6px 6px 0;
-  padding: 10px 12px;
-  margin-top: 8px;
-  font-size: 11px;
-  color: var(--g8);
-  line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.alfred-reply-label {
-  font-size: 8px;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: var(--g5);
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-/* Bouton copier draft */
-.alfred-copy-reply {
-  background: transparent;
-  border: 0.5px solid var(--g4);
-  border-radius: 4px;
-  padding: 4px 10px;
-  font-size: 9px;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--g6);
-  cursor: pointer;
-  font-family: var(--font-body);
-  transition: all 0.2s;
-  margin-top: 6px;
-  display: inline-block;
-}
-.alfred-copy-reply:hover { border-color: var(--g7); color: var(--g8); }
-.alfred-copy-reply.copied { border-color: #4CAF50; color: #4CAF50; }
-
-/* Footer résultats Alfred */
-.alfred-results-footer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 0.5px solid var(--g4);
-}
-
-/* Texte brut fallback (si parsing impossible) */
-.alfred-raw {
-  background: var(--g2);
-  border: 0.5px solid var(--g4);
-  border-radius: 8px;
-  padding: 18px;
-  font-size: 12px;
-  color: var(--g8);
-  line-height: 1.85;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-/* ═══════════════════════ FIN ALFRED CSS ═══════════════════════ */
-
 </style>
 </head>
 <body>
@@ -703,7 +381,13 @@ textarea::placeholder { color: var(--g4); }
       <label>Identifiant</label>
       <div class="select-wrap">
         <select id="login-user">
-          <option value="">Chargement...</option>
+          <option value="">Sélectionner...</option>
+          <option value="antoine.fonfreyde">antoine.fonfreyde</option>
+          <option value="romain.ammari">romain.ammari</option>
+          <option value="frederique.jehl">frederique.jehl</option>
+          <option value="cristina.badino">cristina.badino</option>
+          <option value="emma.vandenesse">emma.vandenesse</option>
+          <option value="sandra.verchin">sandra.verchin</option>
         </select>
         <div class="select-arrow">
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -718,7 +402,7 @@ textarea::placeholder { color: var(--g4); }
     <div class="login-msg" id="login-error">Identifiant ou mot de passe incorrect.</div>
     <div class="login-msg" id="login-locked">Ce compte n'est pas encore activé. Contactez l'administrateur.</div>
   </div>
-  <div class="login-footer-txt">ROB v2.1 · Liberty Incentives &amp; Congresses France</div>
+  <div class="login-footer-txt">ROB v2.0 · Liberty Incentives &amp; Congresses France</div>
 </div>
 
 <!-- ═══════════════════════ APP SCREEN ═══════════════════════ -->
@@ -746,64 +430,6 @@ textarea::placeholder { color: var(--g4); }
   </div>
 
   <div class="app-main">
-
-    <!-- ═══════════════════════════════════════════════════════════════
-         ALFRED HERO ROW — NOUVEAU MODULE (ajouté v2.1)
-         Positionné au-dessus de la grille de modules.
-         Déclenche le webhook Make → analyse Gmail → retour Claude.
-    ════════════════════════════════════════════════════════════════════ -->
-    <div class="alfred-hero" id="alfred-hero-card">
-
-      <div class="alfred-hero-inner">
-
-        <!-- Icône enveloppe animée -->
-        <div class="alfred-icon-wrap idle" id="alfred-icon-wrap">
-          <!-- Badge compteur emails non lus (optionnel, masqué par défaut) -->
-          <div class="alfred-badge" id="alfred-badge"></div>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <rect x="2" y="5" width="16" height="11" rx="2" stroke="#F5E642" stroke-width="1"/>
-            <polyline points="2,6 10,12 18,6" stroke="#F5E642" stroke-width="0.85" fill="none"/>
-          </svg>
-        </div>
-
-        <!-- Nom + description -->
-        <div class="alfred-info">
-          <div class="alfred-name">Alfred</div>
-          <div class="alfred-tagline">Analyse vos emails non lus · génère une liste de tâches priorisées</div>
-        </div>
-
-        <!-- Bouton principal -->
-        <button class="alfred-btn-cta" id="alfred-btn" onclick="runAlfred()">
-          <div class="alfred-cta-spinner" id="alfred-spin"></div>
-          <span id="alfred-lbl">Analyser mes emails</span>
-        </button>
-
-      </div>
-
-      <!-- Message d'erreur Alfred -->
-      <div class="alfred-error" id="alfred-err"></div>
-
-      <!-- Zone résultats (masquée jusqu'au premier appel) -->
-      <div class="alfred-results" id="alfred-results" style="display:none;">
-
-        <div class="alfred-results-hdr">
-          <span class="alfred-results-title">Analyse Alfred</span>
-          <span class="alfred-results-meta" id="alfred-results-meta"></span>
-        </div>
-
-        <!-- Rendu dynamique — injecté par renderAlfred() -->
-        <div id="alfred-output"></div>
-
-        <!-- Footer résultats -->
-        <div class="alfred-results-footer">
-          <button class="btn-copy" id="alfred-copy-btn" onclick="copyAlfredRaw()">Copier l'analyse</button>
-          <button class="btn-reset" onclick="resetAlfred()">Nouvelle analyse</button>
-        </div>
-
-      </div>
-    </div>
-    <!-- ═══════════════ FIN ALFRED HERO ROW ═══════════════ -->
-
     <div class="section-label">Choisir un module</div>
 
     <div class="mod-grid">
@@ -894,23 +520,6 @@ textarea::placeholder { color: var(--g4); }
         <div class="mod-info">
           <div class="mod-name">Quotes DOCX</div>
           <div class="mod-desc">Générateur de devis standardisé · export Word · charte Liberty</div>
-        </div>
-      </button>
-    </div>
-
-    <!-- 6th module: Comms Internes -->
-    <div class="mod-row5">
-      <button class="mod-btn-wide" id="mod-comms" onclick="setMod('comms')">
-        <div class="mod-icon">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M2 3h12v8H9l-3 2v-2H2V3z" stroke="#888780" stroke-width="1" fill="none" stroke-linejoin="round"/>
-            <line x1="4.5" y1="6.5" x2="11.5" y2="6.5" stroke="#888780" stroke-width="0.75"/>
-            <line x1="4.5" y1="8.5" x2="8.5" y2="8.5" stroke="#888780" stroke-width="0.75"/>
-          </svg>
-        </div>
-        <div class="mod-info">
-          <div class="mod-name">Comms internes</div>
-          <div class="mod-desc">Info presta · récap astreinte · mails équipe</div>
         </div>
       </button>
     </div>
@@ -1066,7 +675,7 @@ textarea::placeholder { color: var(--g4); }
 
           <hr class="form-divider">
           <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-            <button class="btn-send" id="mail-preview-btn" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
+            <button class="btn-send" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
             <button class="btn-send" id="mail-send-btn" onclick="sendMail()">
               <div class="send-spinner" id="mail-spin"></div>
               <span id="mail-lbl">Envoyer</span>
@@ -1156,72 +765,6 @@ textarea::placeholder { color: var(--g4); }
         </div>
       </div>
 
-      <!-- COMMS INTERNES -->
-      <div class="panel" id="panel-comms">
-        <div class="form-card">
-          <div class="type-row">
-            <button class="type-btn active" id="comms-type-presta" onclick="setCommsType('presta')">Info presta</button>
-            <button class="type-btn" id="comms-type-astreinte" onclick="setCommsType('astreinte')">Récap astreinte</button>
-          </div>
-          <hr class="form-divider">
-
-          <!-- INFO PRESTA fields -->
-          <div id="comms-presta-fields">
-            <div class="form-row"><label class="form-label" for="cp-prestataire">Prestataire</label><input class="form-input" type="text" id="cp-prestataire" placeholder="Ex : Bateaux Parisiens"></div>
-            <div class="form-row"><label class="form-label" for="cp-destination">Destination / Région</label><input class="form-input" type="text" id="cp-destination" placeholder="Ex : Paris, Lyon, Côte d'Azur..."></div>
-            <div class="form-row">
-              <label class="form-label" for="cp-type">Type d'information</label>
-              <select class="form-input" id="cp-type">
-                <option value="Nouveau tarif">Nouveau tarif</option>
-                <option value="Travaux / Fermeture">Travaux / Fermeture</option>
-                <option value="Nouveau fournisseur">Nouveau fournisseur</option>
-                <option value="Info opérationnelle">Info opérationnelle</option>
-                <option value="Autre">Autre</option>
-              </select>
-            </div>
-            <div class="form-row"><label class="form-label" for="cp-contenu">Contenu</label><textarea class="form-input" id="cp-contenu" rows="4" placeholder="Décris l'information à communiquer à l'équipe..."></textarea></div>
-            <div class="form-row"><label class="form-label" for="cp-emplacement">Emplacement serveur / BDD <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><input class="form-input" type="text" id="cp-emplacement" placeholder="Ex : FOURNISSEUR_BDD / 14 PACA / SAINT-TROPEZ"></div>
-          </div>
-
-          <!-- RECAP ASTREINTE fields -->
-          <div id="comms-astreinte-fields" style="display:none;">
-            <div class="form-row"><label class="form-label" for="ca-periode">Période d'astreinte</label><input class="form-input" type="text" id="ca-periode" placeholder="Ex : Vendredi 1 - Lundi 4 mai 2026"></div>
-            <hr class="form-divider">
-            <div style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g5);font-weight:500;margin-bottom:12px;">Incidents</div>
-            <div id="comms-incidents-container"></div>
-            <button class="btn-add-svc" onclick="addIncident()">+ Ajouter un incident</button>
-            <hr class="form-divider">
-            <div class="form-row"><label class="form-label" for="ca-note">Note générale <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><textarea class="form-input" id="ca-note" rows="3" placeholder="Ex : point d'amélioration, observation générale..."></textarea></div>
-          </div>
-
-          <hr class="form-divider">
-          <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-            <button class="btn-gen" id="comms-btn" onclick="runComms()">
-              <div class="spinner" id="comms-spin"></div>
-              <span id="comms-lbl">Générer le mail</span>
-            </button>
-          </div>
-          <div class="error-box" id="comms-err"></div>
-        </div>
-        <div class="output-section" id="comms-output" style="display:none;">
-          <div class="output-hdr">
-            <span class="output-title">Résultats</span>
-            <span class="output-mode-tag">Comms internes</span>
-          </div>
-          <div class="content-block" id="comms-result"></div>
-          <div class="panel-footer">
-            <button class="btn-copy" id="comms-copy-btn" onclick="copyEl('comms-result','comms-copy-btn','Copier')">Copier</button>
-            <button class="btn-send" id="comms-send-btn" onclick="sendComms()" style="margin-left:8px;">
-              <div class="send-spinner" id="comms-send-spin"></div>
-              <span id="comms-send-lbl">Envoyer à l'équipe</span>
-            </button>
-            <button class="btn-reset" onclick="resetComms()">Nouveau message</button>
-          </div>
-          <div class="msg-success" id="comms-success"><span>✓</span><span id="comms-success-txt"></span></div>
-          <div class="msg-error" id="comms-send-err"></div>
-        </div>
-      </div>
-
       <!-- ADMIN -->
       <div class="panel" id="panel-admin" style="display:none;">
         <div class="admin-card">
@@ -1246,61 +789,140 @@ textarea::placeholder { color: var(--g4); }
       </div>
     </div>
     <div class="footer-right">
-      <div class="footer-version">ROB v2.1</div>
+      <div class="footer-version">ROB v2.0</div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
-      <button class="btn-logout" id="admin-btn" onclick="goAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
+      <button class="btn-logout" id="admin-btn" onclick="toggleAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
     </div>
   </div>
 </div>
 
-<!-- docx.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
+<!-- docx.js bundled via unpkg -->
+<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
 
 <script>
-// ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
-const SUPABASE_URL  = 'https://biknungxkdxtwhdhhxcm.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpa251bmd4a2R4dHdoZGhoeGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjU2NjgsImV4cCI6MjA5MzI0MTY2OH0.AaRhUd-2sKgqjcYw6jZMii8TISiG6UVT1eT7gGMlF1Q';
-
-async function sbFetch(path, opts = {}) {
-  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
-    headers: {
-      'apikey': SUPABASE_ANON,
-      'Authorization': 'Bearer ' + SUPABASE_ANON,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      ...opts.headers
-    },
-    ...opts
-  });
-  if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + await res.text());
-  const txt = await res.text();
-  return txt ? JSON.parse(txt) : null;
-}
-
-const ACCOUNTS = {
-  'antoine.fonfreyde': { display: 'Antoine Fonfreyde', role: 'Admin · Liberty FIT' },
-  'romain.ammari':     { display: 'Romain Ammari',     role: 'Chef de projet FIT' },
-  'frederique.jehl':   { display: 'Frederique Jehl',   role: 'Chef de projet FIT' },
-  'cristina.badino':   { display: 'Cristina Badino',   role: 'Chef de projet FIT' },
-  'emma.vandenesse':   { display: 'Emma Vandenesse',   role: 'Chef de projet FIT' },
-  'sandra.verchin':    { display: 'Sandra Verchin',    role: 'Chef de projet FIT' },
-  'guest.liberty':     { display: 'Invite Liberty',    role: 'Acces demonstration' },
-};
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
 
 const WEBHOOKS = {
   kensington: 'https://hook.eu1.make.com/2mp8ancoa1l53tg75x7wvea45bvbmcw8',
   quotes:     'https://hook.eu1.make.com/vj8jql1msq2ukwkj22o5yc98fx5unhv1',
   compta:     'https://hook.eu1.make.com/ovr2e7q79nj1u9y53dl1b6pj8xqasfhg',
-  mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio',
-  comms:      'https://hook.eu1.make.com/5wnesfvbhudi0k6sl92qwmxc46u0alt9',
-  commsSend:  'https://hook.eu1.make.com/s1r8k4akr5ltn3anf6734p3wrk4chhz3',
-  // ═══ ALFRED — Remplacer par l'URL de votre webhook Make (v2.1) ═══
-  alfred:     'https://hook.eu1.make.com/s4v3otb73bfupx3wla4p42m6efep6vxh',
+  mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio'
 };
 
-// ─── RUNTIME STATE ────────────────────────────────────────────────────────────
+const ACCOUNTS = {
+  'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', active: true,  level: 'admin',    display: 'Antoine Fonfreyde',  role: 'Admin · Liberty FIT' },
+  'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', active: true,  level: 'active',   display: 'Romain Ammari',      role: 'Chef de projet FIT' },
+  'frederique.jehl':   { hash: '64bb3657407463fa1ee427ac336a35b21def6856b308c62136d97edcf9ccf02d', active: false, level: 'explorer', display: 'Frederique Jehl',     role: 'Chef de projet FIT' },
+  'cristina.badino':   { hash: '1a4668e998a410adf8503e25ebd4a966f13fb7bf388303383e4b7d74d7734259', active: false, level: 'explorer', display: 'Cristina Badino',    role: 'Chef de projet FIT' },
+  'emma.vandenesse':   { hash: '7bc2e9bda7b0fd02c8b5a40701166306ee0aed5d93f486750a0acb51780c3e65', active: false, level: 'explorer', display: 'Emma Vandenesse',    role: 'Chef de projet FIT' },
+  'sandra.verchin':    { hash: 'a86f8d969a89be7cae8c68e7fa60625cf56500f2a9cf555e0de5f35443bef44f', active: false, level: 'explorer', display: 'Sandra Verchin',     role: 'Chef de projet FIT' },
+};
+
+// Runtime state (admin can toggle without page reload)
+const accountsState = JSON.parse(localStorage.getItem('rob_accounts') || 'null') || 
+  Object.fromEntries(Object.entries(ACCOUNTS).map(([k,v]) => [k, { active: v.active, level: v.level }]));
+
+const SIGNATURE = `Bien cordialement,\n\nAntoine Fonfreyde\nJunior Project Manager\nLiberty Incentives & Congresses\n116 avenue Gabriel Péri, 93400 Saint-Ouen\nfrance@liberty-int.com\nwww.liberty-int.com`;
+
+const PROMPTS = {
+kensington: `Tu es un assistant opérationnel pour Liberty Incentives & Congresses France, DMC haut de gamme basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 personnes), client principal : Kensington Tours (KT).
+
+PÉRIMÈTRE : France uniquement. Services hors France : ignorer, signaler en début de fiche.
+
+RÈGLES ABSOLUES :
+- Ne jamais inventer d'informations. Données absentes : [DONNÉE MANQUANTE]. Ambiguës : [À VÉRIFIER].
+- Ignorer les lignes [REMOVE].
+- Ne jamais poser de questions. Générer toujours directement. Les ambiguïtés vont dans Points de vigilance.
+- INCLUDED = Liberty contacte le prestataire, mail à générer.
+- EXCLUDED = Liberty contacte ET tarifie, mail à générer.
+- Aucun statut / Blank / Booked by client = [NON GÉRÉ PAR LIBERTY], pas de mail.
+- Welcome Package = vendu par Liberty directement, pas de mail prestataire.
+- Ne jamais mentionner INCLUDED/EXCLUDED dans les mails. Demander uniquement dispo + tarif net agence.
+- Codes hôtels entre parenthèses (B, NB...) : noter tels quels, ne pas interpréter.
+- Transfert départ hors France : hors périmètre même si destination France.
+- Hôtel même établissement plusieurs nuits consécutives : un seul mail groupé.
+- Outputs en français. Pas de tirets cadratins.
+
+VÉRIFICATION FINALE OBLIGATOIRE : chaque service Mail à lancer OUI doit avoir un mail dans l'Output 2.
+
+Génère exactement deux sections séparées par le marqueur ===OUTPUT2=== :
+- Avant : la fiche de coordination complète
+- Après : tous les mails prestataires
+
+FORMAT FICHE :
+FICHE DE COORDINATION LIBERTY — FIT / Dossier vierge
+RÉFÉRENCE DOSSIER : Référence KT / Titre / Chef de projet [À ASSIGNER] / Date de création / Agent KT / Statut
+Périmètre France / Hors périmètre
+1. PROFIL VOYAGEUR : PAX / Composition / Vols arrivée / Vols départ / Niveau de service / Notes client
+2. SERVICES À COORDONNER jour par jour : pour chaque service : intitulé exact, Prod Code, Durée, Horaire, PAX, Véhicule, Statut, Mail à lancer
+   Pour les hôtels : Nom exact, type chambre, configuration, nuits, Statut, Mail à lancer
+3. POINTS DE VIGILANCE : services EXCLUDED / informations manquantes / notes KT / demandes spéciales / délais courts
+4. ACTIONS À LANCER AUJOURD'HUI : priorité haute / priorité normale / avec échéances
+
+FORMAT MAILS (Output 2) :
+Séparer chaque mail par ---MAIL---
+Pour chaque mail :
+SERVICE : [intitulé exact]
+JOUR : [date]
+DESTINATAIRE : [type de prestataire attendu]
+
+Objet : Demande de disponibilité — [intitulé exact] — [DATE] — Réf. [RÉFÉRENCE KT]
+
+Madame, Monsieur,
+
+Nous vous contactons dans le cadre d'un dossier FIT pour le compte de notre client Kensington Tours.
+
+Pourriez-vous nous confirmer votre disponibilité et votre tarif net agence pour la prestation suivante :
+
+Prestation : [intitulé exact du TMT]
+Date : [DATE]
+Horaire : [HORAIRE ou À PRÉCISER]
+Nombre PAX : [N]
+Détail : [vendor notes pertinentes, inclusions, véhicule, langue]
+
+Merci de nous revenir avant le [J-2 du service par défaut].
+
+Bien cordialement,
+
+[Prénom Nom]
+Chef de projet FIT
+Liberty Incentives & Congresses France
+116 avenue Gabriel Péri, 93400 Saint-Ouen
+france@liberty-int.com
+www.liberty-int.com`,
+
+quotes: `Tu es un assistant spécialisé en conception d'itinéraires FIT haut de gamme pour Liberty Incentives & Congresses France, DMC premium basé à Saint-Ouen (Paris). Pôle FIT (1 à 15 voyageurs).
+
+Liberty reçoit des demandes de quote (briefs) de clients variés : tour-opérateurs, agences de voyage, entreprises, particuliers premium. Ces briefs arrivent en anglais ou en français, avec des niveaux de détail très variables.
+
+PÉRIMÈTRE : France uniquement. Si le brief mentionne d'autres pays, traiter uniquement les étapes françaises et le signaler.
+
+RÈGLES ABSOLUES :
+- Ne jamais inventer de tarifs, disponibilités ou références de prestataires spécifiques à Liberty.
+- Si tu suggères un hôtel ou une expérience, préciser : [SUGGESTION — à valider en base Liberty]
+- Signaler toutes les hypothèses avec la mention [HYPOTHÈSE].
+- Ne jamais utiliser de tirets cadratins dans les textes français.
+- Ton premium constant, sobre, sans superlatifs vides.
+- Version interne en français / version client en anglais.
+
+ÉTAPE 0 — ÉVALUATION DU BRIEF :
+Avant tout output, évaluer si le brief contient des manques BLOQUANTS.
+Manque BLOQUANT = sans cette info, impossible de construire un itinéraire cohérent.
+Exemples : dates inconnues, destination trop floue, nombre de voyageurs absent.
+Manque NON BLOQUANT = formuler une hypothèse raisonnable notée [HYPOTHÈSE] et proposer quand même.
+
+SI MANQUES BLOQUANTS : générer uniquement l'email de questions (Output 0), sans itinéraire.
+SI BRIEF SUFFISANT : générer directement Output 1 et Output 2.
+
+Génère les outputs séparés par les marqueurs suivants :
+- Email questions (si nécessaire) : entre ===OUTPUT0_START=== et ===OUTPUT0_END===
+- Fiche interne : entre ===OUTPUT1_START=== et ===OUTPUT1_END===
+- Programme client : entre ===OUTPUT2_START=== et ===OUTPUT2_END===`
+};
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+
 let currentUser = null;
-let userRecord  = null;
 let mailsRaw = '';
 let mailBlocks = [];
 let selectedMails = new Set();
@@ -1308,10 +930,6 @@ let comptaFile = null;
 let currentMailType = 'guide';
 let svcCount = 0;
 let qdSvcCount = 0;
-// ─── Alfred state (v2.1) ─────────────────────────────────────────────────────
-let alfredRawText = ''; // dernière analyse brute, utilisée pour "Copier l'analyse"
-
-// ─── AUTH ─────────────────────────────────────────────────────────────────────
 
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -1319,152 +937,67 @@ async function sha256(str) {
 }
 
 async function doLogin() {
-  const user    = document.getElementById('login-user').value;
-  const pwd     = document.getElementById('login-pwd').value;
-  const errEl   = document.getElementById('login-error');
-  const lockEl  = document.getElementById('login-locked');
-  const btn     = document.querySelector('.login-btn');
+  const user = document.getElementById('login-user').value;
+  const pwd  = document.getElementById('login-pwd').value;
+  const errEl  = document.getElementById('login-error');
+  const lockEl = document.getElementById('login-locked');
   errEl.className = 'login-msg';
   lockEl.className = 'login-msg';
 
   if (!user || !pwd) { errEl.className = 'login-msg error'; return; }
 
-  btn.textContent = 'Vérification...';
-  btn.disabled = true;
-  try {
-    const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level,permissions,password_hash,display_name,role_label');
-    if (!rows || rows.length === 0) { errEl.className = 'login-msg error'; return; }
+  const account = ACCOUNTS[user];
+  if (!account) { errEl.className = 'login-msg error'; return; }
 
-    const rec = rows[0];
-    if (!rec.password_hash) { errEl.className = 'login-msg error'; return; }
+  const hash = await sha256(pwd);
+  if (hash !== account.hash) { errEl.className = 'login-msg error'; return; }
 
-    const hash = await sha256(pwd);
-    if (hash !== rec.password_hash) { errEl.className = 'login-msg error'; return; }
+  const state = accountsState[user];
+  if (!state.active) { lockEl.className = 'login-msg locked'; return; }
 
-    if (!rec.active && rec.level !== 'admin') { lockEl.className = 'login-msg locked'; return; }
-
-    currentUser = user;
-    const fallback = ACCOUNTS[user] || {};
-    userRecord = {
-      ...rec,
-      display: rec.display_name || fallback.display || user,
-      role:    rec.role_label   || fallback.role    || 'Utilisateur'
-    };
-
-    await sbFetch('rob_logs', {
-      method: 'POST',
-      body: JSON.stringify({ username: user, connected_at: new Date().toISOString() })
-    }).catch(() => {});
-
-    launchApp();
-  } catch(e) {
-    errEl.className = 'login-msg error';
-    errEl.textContent = 'Erreur de connexion : ' + e.message;
-  } finally {
-    btn.textContent = 'Se connecter';
-    btn.disabled = false;
-  }
+  currentUser = user;
+  logConnection(user);
+  launchApp(account, state);
 }
 
-async function loadLoginUsers() {
-  const select = document.getElementById('login-user');
-  try {
-    const rows = await sbFetch('rob_users?select=username,display_name&order=username');
-    if (rows && rows.length > 0) {
-      select.innerHTML = '<option value="">Sélectionner...</option>';
-      rows.forEach(row => {
-        const opt = document.createElement('option');
-        opt.value = row.username;
-        opt.textContent = row.username;
-        select.appendChild(opt);
-      });
-    }
-  } catch(e) {
-    select.innerHTML = '<option value="">Sélectionner...</option>';
-    Object.keys(ACCOUNTS).forEach(u => {
-      const opt = document.createElement('option');
-      opt.value = u; opt.textContent = u;
-      select.appendChild(opt);
-    });
-  }
-}
-
-document.addEventListener('DOMContentLoaded', loadLoginUsers);
-
-let permissionsPolling = null;
-
-function launchApp() {
+function launchApp(account, state) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'flex';
 
-  const initials = userRecord.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  const initials = account.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   document.getElementById('footer-avatar').textContent = initials;
-  document.getElementById('footer-name').textContent   = userRecord.display;
-  document.getElementById('footer-role').textContent   = userRecord.role;
+  document.getElementById('footer-name').textContent = account.display;
+  document.getElementById('footer-role').textContent = account.role;
 
-  if (userRecord.level === 'admin') {
+  const isAdmin = state.level === 'admin';
+  const canUse  = state.level === 'admin' || state.level === 'active';
+
+  if (isAdmin) {
     document.getElementById('admin-btn').style.display = 'block';
+    buildAdminPanel();
+  }
+
+  // Lock modules for explorers
+  if (!canUse) {
+    ['mod-kensington','mod-quotes','mod-mails','mod-quotepdf','mod-compta'].forEach(id => {
+      const btn = document.getElementById(id);
+      btn.classList.add('locked');
+      if (!btn.querySelector('.locked-badge')) {
+        const badge = document.createElement('div');
+        badge.className = 'locked-badge';
+        badge.textContent = 'Accès en attente';
+        btn.querySelector('.mod-info').appendChild(badge);
+      }
+    });
+    document.getElementById('panel-kensington').innerHTML = `<div class="locked-panel"><p>Ce module n'est pas encore activé pour votre compte.<br>Contactez l'administrateur pour obtenir l'accès.</p></div>`;
   }
 
   if (svcCount === 0) addSvc();
   if (qdSvcCount === 0) addQdSvc();
-
-  setTimeout(() => applyPermissions(userRecord.permissions), 150);
-  permissionsPolling = setInterval(async () => {
-    if (!currentUser) return;
-    try {
-      const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(currentUser) + '&select=permissions,active');
-      if (rows && rows[0]) {
-        if (!rows[0].active && userRecord.level !== 'admin') { logout(); return; }
-        userRecord.permissions = rows[0].permissions;
-        applyPermissions(rows[0].permissions);
-      }
-    } catch(e) {}
-  }, 30000);
-}
-
-// Map permission -> { id } — alfred ajouté (v2.1)
-const PERM_BUTTONS = {
-  kensington:    { id: 'kt-btn' },
-  quotes:        { id: 'qt-btn' },
-  mails_apercu:  { id: 'mail-preview-btn' },
-  mails_envoyer: { id: 'mail-send-btn' },
-  compta:        { id: 'ct-btn' },
-  docx:          { id: 'qd-btn' },
-  alfred:        { id: 'alfred-btn' }, // ← NOUVEAU (v2.1)
-};
-
-function applyPermissions(perms) {
-  if (!perms) return;
-  const existing = document.getElementById('readonly-banner');
-  if (existing) existing.remove();
-
-  const someDisabled = Object.values(perms).some(v => !v);
-
-  if (someDisabled) {
-    const banner = document.createElement('div');
-    banner.id = 'readonly-banner';
-    banner.style.cssText = 'background:var(--amberbg);border-bottom:0.5px solid var(--amber);padding:9px 28px;font-size:11px;color:var(--amberborder);letter-spacing:0.5px;text-align:center;';
-    banner.textContent = 'Certaines fonctionnalites sont desactivees sur ce compte';
-    document.querySelector('.app-header').after(banner);
-  }
-
-  Object.entries(PERM_BUTTONS).forEach(([key, { id }]) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const allowed = perms[key] !== false;
-    el.disabled = !allowed;
-    el.style.opacity = allowed ? '' : '0.3';
-    el.style.cursor = allowed ? '' : 'not-allowed';
-    el.style.pointerEvents = allowed ? '' : 'none';
-  });
 }
 
 function logout() {
-  if (permissionsPolling) { clearInterval(permissionsPolling); permissionsPolling = null; }
   currentUser = null;
-  userRecord  = null;
-  alfredRawText = '';
   document.getElementById('app-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-pwd').value = '';
@@ -1472,362 +1005,81 @@ function logout() {
   document.getElementById('login-locked').className = 'login-msg';
 }
 
-function goAdmin() {
-  window.location.href = 'admin.html';
+// ─── CONNECTION LOG ───────────────────────────────────────────────────────────
+
+function logConnection(user) {
+  const logs = JSON.parse(localStorage.getItem('rob_logs') || '[]');
+  logs.unshift({ user, time: new Date().toISOString() });
+  if (logs.length > 50) logs.splice(50);
+  localStorage.setItem('rob_logs', JSON.stringify(logs));
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+
+function buildAdminPanel() {
+  const list = document.getElementById('admin-users-list');
+  list.innerHTML = '';
+  Object.entries(ACCOUNTS).forEach(([key, acc]) => {
+    const state = accountsState[key];
+    const initials = acc.display.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const badgeClass = state.level === 'admin' ? 'badge-admin' : state.active ? 'badge-active' : 'badge-locked';
+    const badgeText  = state.level === 'admin' ? 'Admin' : state.active ? 'Actif' : 'Verrouillé';
+    const row = document.createElement('div');
+    row.className = 'admin-user-row';
+    row.innerHTML = `
+      <div class="admin-avatar">${initials}</div>
+      <div class="admin-user-info">
+        <div class="admin-user-name">${acc.display}</div>
+        <div class="admin-user-role">${key}</div>
+      </div>
+      <span class="admin-status-badge ${badgeClass}" id="badge-${key}">${badgeText}</span>
+      ${state.level !== 'admin' ? `<button class="btn-toggle" onclick="toggleUser('${key}')">${state.active ? 'Désactiver' : 'Activer'}</button>` : ''}
+    `;
+    list.appendChild(row);
+  });
+
+  const logList = document.getElementById('admin-logs-list');
+  const logs = JSON.parse(localStorage.getItem('rob_logs') || '[]');
+  if (logs.length === 0) {
+    logList.innerHTML = '<div class="log-empty">Aucune connexion enregistrée.</div>';
+  } else {
+    logList.innerHTML = logs.slice(0, 20).map(l => {
+      const d = new Date(l.time);
+      const fmt = d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+      return `<div class="log-entry"><span class="log-user">${ACCOUNTS[l.user]?.display || l.user}</span><span class="log-time">${fmt}</span></div>`;
+    }).join('');
+  }
+}
+
+function toggleUser(key) {
+  accountsState[key].active = !accountsState[key].active;
+  accountsState[key].level = accountsState[key].active ? 'active' : 'explorer';
+  localStorage.setItem('rob_accounts', JSON.stringify(accountsState));
+  buildAdminPanel();
+}
+
+function toggleAdmin() {
+  const panel = document.getElementById('panel-admin');
+  const isVisible = panel.style.display !== 'none';
+  document.querySelectorAll('.panel').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  if (!isVisible) { panel.style.display = 'block'; buildAdminPanel(); }
+  else { setMod('kensington'); }
 }
 
 // ─── MODULE SWITCHING ─────────────────────────────────────────────────────────
 
 function setMod(mod) {
-  ['kensington','quotes','mails','quotepdf','compta','comms'].forEach(m => {
+  const canUse = accountsState[currentUser]?.active;
+  if (!canUse && mod !== 'admin') return;
+
+  ['kensington','quotes','mails','quotepdf','compta'].forEach(m => {
     const btn = document.getElementById('mod-' + m);
-    if (btn) btn.classList.toggle('active', m === mod);
+    if (btn) { btn.classList.toggle('active', m === mod); }
     const panel = document.getElementById('panel-' + m);
-    if (panel) panel.classList.toggle('active', m === mod);
+    if (panel) { panel.classList.toggle('active', m === mod); }
   });
+  document.getElementById('panel-admin').style.display = 'none';
 }
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// ─── ALFRED — FONCTIONS PRINCIPALES (ajouté v2.1) ─────────────────────────────
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * runAlfred()
- * Envoie un déclencheur au webhook Make d'Alfred.
- * Le payload contient l'identifiant du chef de projet pour que Make
- * sache quelle boîte Gmail analyser.
- * Make orchestre : récupération Gmail → prompt Claude → retour analyse.
- */
-async function runAlfred() {
-  const btn  = document.getElementById('alfred-btn');
-  const spin = document.getElementById('alfred-cta-spinner') || document.getElementById('alfred-spin');
-  const lbl  = document.getElementById('alfred-lbl');
-  const errEl = document.getElementById('alfred-err');
-  const iconWrap = document.getElementById('alfred-icon-wrap');
-
-  // Reset état
-  errEl.style.display = 'none';
-  errEl.textContent = '';
-  document.getElementById('alfred-results').style.display = 'none';
-  alfredRawText = '';
-
-  // Loading
-  btn.disabled = true;
-  spin.style.display = 'block';
-  lbl.textContent = 'Analyse en cours…';
-  if (iconWrap) iconWrap.classList.remove('idle');
-
-  try {
-    // Envoi en text/plain pour éviter le preflight CORS (cohérent avec les autres webhooks Rob)
-    const payload = `user:${currentUser}\ndisplay:${userRecord ? userRecord.display : ''}\ntrigger:analyze_inbox\nts:${new Date().toISOString()}`;
-
-    const res = await fetch(WEBHOOKS.alfred, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: payload
-    });
-
-    if (!res.ok) {
-      showAlfredError('Erreur Make ' + res.status + ' — vérifiez que le webhook Alfred est actif.');
-      return;
-    }
-
-    const raw = await res.text();
-    const text = parseWebhookText(raw);
-
-    if (!text || text.trim().length < 20) {
-      showAlfredError('La réponse d\'Alfred est vide. Vérifiez le scénario Make.');
-      return;
-    }
-
-    alfredRawText = text;
-    renderAlfred(text);
-
-    // Afficher la zone résultats et scroller doucement
-    document.getElementById('alfred-results').style.display = 'block';
-    document.getElementById('alfred-hero-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  } catch (e) {
-    showAlfredError('Erreur réseau : ' + e.message);
-  } finally {
-    btn.disabled = false;
-    spin.style.display = 'none';
-    lbl.textContent = 'Nouvelle analyse';
-    if (iconWrap) iconWrap.classList.add('idle');
-  }
-}
-
-/**
- * showAlfredError(msg)
- * Affiche un message d'erreur sous le bouton Alfred.
- */
-function showAlfredError(msg) {
-  const errEl = document.getElementById('alfred-err');
-  errEl.textContent = msg;
-  errEl.style.display = 'block';
-}
-
-/**
- * renderAlfred(text)
- * Parse la réponse structurée d'Alfred et génère le HTML des résultats.
- *
- * La réponse Alfred suit cette structure :
- *   📋 SYNTHÈSE BOÎTE MAIL — ...
- *   🔴 URGENT — ...
- *   🟡 IMPORTANT — ...
- *   🟢 À TRAITER — ...
- *   🧹 IGNORÉS
- *
- * Le rendu tente un parsing par sections. Si la structure n'est pas
- * reconnue, il bascule sur un affichage texte brut bien stylisé.
- */
-function renderAlfred(text) {
-  const output = document.getElementById('alfred-output');
-  const metaEl = document.getElementById('alfred-results-meta');
-  output.innerHTML = '';
-
-  // Timestamp de l'analyse
-  const now = new Date();
-  metaEl.textContent = 'Analysé le ' + now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
-  // ── Tentative de parsing par sections ──────────────────────────────────────
-
-  // Détecter si le texte contient les marqueurs de section attendus
-  const hasSections = text.includes('🔴') || text.includes('🟡') || text.includes('🟢');
-
-  if (!hasSections) {
-    // Fallback : affichage texte brut
-    const raw = document.createElement('div');
-    raw.className = 'alfred-raw';
-    raw.textContent = text;
-    output.appendChild(raw);
-    return;
-  }
-
-  // ── Parser la synthèse (ligne 📋) ──────────────────────────────────────────
-  const synthMatch = text.match(/📋[^\n]*\n(.*?)(?=🔴|🟡|🟢|🧹|$)/s);
-  if (synthMatch) {
-    const synthText = synthMatch[0].trim();
-    const synth = document.createElement('div');
-    synth.className = 'alfred-synth';
-    synth.textContent = synthText;
-    output.appendChild(synth);
-  }
-
-  // ── Définition des sections à parser ──────────────────────────────────────
-  const SECTIONS = [
-    { emoji: '🔴', cls: 'urgent',    dotCls: 'dot-urgent',    label: '🔴 Urgent — À traiter aujourd\'hui' },
-    { emoji: '🟡', cls: 'important', dotCls: 'dot-important', label: '🟡 Important — À traiter cette semaine' },
-    { emoji: '🟢', cls: 'normal',    dotCls: 'dot-normal',    label: '🟢 À traiter — Sans urgence' },
-    { emoji: '🧹', cls: 'ignored',   dotCls: 'dot-ignored',   label: '🧹 Ignorés' },
-  ];
-
-  SECTIONS.forEach(({ emoji, cls, dotCls, label }) => {
-    // Extraire le bloc de texte correspondant à cette section
-    const startIdx = text.indexOf(emoji);
-    if (startIdx === -1) return;
-
-    // Trouver la fin : prochain emoji de section ou fin du texte
-    const nextSectionStart = Math.min(
-      ...SECTIONS
-        .filter(s => s.emoji !== emoji)
-        .map(s => { const i = text.indexOf(s.emoji, startIdx + 1); return i === -1 ? Infinity : i; })
-    );
-    const sectionText = text.substring(startIdx, nextSectionStart === Infinity ? undefined : nextSectionStart).trim();
-
-    if (!sectionText || sectionText.length < 5) return;
-
-    // Construire le bloc section
-    const section = document.createElement('div');
-    section.className = 'alfred-section';
-
-    const hdr = document.createElement('div');
-    hdr.className = 'alfred-section-hdr ' + cls;
-
-    // Extraire le titre de la section (première ligne)
-    const firstLine = sectionText.split('\n')[0];
-    hdr.textContent = firstLine;
-    section.appendChild(hdr);
-
-    const body = document.createElement('div');
-    body.className = 'alfred-section-body';
-
-    // ── Parser les tâches individuelles dans cette section ────────────────────
-    // Les tâches sont séparées par des lignes vides ou des numéros "[N°]"
-    const sectionContent = sectionText.substring(firstLine.length).trim();
-
-    if (cls === 'ignored') {
-      // Section ignorés : simple texte
-      const task = document.createElement('div');
-      task.className = 'alfred-task';
-      const dot = document.createElement('div');
-      dot.className = 'alfred-task-dot ' + dotCls;
-      task.appendChild(dot);
-      const content = document.createElement('div');
-      content.className = 'alfred-task-content';
-      const taskBody = document.createElement('div');
-      taskBody.className = 'alfred-task-body';
-      taskBody.textContent = sectionContent || sectionText;
-      content.appendChild(taskBody);
-      task.appendChild(content);
-      body.appendChild(task);
-    } else {
-      // Sections urgences : parser chaque entrée numérotée ou séparée
-      // Découper par double saut de ligne ou par "[N°]"
-      const rawTasks = sectionContent
-        .split(/\n(?=\[\d+\]|\[N°\d+\])/g)
-        .map(t => t.trim())
-        .filter(t => t.length > 10);
-
-      if (rawTasks.length === 0) {
-        // Aucune tâche parseable → affichage brut
-        const noTask = document.createElement('div');
-        noTask.className = 'alfred-task';
-        const dot = document.createElement('div');
-        dot.className = 'alfred-task-dot ' + dotCls;
-        noTask.appendChild(dot);
-        const content = document.createElement('div');
-        content.className = 'alfred-task-content';
-        const taskBody = document.createElement('div');
-        taskBody.className = 'alfred-task-body';
-        taskBody.textContent = sectionContent;
-        content.appendChild(taskBody);
-        noTask.appendChild(content);
-        body.appendChild(noTask);
-      } else {
-        rawTasks.forEach(rawTask => {
-          const taskEl = buildAlfredTaskCard(rawTask, dotCls);
-          body.appendChild(taskEl);
-        });
-      }
-    }
-
-    section.appendChild(body);
-    output.appendChild(section);
-  });
-}
-
-/**
- * buildAlfredTaskCard(rawTask, dotCls)
- * Construit une carte tâche à partir du texte brut d'un bloc.
- * Détecte les champs : De, Reçu le, Résumé, Action requise, Réponse suggérée.
- */
-function buildAlfredTaskCard(rawTask, dotCls) {
-  const task = document.createElement('div');
-  task.className = 'alfred-task';
-
-  const dot = document.createElement('div');
-  dot.className = 'alfred-task-dot ' + dotCls;
-  task.appendChild(dot);
-
-  const content = document.createElement('div');
-  content.className = 'alfred-task-content';
-
-  // Extraire le sujet (première ligne non vide, souvent "[1] Objet du mail")
-  const lines = rawTask.split('\n').map(l => l.trim()).filter(l => l);
-  const subjectLine = lines[0] || '';
-
-  const subjectEl = document.createElement('div');
-  subjectEl.className = 'alfred-task-subject';
-  // Nettoyer le numéro de tâche "[1]" en début de ligne
-  subjectEl.textContent = subjectLine.replace(/^\[\d+\]\s*/, '').replace(/^\[N°\d+\]\s*/, '');
-  content.appendChild(subjectEl);
-
-  // Extraire les métadonnées (De, Reçu le)
-  const deMatch = rawTask.match(/[-–]\s*De\s*:\s*(.+)/i);
-  const recuMatch = rawTask.match(/[-–]\s*Reçu\s*le?\s*:\s*(.+)/i);
-  if (deMatch || recuMatch) {
-    const meta = document.createElement('div');
-    meta.className = 'alfred-task-meta';
-    const parts = [];
-    if (deMatch)  parts.push('De : ' + deMatch[1].trim());
-    if (recuMatch) parts.push('Reçu ' + recuMatch[1].trim());
-    meta.textContent = parts.join('  ·  ');
-    content.appendChild(meta);
-  }
-
-  // Extraire le résumé + action requise (tout sauf Réponse suggérée)
-  const replyMarker = /[-–]\s*Réponse\s+suggérée\s*:/i;
-  const replyIdx = rawTask.search(replyMarker);
-  const bodyText = replyIdx !== -1 ? rawTask.substring(0, replyIdx) : rawTask;
-
-  // Construire le corps (lignes Résumé + Action requise)
-  const bodyLines = bodyText.split('\n')
-    .map(l => l.trim())
-    .filter(l => l && l !== subjectLine && !l.match(/^[-–]\s*De\s*:/i) && !l.match(/^[-–]\s*Reçu/i));
-
-  if (bodyLines.length > 0) {
-    const bodyEl = document.createElement('div');
-    bodyEl.className = 'alfred-task-body';
-    bodyEl.textContent = bodyLines.join('\n');
-    content.appendChild(bodyEl);
-  }
-
-  // Extraire et afficher la réponse suggérée
-  if (replyIdx !== -1) {
-    const replyText = rawTask.substring(replyIdx).replace(replyMarker, '').trim();
-    if (replyText.length > 5) {
-      const replyWrap = document.createElement('div');
-      replyWrap.className = 'alfred-reply-box';
-
-      const replyLabel = document.createElement('div');
-      replyLabel.className = 'alfred-reply-label';
-      replyLabel.textContent = 'Réponse suggérée';
-      replyWrap.appendChild(replyLabel);
-
-      const replyContent = document.createElement('div');
-      replyContent.textContent = replyText;
-      replyWrap.appendChild(replyContent);
-
-      // Bouton "Copier ce draft"
-      const copyBtn = document.createElement('button');
-      copyBtn.className = 'alfred-copy-reply';
-      copyBtn.textContent = 'Copier ce draft';
-      copyBtn.onclick = function() {
-        navigator.clipboard.writeText(replyText).then(() => {
-          copyBtn.textContent = 'Copié ✓';
-          copyBtn.classList.add('copied');
-          setTimeout(() => { copyBtn.textContent = 'Copier ce draft'; copyBtn.classList.remove('copied'); }, 2000);
-        });
-      };
-      replyWrap.appendChild(copyBtn);
-      content.appendChild(replyWrap);
-    }
-  }
-
-  task.appendChild(content);
-  return task;
-}
-
-/**
- * copyAlfredRaw()
- * Copie l'intégralité de l'analyse Alfred dans le presse-papier.
- */
-function copyAlfredRaw() {
-  if (!alfredRawText) return;
-  navigator.clipboard.writeText(alfredRawText).then(() => {
-    const btn = document.getElementById('alfred-copy-btn');
-    btn.textContent = 'Copié ✓';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copier l\'analyse'; btn.classList.remove('copied'); }, 2000);
-  });
-}
-
-/**
- * resetAlfred()
- * Réinitialise le module Alfred à son état initial.
- */
-function resetAlfred() {
-  alfredRawText = '';
-  document.getElementById('alfred-results').style.display = 'none';
-  document.getElementById('alfred-output').innerHTML = '';
-  document.getElementById('alfred-err').style.display = 'none';
-  document.getElementById('alfred-lbl').textContent = 'Analyser mes emails';
-  const iconWrap = document.getElementById('alfred-icon-wrap');
-  if (iconWrap) iconWrap.classList.add('idle');
-}
-
-// ═══════════════════════ FIN ALFRED FONCTIONS ═══════════════════════
 
 // ─── KENSINGTON ───────────────────────────────────────────────────────────────
 
@@ -1838,7 +1090,8 @@ async function runKensington() {
   document.getElementById('kt-output').style.display = 'none';
   hideErr('kt-err');
   try {
-    const res = await fetch(WEBHOOKS.kensington, { method:'POST', headers:{'Content-Type':'text/plain'}, body: input });
+    const payload = PROMPTS.kensington + '\n\n===TMT===\n\n' + input;
+    const res = await fetch(WEBHOOKS.kensington, { method:'POST', headers:{'Content-Type':'text/plain'}, body: payload });
     if (!res.ok) { showErr('kt-err','Erreur Make : ' + res.status); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
@@ -1952,7 +1205,7 @@ async function runQuotes() {
   document.getElementById('qt-output').style.display = 'none';
   hideErr('qt-err');
   try {
-    const res = await fetch(WEBHOOKS.quotes, {method:'POST',headers:{'Content-Type':'text/plain'},body: input});
+    const res = await fetch(WEBHOOKS.quotes, {method:'POST',headers:{'Content-Type':'text/plain'},body: PROMPTS.quotes + '\n\n===BRIEF===\n\n' + input});
     if (!res.ok) { showErr('qt-err','Erreur Make : ' + res.status); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
@@ -1989,153 +1242,6 @@ function resetQT() {
   document.getElementById('qt-input').value = '';
   document.getElementById('qt-output').style.display = 'none';
   window.scrollTo(0,0);
-}
-
-// ─── COMMS INTERNES ───────────────────────────────────────────────────────────
-
-let commsType = 'presta';
-
-function setCommsType(type) {
-  commsType = type;
-  document.getElementById('comms-type-presta').classList.toggle('active', type === 'presta');
-  document.getElementById('comms-type-astreinte').classList.toggle('active', type === 'astreinte');
-  document.getElementById('comms-presta-fields').style.display = type === 'presta' ? '' : 'none';
-  document.getElementById('comms-astreinte-fields').style.display = type === 'astreinte' ? '' : 'none';
-  document.getElementById('comms-output').style.display = 'none';
-}
-
-let incidentCount = 0;
-
-function addIncident() {
-  incidentCount++;
-  const c = document.getElementById('comms-incidents-container');
-  const div = document.createElement('div');
-  div.className = 'form-card';
-  div.style.cssText = 'margin-bottom:12px;padding:12px;background:var(--g2);border-radius:6px;';
-  div.id = 'incident-' + incidentCount;
-  div.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <span style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g5);font-weight:500;">Incident ${incidentCount}</span>
-      <button onclick="removeIncident(${incidentCount})" style="background:none;border:none;color:var(--g5);cursor:pointer;font-size:14px;">×</button>
-    </div>
-    <div class="form-row-2">
-      <div><label class="form-label">Date</label><input class="form-input" type="text" id="inc-date-${incidentCount}" placeholder="Ex : Samedi 2 mai 2026"></div>
-      <div><label class="form-label">Heure</label><input class="form-input" type="text" id="inc-heure-${incidentCount}" placeholder="Ex : 14h30"></div>
-    </div>
-    <div class="form-row"><label class="form-label">N° dossier</label><input class="form-input" type="text" id="inc-dossier-${incidentCount}" placeholder="Ex : FJ 14983 Kno2T-512884 KNODEL"></div>
-    <div class="form-row"><label class="form-label">Description</label><textarea class="form-input" id="inc-desc-${incidentCount}" rows="3" placeholder="Décris la situation et les actions prises..."></textarea></div>
-    <div class="form-row"><label class="form-label">Résolution</label><input class="form-input" type="text" id="inc-resolution-${incidentCount}" placeholder="Ex : Problème résolu après contact avec Hacène"></div>
-  `;
-  c.appendChild(div);
-}
-
-function removeIncident(n) {
-  const el = document.getElementById('incident-' + n);
-  if (el) el.remove();
-}
-
-function buildCommsPayload() {
-  if (commsType === 'presta') {
-    const prestataire = document.getElementById('cp-prestataire').value.trim();
-    const destination = document.getElementById('cp-destination').value.trim();
-    const type = document.getElementById('cp-type').value;
-    const contenu = document.getElementById('cp-contenu').value.trim();
-    const emplacement = document.getElementById('cp-emplacement').value.trim();
-    if (!prestataire || !contenu) return null;
-    let payload = `TYPE_MODULE: INFO_PRESTA\nPRESTATAIRE: ${prestataire}\nDESTINATION: ${destination}\nTYPE: ${type}\nCONTENU: ${contenu}`;
-    if (emplacement) payload += `\nEMPLACEMENT: ${emplacement}`;
-    return payload;
-  } else {
-    const periode = document.getElementById('ca-periode').value.trim();
-    const note = document.getElementById('ca-note').value.trim();
-    if (!periode) return null;
-    let incidents = '';
-    let n = 0;
-    document.querySelectorAll('[id^="incident-"]').forEach(el => {
-      const id = el.id.replace('incident-', '');
-      const date = document.getElementById('inc-date-' + id)?.value.trim() || '';
-      const heure = document.getElementById('inc-heure-' + id)?.value.trim() || '';
-      const dossier = document.getElementById('inc-dossier-' + id)?.value.trim() || '';
-      const desc = document.getElementById('inc-desc-' + id)?.value.trim() || '';
-      const resolution = document.getElementById('inc-resolution-' + id)?.value.trim() || '';
-      if (date || dossier || desc) {
-        n++;
-        incidents += `\nINCIDENT ${n}\n  DATE: ${date}\n  HEURE: ${heure}\n  DOSSIER: ${dossier}\n  DESCRIPTION: ${desc}\n  RESOLUTION: ${resolution || '[À PRÉCISER]'}`;
-      }
-    });
-    if (!incidents) return null;
-    let payload = `TYPE_MODULE: RECAP_ASTREINTE\nPERIODE: ${periode}${incidents}`;
-    if (note) payload += `\nNOTE_GENERALE: ${note}`;
-    return payload;
-  }
-}
-
-async function runComms() {
-  // CORRECTION BUG original : utilisait `input` au lieu de `payload`
-  const payload = buildCommsPayload();
-  if (!payload) { showErr('comms-err', 'Veuillez remplir les champs obligatoires.'); return; }
-  setLoading('comms-btn','comms-spin','comms-lbl','Génération en cours...','','');
-  document.getElementById('comms-output').style.display = 'none';
-  hideErr('comms-err');
-  try {
-    const res = await fetch(WEBHOOKS.comms, { method:'POST', headers:{'Content-Type':'text/plain'}, body: payload });
-    if (!res.ok) { showErr('comms-err', 'Erreur Make : ' + res.status); return; }
-    const raw = await res.text();
-    const text = parseWebhookText(raw);
-    if (!text || text.length < 10) { showErr('comms-err', 'Réponse vide.'); return; }
-    document.getElementById('comms-result').textContent = text;
-    document.getElementById('comms-output').style.display = 'block';
-    document.getElementById('comms-output').scrollIntoView({behavior:'smooth', block:'start'});
-  } catch(e) { showErr('comms-err', 'Erreur réseau : ' + e.message);
-  } finally { clearLoading('comms-btn','comms-spin','comms-lbl','Générer le mail',''); }
-}
-
-function resetComms() {
-  document.getElementById('cp-prestataire').value = '';
-  document.getElementById('cp-destination').value = '';
-  document.getElementById('cp-contenu').value = '';
-  document.getElementById('cp-emplacement').value = '';
-  document.getElementById('ca-periode').value = '';
-  document.getElementById('ca-note').value = '';
-  document.getElementById('comms-incidents-container').innerHTML = '';
-  incidentCount = 0;
-  document.getElementById('comms-output').style.display = 'none';
-  window.scrollTo(0,0);
-}
-
-async function sendComms() {
-  const resultEl = document.getElementById('comms-result');
-  const body = resultEl.textContent.trim();
-  if (!body) return;
-  const subjectMatch = body.match(/^Objet\s*:\s*(.+)/m);
-  const subject = subjectMatch ? subjectMatch[1].trim() : 'Information équipe FIT';
-  const bodyClean = body.replace(/^Objet\s*:.*(\r?\n)+/m, '').trim();
-  const btn = document.getElementById('comms-send-btn');
-  const spin = document.getElementById('comms-send-spin');
-  const lbl = document.getElementById('comms-send-lbl');
-  btn.disabled = true;
-  if (spin) spin.style.display = 'block';
-  lbl.textContent = 'Envoi en cours...';
-  hideErr('comms-send-err');
-  try {
-    const res = await fetch(WEBHOOKS.commsSend, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ subject, body: bodyClean, sender: userRecord ? userRecord.display : '' })
-    });
-    if (!res.ok) { showErr('comms-send-err', 'Erreur envoi : ' + res.status); return; }
-    const successEl = document.getElementById('comms-success');
-    const successTxt = document.getElementById('comms-success-txt');
-    successTxt.textContent = 'Mail envoyé à l\'équipe.';
-    successEl.style.display = 'flex';
-    btn.style.display = 'none';
-    setTimeout(() => { successEl.style.display = 'none'; }, 4000);
-  } catch(e) { showErr('comms-send-err', 'Erreur réseau : ' + e.message);
-  } finally {
-    btn.disabled = false;
-    if (spin) spin.style.display = 'none';
-    lbl.textContent = 'Envoyer à l\'équipe';
-  }
 }
 
 // ─── MAILS DISPO ─────────────────────────────────────────────────────────────
@@ -2330,17 +1436,17 @@ function getQdServices() {
 }
 
 async function generateDocx() {
-  const client = document.getElementById('qd-client').value.trim();
-  const ref    = document.getElementById('qd-ref').value.trim();
-  const dest   = document.getElementById('qd-destination').value.trim();
-  const pax    = document.getElementById('qd-pax').value.trim();
-  const dateDevis = document.getElementById('qd-date-devis').value;
-  const validite  = parseInt(document.getElementById('qd-validite').value)||15;
-  const intro  = document.getElementById('qd-intro').value.trim();
-  const condResa  = document.getElementById('qd-cond-resa').value.trim();
-  const condAnnul = document.getElementById('qd-cond-annul').value.trim();
-  const notes  = document.getElementById('qd-notes').value.trim();
-  const svcs   = getQdServices();
+  const client   = document.getElementById('qd-client').value.trim();
+  const ref      = document.getElementById('qd-ref').value.trim();
+  const dest     = document.getElementById('qd-destination').value.trim();
+  const pax      = document.getElementById('qd-pax').value.trim();
+  const dateDevis= document.getElementById('qd-date-devis').value;
+  const validite = parseInt(document.getElementById('qd-validite').value)||15;
+  const intro    = document.getElementById('qd-intro').value.trim();
+  const condResa = document.getElementById('qd-cond-resa').value.trim();
+  const condAnnul= document.getElementById('qd-cond-annul').value.trim();
+  const notes    = document.getElementById('qd-notes').value.trim();
+  const svcs     = getQdServices();
 
   hideErr('qd-err');
   if (!client) { showErr('qd-err','Le nom du client est obligatoire.'); return; }
@@ -2355,215 +1461,210 @@ async function generateDocx() {
 
     const {
       Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-      AlignmentType, BorderStyle, WidthType, ShadingType, VerticalAlign,
-      PageNumber, HeadingLevel, PageBreak
+      ImageRun, AlignmentType, BorderStyle, WidthType, ShadingType, VerticalAlign, PageBreak
     } = docx;
 
-    const NAVY  = '1E2D4E';
-    const GOLD  = 'C8A84B';
-    const LIGHT = 'F5F4F0';
-    const WHITE = 'FFFFFF';
-    const DARK  = '2C2B29';
-    const MID   = '888780';
-    const border0 = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
-    const borders0 = { top: border0, bottom: border0, left: border0, right: border0 };
+    // ── PALETTE
+    const NAVY='1E2D4E', GOLD='C8A84B', WHITE='FFFFFF', DARK='2C2B29', MID='6B6A66', LIGHT='F5F4F0';
+    const b0 = { style:BorderStyle.NONE, size:0, color:'FFFFFF' };
+    const borders0 = { top:b0, bottom:b0, left:b0, right:b0 };
+    const borderGold = { style:BorderStyle.SINGLE, size:8, color:GOLD, space:0 };
 
-    const totalTTC = svcs.reduce((acc, s) => acc + s.prix, 0);
-    const dateStr = dateDevis ? new Date(dateDevis+'T00:00:00').toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}) : new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    // ── HELPERS
+    const W = 9026; // content width DXA (A4 - 1.8cm margins each side)
+    const mk = (children, opts={}) => new TableCell({
+      borders: opts.borders || borders0,
+      width: opts.w ? {size:opts.w, type:WidthType.DXA} : undefined,
+      shading: opts.fill ? {fill:opts.fill, type:ShadingType.CLEAR} : undefined,
+      margins: opts.margins || {top:80,bottom:80,left:140,right:140},
+      verticalAlign: opts.va || VerticalAlign.CENTER,
+      children,
+    });
+    const tr = (...cells) => new TableRow({children:cells});
+    const tbl = (rows, widths) => new Table({
+      width:{size:W, type:WidthType.DXA}, columnWidths:widths, rows,
+    });
+    const p = (runs, opts={}) => new Paragraph({
+      alignment: opts.align||AlignmentType.LEFT,
+      spacing: opts.spacing||{},
+      border: opts.border,
+      children: Array.isArray(runs)?runs:[runs],
+    });
+    const r = (text, opts={}) => new TextRun({
+      text, font:'Arial', size:opts.sz||20, bold:opts.bold||false,
+      italics:opts.italic||false, color:opts.color||DARK, characterSpacing:opts.track||0,
+    });
+    const fmt = n => `€ ${n.toLocaleString('fr-FR')}`;
 
+    // ── COMPUTED
+    const totalTTC = svcs.reduce((a,s)=>a+s.prix,0);
+    const dateStr = dateDevis
+      ? new Date(dateDevis+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})
+      : new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
     const validDate = new Date(dateDevis ? new Date(dateDevis+'T00:00:00') : new Date());
-    validDate.setDate(validDate.getDate() + validite);
-    const validStr = validDate.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    validDate.setDate(validDate.getDate()+validite);
+    const validStr = validDate.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+    // ── LOGO (PNG Liberty embarqué en base64)
+    const LOGO_B64 = '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';
+    const logoBytes = Uint8Array.from(atob(LOGO_B64), c=>c.charCodeAt(0));
 
     const children = [];
 
-    children.push(new Table({
-      width: { size: 9360, type: WidthType.DXA },
-      columnWidths: [9360],
-      rows: [new TableRow({ children: [new TableCell({
-        borders: borders0,
-        shading: { fill: GOLD, type: ShadingType.CLEAR },
-        width: { size: 9360, type: WidthType.DXA },
-        margins: { top: 0, bottom: 0, left: 0, right: 0 },
-        children: [new Paragraph({ children: [new TextRun({ text: ' ', size: 16 })] })]
-      })] })]
+    // ── BARRE OR TOP
+    children.push(p(r('',{sz:8}), {
+      border:{bottom:{style:BorderStyle.SINGLE,size:18,color:GOLD,space:0}},
+      spacing:{before:0,after:0}
+    }));
+    children.push(p(r('',{sz:4}),{spacing:{before:40,after:0}}));
+
+    // ── HEADER : logo + nom | référence
+    children.push(tbl([tr(
+      mk([
+        new Paragraph({spacing:{before:0,after:0},children:[new ImageRun({data:logoBytes,transformation:{width:48,height:48},type:'png'})]}) ,
+        p([r('LIBERTY INTERNATIONAL TOURISM GROUP',{sz:16,bold:true,color:NAVY,track:30})],{spacing:{before:40,after:0}}),
+        p([r('Liberty Incentives & Congresses France  ·  FIT Division',{sz:14,color:MID})],{spacing:{before:20,after:0}}),
+      ],{w:6200}),
+      mk([
+        p([r('QUOTATION',{sz:16,bold:true,color:NAVY,track:60})],{align:AlignmentType.RIGHT,spacing:{before:0,after:40}}),
+        p([r(ref?`Ref. ${ref}`:'',{sz:15,color:DARK})],{align:AlignmentType.RIGHT,spacing:{before:0,after:20}}),
+        p([r(dateStr,{sz:14,color:MID})],{align:AlignmentType.RIGHT,spacing:{before:0,after:20}}),
+        p([r(`Valid until ${validStr}`,{sz:14,bold:true,color:GOLD})],{align:AlignmentType.RIGHT}),
+      ],{w:2826,va:VerticalAlign.TOP}),
+    )],[6200,2826]));
+
+    // ── SÉPARATEUR OR
+    children.push(p(r('',{sz:6}),{border:{bottom:borderGold},spacing:{before:80,after:80}}));
+
+    // ── DESTINATION
+    children.push(p([
+      r(dest||'Proposal',{sz:40,bold:true,color:NAVY}),
+      r(pax?`  ·  ${pax}`:'',{sz:22,color:MID}),
+    ],{spacing:{before:40,after:40}}));
+
+    // Meta row
+    children.push(tbl([tr(
+      mk([p([r('PREPARED FOR',{sz:12,bold:true,color:GOLD,track:60}),r(`  ${client}`,{sz:15,color:DARK})])],{w:4500}),
+      mk([p([r('SERVICES',{sz:12,bold:true,color:GOLD,track:60}),r(`  ${svcs.length}`,{sz:15,color:DARK})])],{w:2000}),
+      mk([p([r('PREPARED BY',{sz:12,bold:true,color:GOLD,track:60}),r('  Liberty FIT France',{sz:15,color:DARK})])],{w:2526}),
+    )],[4500,2000,2526]));
+
+    // ── INTRO
+    children.push(p(r('',{sz:6}),{border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'E0DDD4',space:0}},spacing:{before:80,after:0}}));
+    const introText = intro || `Dear ${client}, please find below our proposal. We remain at your disposal for any adjustments.`;
+    children.push(p(r(introText,{sz:16,italic:true,color:MID}),{spacing:{before:100,after:60}}));
+
+    // ── SECTION SERVICES
+    children.push(p(r('SERVICES',{sz:18,bold:true,color:NAVY,track:80}),{
+      border:{bottom:borderGold},spacing:{before:200,after:120}
     }));
 
-    children.push(new Paragraph({ spacing: { before: 480 } }));
-    children.push(new Paragraph({
-      alignment: AlignmentType.CENTER, spacing: { after: 80 },
-      children: [new TextRun({ text: 'LIBERTY INCENTIVES & CONGRESSES', font: 'Arial', size: 18, bold: true, color: MID, characterSpacing: 80 })]
-    }));
-    children.push(new Paragraph({
-      alignment: AlignmentType.CENTER, spacing: { after: 560 },
-      border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 8 } },
-      children: [new TextRun({ text: '', size: 4 })]
-    }));
-    children.push(new Paragraph({
-      alignment: AlignmentType.CENTER, spacing: { after: 160 },
-      children: [new TextRun({ text: dest || 'Proposal', font: 'Arial', size: 52, bold: true, color: NAVY })]
-    }));
-    if (client) {
-      children.push(new Paragraph({
-        alignment: AlignmentType.CENTER, spacing: { after: 80 },
-        children: [new TextRun({ text: `Prepared for ${client}`, font: 'Arial', size: 22, color: GOLD, italics: true })]
-      }));
-    }
-    if (pax) {
-      children.push(new Paragraph({
-        alignment: AlignmentType.CENTER, spacing: { after: 480 },
-        children: [new TextRun({ text: pax, font: 'Arial', size: 20, color: MID })]
-      }));
-    }
+    svcs.forEach(svc => {
+      // En-tête service (navy + or)
+      children.push(tbl([tr(
+        mk([
+          p([
+            r(svc.cat?svc.cat.toUpperCase():'SERVICE',{sz:14,bold:true,color:GOLD,track:40}),
+            r('   ·   ',{sz:14,color:MID}),
+            r(svc.nom,{sz:18,bold:true,color:WHITE}),
+          ],{spacing:{before:0,after:40}}),
+          p([r(svc.date||'',{sz:14,italic:true,color:'AAAAAA'})],{spacing:{before:0,after:0}}),
+        ],{w:6826,fill:NAVY,margins:{top:120,bottom:120,left:160,right:120}}),
+        mk([
+          p([r(svc.prix>0?fmt(svc.prix):'On request',{sz:26,bold:true,color:NAVY})],{align:AlignmentType.RIGHT}),
+        ],{w:2200,fill:GOLD,va:VerticalAlign.CENTER,margins:{top:120,bottom:120,left:120,right:160}}),
+      )],[6826,2200]));
 
-    children.push(new Table({
-      width: { size: 9360, type: WidthType.DXA },
-      columnWidths: [2340, 7020],
-      rows: [
-        ...(ref ? [['REFERENCE', ref]] : []),
-        ['PREPARED BY', 'Liberty Incentives & Congresses'],
-        ['DATE', dateStr],
-        ['STATUS', 'Estimate — subject to confirmation'],
-      ].map(([label, value]) => new TableRow({ children: [
-        new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 2340, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 160, right: 120 },
-          children: [new Paragraph({ children: [new TextRun({ text: label, font: 'Arial', size: 16, bold: true, color: GOLD })] })] }),
-        new TableCell({ borders: borders0, width: { size: 7020, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 160, right: 120 },
-          children: [new Paragraph({ children: [new TextRun({ text: value, font: 'Arial', size: 16, color: DARK })] })] }),
-      ]}))
-    }));
-
-    children.push(new Paragraph({ spacing: { before: 360, after: 120 } }));
-    children.push(new Paragraph({
-      children: [new TextRun({ text: intro || `Dear ${client}, please find below our proposal. We remain at your disposal for any adjustments.`, font: 'Arial', size: 18, color: MID, italics: true })]
-    }));
-    children.push(new Paragraph({ children: [new PageBreak()] }));
-
-    children.push(new Paragraph({
-      spacing: { before: 0, after: 280 },
-      border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 6 } },
-      children: [new TextRun({ text: 'SERVICES', font: 'Arial', size: 24, bold: true, color: NAVY, characterSpacing: 60 })]
-    }));
-
-    svcs.forEach((svc) => {
-      children.push(new Table({
-        width: { size: 9360, type: WidthType.DXA },
-        columnWidths: [7200, 2160],
-        rows: [new TableRow({ children: [
-          new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 7200, type: WidthType.DXA }, margins: { top: 120, bottom: 120, left: 180, right: 120 }, verticalAlign: VerticalAlign.CENTER,
-            children: [
-              new Paragraph({ children: [
-                ...(svc.cat ? [new TextRun({ text: svc.cat.toUpperCase() + ' · ', font: 'Arial', size: 16, color: GOLD, bold: true })] : []),
-                new TextRun({ text: svc.nom, font: 'Arial', size: 22, bold: true, color: WHITE })
-              ] }),
-              ...(svc.date ? [new Paragraph({ spacing: { before: 40 }, children: [new TextRun({ text: svc.date, font: 'Arial', size: 16, color: 'AAAAAA', italics: true })] })] : []),
-            ]
-          }),
-          new TableCell({ borders: borders0, shading: { fill: GOLD, type: ShadingType.CLEAR }, width: { size: 2160, type: WidthType.DXA }, margins: { top: 120, bottom: 120, left: 120, right: 180 }, verticalAlign: VerticalAlign.CENTER,
-            children: [new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: svc.prix > 0 ? `€${svc.prix.toLocaleString('fr-FR', {minimumFractionDigits:0, maximumFractionDigits:2})}` : 'Sur demande', font: 'Arial', size: 24, bold: true, color: NAVY })] })]
-          }),
-        ]})]
-      }));
-
-      const bodyRows = [];
-      if (svc.desc) bodyRows.push(new Paragraph({ spacing: { before: 120, after: 80 }, children: [new TextRun({ text: svc.desc, font: 'Arial', size: 18, color: DARK })] }));
-      if (svc.incl) {
-        bodyRows.push(new Paragraph({ spacing: { before: 80, after: 40 }, children: [new TextRun({ text: 'Included', font: 'Arial', size: 16, bold: true, color: NAVY })] }));
-        bodyRows.push(new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: svc.incl, font: 'Arial', size: 16, color: MID })] }));
+      // Corps service
+      const body=[];
+      if(svc.desc) body.push(p(r(svc.desc,{sz:16,color:DARK}),{spacing:{before:80,after:60}}));
+      if(svc.incl) body.push(p([r('Included:  ',{sz:15,bold:true,color:NAVY}),r(svc.incl,{sz:15,color:MID})],{spacing:{before:0,after:40}}));
+      if(svc.excl) body.push(p([r('Not included:  ',{sz:15,bold:true,color:MID}),r(svc.excl,{sz:15,italic:true,color:MID})],{spacing:{before:0,after:40}}));
+      if(body.length>0) {
+        children.push(tbl([tr(mk(body,{
+          w:W,
+          borders:{top:b0,bottom:{style:BorderStyle.SINGLE,size:4,color:'E8E6DF'},left:b0,right:b0},
+          margins:{top:80,bottom:100,left:160,right:160},
+        }))],[W]));
       }
-      if (svc.excl) {
-        bodyRows.push(new Paragraph({ spacing: { before: 40, after: 60 }, children: [
-          new TextRun({ text: 'Not included: ', font: 'Arial', size: 16, bold: true, color: MID }),
-          new TextRun({ text: svc.excl, font: 'Arial', size: 16, color: MID, italics: true }),
-        ] }));
-      }
-      if (bodyRows.length > 0) {
-        children.push(new Table({
-          width: { size: 9360, type: WidthType.DXA },
-          columnWidths: [9360],
-          rows: [new TableRow({ children: [new TableCell({
-            borders: { top: border0, bottom: { style: BorderStyle.SINGLE, size: 4, color: 'E8E6DF' }, left: border0, right: border0 },
-            width: { size: 9360, type: WidthType.DXA },
-            margins: { top: 80, bottom: 120, left: 180, right: 180 },
-            children: bodyRows
-          })] })]
-        }));
-      }
-      children.push(new Paragraph({ spacing: { before: 240 } }));
+      children.push(p(r('',{sz:8}),{spacing:{before:100,after:0}}));
     });
 
-    children.push(new Paragraph({ spacing: { before: 120, after: 280 }, border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 6 } },
-      children: [new TextRun({ text: 'INDICATIVE BUDGET SUMMARY', font: 'Arial', size: 24, bold: true, color: NAVY, characterSpacing: 60 })]
+    // ── TOTAL
+    children.push(tbl([tr(
+      mk([
+        p([r('ESTIMATED TOTAL',{sz:18,bold:true,color:WHITE,track:40})],{spacing:{before:0,after:20}}),
+        p([r(`All prices TTC  ·  ${pax||svcs.length+' services'}`,{sz:14,color:'AAAAAA'})]),
+      ],{w:6826,fill:NAVY,margins:{top:120,bottom:120,left:160,right:120}}),
+      mk([
+        p([r(fmt(totalTTC),{sz:30,bold:true,color:GOLD})],{align:AlignmentType.RIGHT}),
+      ],{w:2200,fill:NAVY,va:VerticalAlign.CENTER,margins:{top:120,bottom:120,left:120,right:160}}),
+    )],[6826,2200]));
+
+    children.push(p(r('',{sz:8}),{spacing:{before:200,after:0}}));
+
+    // ── CONDITIONS
+    children.push(p(r('TERMS & CONDITIONS',{sz:18,bold:true,color:NAVY,track:80}),{
+      border:{bottom:borderGold},spacing:{before:80,after:120}
     }));
 
-    children.push(new Table({
-      width: { size: 9360, type: WidthType.DXA },
-      columnWidths: [6800, 2560],
-      rows: [
-        new TableRow({ children: [
-          new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 6800, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 160, right: 120 },
-            children: [new Paragraph({ children: [new TextRun({ text: 'Service', font: 'Arial', size: 18, bold: true, color: GOLD })] })] }),
-          new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 2560, type: WidthType.DXA }, margins: { top: 100, bottom: 100, left: 120, right: 160 },
-            children: [new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: 'Amount', font: 'Arial', size: 18, bold: true, color: GOLD })] })] }),
-        ]}),
-        ...svcs.map((svc) => new TableRow({ children: [
-          new TableCell({ borders: { top: border0, bottom: { style: BorderStyle.SINGLE, size: 2, color: 'E8E6DF' }, left: border0, right: border0 }, width: { size: 6800, type: WidthType.DXA }, margins: { top: 80, bottom: 80, left: 160, right: 120 },
-            children: [new Paragraph({ children: [new TextRun({ text: svc.nom, font: 'Arial', size: 18, color: DARK })] })] }),
-          new TableCell({ borders: { top: border0, bottom: { style: BorderStyle.SINGLE, size: 2, color: 'E8E6DF' }, left: border0, right: border0 }, width: { size: 2560, type: WidthType.DXA }, margins: { top: 80, bottom: 80, left: 120, right: 160 },
-            children: [new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: svc.prix > 0 ? `€${svc.prix.toLocaleString('fr-FR', {minimumFractionDigits:0, maximumFractionDigits:2})}` : 'On request', font: 'Arial', size: 18, color: DARK })] })] }),
-        ]})),
-        new TableRow({ children: [
-          new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 6800, type: WidthType.DXA }, margins: { top: 120, bottom: 120, left: 160, right: 120 },
-            children: [new Paragraph({ children: [new TextRun({ text: 'ESTIMATED TOTAL', font: 'Arial', size: 20, bold: true, color: WHITE })] })] }),
-          new TableCell({ borders: borders0, shading: { fill: NAVY, type: ShadingType.CLEAR }, width: { size: 2560, type: WidthType.DXA }, margins: { top: 120, bottom: 120, left: 120, right: 160 },
-            children: [new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: `€${totalTTC.toLocaleString('fr-FR', {minimumFractionDigits:0, maximumFractionDigits:2})}`, font: 'Arial', size: 22, bold: true, color: GOLD })] })] }),
-        ]}),
-      ]
-    }));
+    const condCell = (title,text,w=4413) => mk([
+      p([r(title,{sz:14,bold:true,color:NAVY,track:30})],{spacing:{before:0,after:40}}),
+      p([r(text,{sz:15,color:MID})]),
+    ],{
+      w,
+      borders:{top:b0,bottom:b0,left:{style:BorderStyle.SINGLE,size:8,color:GOLD},right:b0},
+      fill:LIGHT,
+      margins:{top:100,bottom:100,left:140,right:120},
+    });
 
-    children.push(new Paragraph({ spacing: { before: 480, after: 280 }, border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: GOLD, space: 6 } },
-      children: [new TextRun({ text: 'TERMS & CONDITIONS', font: 'Arial', size: 24, bold: true, color: NAVY, characterSpacing: 60 })]
-    }));
+    const condResaText = condResa||'No service is confirmed at this stage. All rates are valid at date of proposal and subject to change pending final availability confirmation.';
+    const condAnnulText = condAnnul||'Cancellation terms will be confirmed upon booking of each individual service.';
+    children.push(tbl([tr(condCell('Reservation & Availability',condResaText),condCell('Cancellation Policy',condAnnulText))],[4513,4513]));
 
-    const addCondSection = (label, text) => {
-      if (!text) return;
-      children.push(new Paragraph({ spacing: { before: 160, after: 60 }, children: [new TextRun({ text: label, font: 'Arial', size: 18, bold: true, color: NAVY })] }));
-      children.push(new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text, font: 'Arial', size: 18, color: MID })] }));
-    };
-    addCondSection('Reservation & Availability', condResa || 'No service is confirmed at this stage. All rates are valid at date of proposal and subject to change pending final availability confirmation.');
-    addCondSection('Cancellation Policy', condAnnul || 'Cancellation terms will be confirmed upon booking of each service.');
-    if (notes) addCondSection('Additional Notes', notes);
+    if(notes){
+      children.push(p(r('',{sz:6}),{spacing:{before:100}}));
+      children.push(tbl([tr(condCell('Additional Notes',notes,W))],[W]));
+    }
 
-    children.push(new Paragraph({ spacing: { before: 240, after: 120 }, children: [new TextRun({ text: `This quotation is valid until ${validStr}.`, font: 'Arial', size: 16, color: MID, italics: true })] }));
-    children.push(new Paragraph({ spacing: { before: 480 } }));
-    children.push(new Table({
-      width: { size: 9360, type: WidthType.DXA },
-      columnWidths: [9360],
-      rows: [new TableRow({ children: [new TableCell({
-        borders: borders0,
-        shading: { fill: NAVY, type: ShadingType.CLEAR },
-        width: { size: 9360, type: WidthType.DXA },
-        margins: { top: 140, bottom: 140, left: 200, right: 200 },
-        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [
-          new TextRun({ text: 'Liberty Incentives & Congresses', font: 'Arial', size: 18, bold: true, color: GOLD }),
-          new TextRun({ text: '  ·  Saint-Ouen, France  ·  fit.france@liberty-int.com  ·  www.liberty-int.com', font: 'Arial', size: 16, color: 'AAAAAA' }),
-        ] })]
-      })] })]
-    }));
+    children.push(p(r(`This quotation is valid until ${validStr}.`,{sz:14,italic:true,color:MID}),{spacing:{before:120,after:60}}));
+    children.push(p(r('',{sz:6}),{spacing:{before:200,after:0}}));
 
+    // ── FOOTER LIBERTY
+    children.push(tbl([tr(
+      mk([
+        p([r('Liberty Incentives & Congresses France',{sz:16,bold:true,color:GOLD})],{spacing:{before:0,after:40}}),
+        p([r('116 avenue Gabriel Péri, 93400 Saint-Ouen',{sz:13,color:'BBBBBB'})]),
+      ],{w:5000,fill:NAVY,margins:{top:120,bottom:120,left:180,right:120}}),
+      mk([
+        p([r('fit.france@liberty-int.com',{sz:13,color:GOLD})],{align:AlignmentType.RIGHT,spacing:{before:0,after:40}}),
+        p([r('www.liberty-int.com',{sz:13,color:'BBBBBB'})],{align:AlignmentType.RIGHT}),
+      ],{w:4026,fill:NAVY,va:VerticalAlign.CENTER,margins:{top:120,bottom:120,left:120,right:180}}),
+    )],[5000,4026]));
+
+    // ── GÉNÉRATION
     const doc = new Document({
-      styles: { default: { document: { run: { font: 'Arial', size: 20, color: DARK } } } },
-      sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 } } }, children }]
+      styles:{default:{document:{run:{font:'Arial',size:20,color:DARK}}}},
+      sections:[{
+        properties:{page:{
+          size:{width:11906,height:16838},
+          margin:{top:720,right:1021,bottom:720,left:1021},
+        }},
+        children,
+      }],
     });
 
     const buffer = await Packer.toBuffer(doc);
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const blob = new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `Devis_Liberty_${(client||'Client').replace(/\s+/g,'_')}_${ref||'REF'}.docx`;
-    a.click(); URL.revokeObjectURL(url);
+    a.href=url;
+    a.download=`Devis_Liberty_${(client||'Client').replace(/\s+/g,'_')}_${ref||'REF'}.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
 
-  } catch(e) { showErr('qd-err','Erreur génération : ' + e.message); console.error(e);
-  } finally { btn.disabled = false; lbl.textContent = 'Générer le devis DOCX'; }
+  } catch(e) { showErr('qd-err','Erreur génération : '+e.message); console.error(e);
+  } finally { btn.disabled=false; lbl.textContent='Générer le devis DOCX'; }
 }
 
 // ─── COMPTA ───────────────────────────────────────────────────────────────────
