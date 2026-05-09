@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rob — Agent IA · Liberty FIT</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -23886,6 +23889,36 @@ const WEBHOOKS = {
   mails:      'https://hook.eu1.make.com/5n8fsqjxxlij3y12w0tuqq7jva9vukio'
 };
 
+// ─── SUPABASE ─────────────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://biknungxkdxtwhdhhxcm.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpa251bmd4a2R4dHdoZGhoeGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjU2NjgsImV4cCI6MjA5MzI0MTY2OH0.AaRhUd-2sKgqjcYw6jZMii8TISiG6UVT1eT7gGMlF1Q';
+
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type': 'application/json',
+      ...opts.headers
+    },
+    ...opts
+  });
+  if (!res.ok) throw new Error('Supabase ' + res.status);
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+async function sbLogConnection(username) {
+  try {
+    await sbFetch('rob_logs', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ username, connected_at: new Date().toISOString() })
+    });
+  } catch(e) { console.warn('Log connexion échoué:', e.message); }
+}
+
+// ─── ACCOUNTS (profils locaux — noms/rôles/permissions par défaut) ────────────
 const ACCOUNTS = {
   'antoine.fonfreyde': { hash: 'dc883e9cefe3ee597366fa5a60fb42481c0b1e882835adb4b1f64cba6a6ae9ec', active: true,  level: 'admin',    display: 'Antoine Fonfreyde',  role: 'Admin · Liberty FIT' },
   'romain.ammari':     { hash: '9178c4f9d68c0104b8d2e9915867f2473585b05cb68eee3453112583fc4ec76d', active: true,  level: 'active',   display: 'Romain Ammari',      role: 'Chef de projet FIT' },
@@ -24014,10 +24047,11 @@ async function sha256(str) {
 }
 
 async function doLogin() {
-  const user = document.getElementById('login-user').value;
+  const user = document.getElementById('login-user').value.trim();
   const pwd  = document.getElementById('login-pwd').value;
   const errEl  = document.getElementById('login-error');
   const lockEl = document.getElementById('login-locked');
+  const btn    = document.querySelector('.login-btn');
   errEl.className = 'login-msg';
   lockEl.className = 'login-msg';
 
@@ -24026,15 +24060,43 @@ async function doLogin() {
   const account = ACCOUNTS[user];
   if (!account) { errEl.className = 'login-msg error'; return; }
 
-  const hash = await sha256(pwd);
-  if (hash !== account.hash) { errEl.className = 'login-msg error'; return; }
+  if (btn) btn.disabled = true;
+  try {
+    // Vérification du mot de passe depuis Supabase
+    const hash = await sha256(pwd);
+    const rows = await sbFetch(
+      'rob_users?username=eq.' + encodeURIComponent(user) + '&select=password_hash,active,level,permissions'
+    );
 
-  const state = accountsState[user];
-  if (!state.active) { lockEl.className = 'login-msg locked'; return; }
+    if (!rows || rows.length === 0) { errEl.className = 'login-msg error'; return; }
+    const dbUser = rows[0];
 
-  currentUser = user;
-  logConnection(user);
-  launchApp(account, state);
+    if (hash !== dbUser.password_hash) { errEl.className = 'login-msg error'; return; }
+    if (!dbUser.active) { lockEl.className = 'login-msg locked'; return; }
+
+    // Mise à jour de l'état runtime avec les données Supabase
+    accountsState[user] = {
+      active: dbUser.active,
+      level: dbUser.level,
+      permissions: dbUser.permissions || {}
+    };
+
+    currentUser = user;
+    sbLogConnection(user);
+    launchApp(account, accountsState[user]);
+  } catch(e) {
+    // Fallback local si Supabase inaccessible
+    console.warn('Supabase inaccessible, fallback local:', e.message);
+    const hash = await sha256(pwd);
+    if (hash !== account.hash) { errEl.className = 'login-msg error'; return; }
+    const state = accountsState[user];
+    if (!state.active) { lockEl.className = 'login-msg locked'; return; }
+    currentUser = user;
+    logConnection(user);
+    launchApp(account, state);
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 function launchApp(account, state) {
