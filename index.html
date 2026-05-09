@@ -1258,7 +1258,7 @@ function renderAlfred(text) {
       taskBody.textContent = sectionContent || sectionText;
       content.appendChild(taskBody); task.appendChild(content); body.appendChild(task);
     } else {
-      const rawTasks = sectionContent.split(/\n(?=\[\d+\]|\[N°\d+\])/g).map(t => t.trim()).filter(t => t.length > 10);
+      const rawTasks = sectionContent.split(/\n---\n|\n(?=\*{0,2}\[[\d]+\])/).map(t => t.trim()).filter(t => t.length > 10);
       if (rawTasks.length === 0) {
         const noTask = document.createElement('div'); noTask.className = 'alfred-task';
         const dot = document.createElement('div'); dot.className = 'alfred-task-dot ' + dotCls;
@@ -1283,7 +1283,7 @@ function buildAlfredTaskCard(rawTask, dotCls) {
   const lines = rawTask.split('\n').map(l => l.trim()).filter(l => l);
   const subjectLine = lines[0] || '';
   const subjectEl = document.createElement('div'); subjectEl.className = 'alfred-task-subject';
-  subjectEl.textContent = subjectLine.replace(/^\[\d+\]\s*/, '').replace(/^\[N°\d+\]\s*/, '');
+  subjectEl.textContent = subjectLine.replace(/^\*{0,2}\[[\d]+\]\*{0,2}\s*/, '').replace(/^\[N°\d+\]\s*/, '').replace(/\*\*/g, '');
   content.appendChild(subjectEl);
   const deMatch = rawTask.match(/[-]\s*De\s*:\s*(.+)/i);
   const recuMatch = rawTask.match(/[-]\s*Recu\s*le?\s*:\s*(.+)/i);
@@ -1298,10 +1298,10 @@ function buildAlfredTaskCard(rawTask, dotCls) {
   const replyMarker = /[-]\s*Reponse\s+suggeree\s*:/i;
   const replyIdx = rawTask.search(replyMarker);
   const bodyText = replyIdx !== -1 ? rawTask.substring(0, replyIdx) : rawTask;
-  const bodyLines = bodyText.split('\n').map(l => l.trim()).filter(l => l && l !== subjectLine && !l.match(/^[-]\s*De\s*:/i) && !l.match(/^[-]\s*Recu/i));
+  const bodyLines = bodyText.split('\n').map(l => l.trim()).filter(l => l && l !== subjectLine && !l.match(/^[-]\s*De\s*:/i) && !l.match(/^[-]\s*Recu/i) && l !== '---');
   if (bodyLines.length > 0) {
     const bodyEl = document.createElement('div'); bodyEl.className = 'alfred-task-body';
-    bodyEl.textContent = bodyLines.join('\n'); content.appendChild(bodyEl);
+    bodyEl.innerHTML = bodyLines.join('\n').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); content.appendChild(bodyEl);
   }
   if (replyIdx !== -1) {
     const replyText = rawTask.substring(replyIdx).replace(replyMarker, '').trim();
