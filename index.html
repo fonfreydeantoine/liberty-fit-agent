@@ -1370,7 +1370,7 @@ function renderKensington(fullText) {
   const idx = fullText.indexOf(marker);
   const ficheText = idx !== -1 ? fullText.substring(0, idx).trim() : fullText.trim();
   mailsRaw = idx !== -1 ? fullText.substring(idx + marker.length).trim() : '';
-  document.getElementById('kt-fiche-content').textContent = ficheText;
+  document.getElementById('kt-fiche-content').innerHTML = mdToHtml(ficheText);
   const refMatch = ficheText.match(/[Rr]eference KT\s*:\s*([^\n]+)/);
   if (refMatch) document.getElementById('kt-ref').textContent = refMatch[1].trim();
   const container = document.getElementById('kt-mails-content');
@@ -1484,9 +1484,9 @@ function renderQuotes(fullText) {
   const o1 = extract('===OUTPUT1_START===','===OUTPUT1_END===');
   const o2 = extract('===OUTPUT2_START===','===OUTPUT2_END===');
   const insuff = o0 && (!o1 && !o2);
-  document.getElementById('qt-interne').textContent = o1 || '(Aucune fiche interne generee.)';
-  document.getElementById('qt-client').textContent  = o2 || '(Aucun programme client genere.)';
-  document.getElementById('qt-email').textContent   = o0 || '(Aucun email de questions.)';
+  document.getElementById('qt-interne').innerHTML = mdToHtml(o1 || '(Aucune fiche interne generee.)');
+  document.getElementById('qt-client').innerHTML  = mdToHtml(o2 || '(Aucun programme client genere.)');
+  document.getElementById('qt-email').innerHTML   = mdToHtml(o0 || '(Aucun email de questions.)');
   document.getElementById('qt-alert').style.display = insuff ? 'inline-block' : 'none';
   if (o1) { const m = o1.match(/Client final\s*:\s*([^\n]+)/); if(m) document.getElementById('qt-ref').textContent = m[1].trim(); }
   insuff ? switchQT('email') : switchQT('interne');
@@ -1595,7 +1595,7 @@ async function runComms() {
     const raw = await res.text();
     const text = parseWebhookText(raw);
     if (!text || text.length < 10) { showErr('comms-err', 'Reponse vide.'); return; }
-    document.getElementById('comms-result').textContent = text;
+    document.getElementById('comms-result').innerHTML = mdToHtml(text);
     document.getElementById('comms-output').style.display = 'block';
     document.getElementById('comms-output').scrollIntoView({behavior:'smooth', block:'start'});
   } catch(e) { showErr('comms-err', 'Erreur reseau : ' + e.message);
@@ -1993,6 +1993,7 @@ function parseWebhookText(raw) {
   } catch(e) {}
   return raw;
 }
+function mdToHtml(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');}
 function esc(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');}
 function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';}
 function hideErr(id){const el=document.getElementById(id);el.style.display='none';}
