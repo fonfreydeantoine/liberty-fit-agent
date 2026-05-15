@@ -321,6 +321,30 @@ textarea::placeholder { color: var(--g4); }
 .mail-preview-label { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 10px; }
 .mail-preview-content { font-size: 13px; color: var(--g9); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
 
+/* RICH EDITOR */
+.rich-editor-wrap { display: none; }
+.rich-editor-wrap.visible { display: block; }
+.rich-editor-objet-row { margin-bottom: 12px; }
+.rich-editor-objet-label { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 6px; display: block; }
+.rich-editor-objet { width: 100%; background: var(--g1); border: 0.5px solid var(--rob-yellow); border-radius: 7px; padding: 10px 14px; font-family: var(--font-body); font-size: 13px; color: var(--g9); outline: none; }
+.rich-toolbar { display: flex; align-items: center; gap: 2px; background: var(--g3); border: 0.5px solid var(--g4); border-bottom: none; border-radius: 7px 7px 0 0; padding: 6px 8px; flex-wrap: wrap; }
+.rich-toolbar-btn { background: transparent; border: none; border-radius: 4px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--g7); font-size: 13px; font-family: var(--font-body); transition: background 0.15s, color 0.15s; flex-shrink: 0; }
+.rich-toolbar-btn:hover { background: var(--g4); color: var(--g9); }
+.rich-toolbar-btn.active { background: rgba(245,230,66,0.12); color: var(--rob-yellow); }
+.rich-toolbar-sep { width: 0.5px; height: 18px; background: var(--g4); margin: 0 4px; flex-shrink: 0; }
+.rich-body { min-height: 220px; background: var(--g1); border: 0.5px solid var(--rob-yellow); border-top: none; border-radius: 0 0 7px 7px; padding: 14px 16px; font-family: var(--font-body); font-size: 13px; color: var(--g9); line-height: 1.85; outline: none; word-break: break-word; }
+.rich-body:empty:before { content: attr(data-placeholder); color: var(--g4); pointer-events: none; }
+.rich-body ul, .rich-body ol { padding-left: 20px; margin: 4px 0; }
+.rich-body li { margin: 2px 0; }
+.rich-editor-footer { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 0.5px solid var(--g4); }
+.btn-send-rich { background: var(--rob-yellow); color: var(--g2); border: none; border-radius: 8px; padding: 10px 24px; font-family: var(--font-title); font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; letter-spacing: 0.5px; }
+.btn-send-rich:hover { background: var(--rob-yellow-dark); }
+.btn-send-rich:disabled { background: var(--g4); color: var(--g6); cursor: not-allowed; }
+.send-rich-spinner { width: 13px; height: 13px; border: 2px solid rgba(26,25,24,0.2); border-top-color: var(--g2); border-radius: 50%; animation: spin 0.75s linear infinite; display: none; }
+.btn-edit-toggle { background: transparent; border: 0.5px solid var(--g4); border-radius: 6px; padding: 5px 14px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--g6); cursor: pointer; font-family: var(--font-body); transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+.btn-edit-toggle:hover { border-color: var(--rob-yellow); color: var(--rob-yellow); }
+.edit-pencil { font-size: 11px; }
+
 /* QUOTES DOCX */
 .quote-svc-block { border: 0.5px solid var(--g4); border-radius: 8px; padding: 16px; margin-bottom: 12px; background: var(--g1); }
 .quote-svc-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
@@ -508,7 +532,7 @@ textarea::placeholder { color: var(--g4); }
         </div>
         <div class="alfred-info">
           <div class="alfred-name">Alfred</div>
-          <div class="alfred-tagline">Analyse vos emails non lus · genere une liste de taches priorisees</div>
+          <div class="alfred-tagline">Analyse vos emails non lus · génère une liste de tâches priorisées</div>
         </div>
         <button class="alfred-btn-cta" id="alfred-btn" onclick="runAlfred()">
           <div class="alfred-cta-spinner" id="alfred-spin"></div>
@@ -572,7 +596,7 @@ textarea::placeholder { color: var(--g4); }
         </div>
         <div class="mod-info">
           <div class="mod-name">Agent Quotes</div>
-          <div class="mod-desc">Brief client · itineraire FIT · programme premium</div>
+          <div class="mod-desc">Brief client · itinéraire FIT · programme premium</div>
         </div>
       </button>
 
@@ -585,7 +609,7 @@ textarea::placeholder { color: var(--g4); }
         </div>
         <div class="mod-info">
           <div class="mod-name">Mails dispo</div>
-          <div class="mod-desc">Guides, assistants, hotels · envoi automatique</div>
+          <div class="mod-desc">Guides, assistants, hôtels · envoi automatique</div>
         </div>
       </button>
 
@@ -617,7 +641,7 @@ textarea::placeholder { color: var(--g4); }
         </div>
         <div class="mod-info">
           <div class="mod-name">Quotes DOCX</div>
-          <div class="mod-desc">Generateur de devis standardise · export Word · charte Liberty</div>
+          <div class="mod-desc">Générateur de devis standardisé · export Word · charte Liberty</div>
         </div>
       </button>
     </div>
@@ -633,7 +657,7 @@ textarea::placeholder { color: var(--g4); }
         </div>
         <div class="mod-info">
           <div class="mod-name">Comms internes</div>
-          <div class="mod-desc">Info presta · recap astreinte · mails equipe</div>
+          <div class="mod-desc">Info presta · récap astreinte · mails équipe</div>
         </div>
       </button>
     </div>
@@ -645,11 +669,11 @@ textarea::placeholder { color: var(--g4); }
       <div class="panel active" id="panel-kensington">
         <div class="input-card">
           <div class="input-label">Contenu du TMT Kensington</div>
-          <textarea id="kt-input" placeholder="Coller ici le texte copie depuis le TMT Kensington (tous les jours du sejour France)..."></textarea>
+          <textarea id="kt-input" placeholder="Coller ici le texte copié depuis le TMT Kensington (tous les jours du séjour France)..."></textarea>
           <div class="actions">
             <button class="btn-gen" id="kt-btn" onclick="runKensington()">
               <div class="spinner" id="kt-spin"></div>
-              <span id="kt-lbl">Generer la fiche et les mails</span>
+              <span id="kt-lbl">Générer la fiche et les mails</span>
             </button>
             <span class="hint" id="kt-hint"></span>
           </div>
@@ -676,7 +700,7 @@ textarea::placeholder { color: var(--g4); }
           </div>
           <div class="t-panel" id="ktp-mails">
             <div class="merge-bar" id="kt-merge-bar">
-              <span class="merge-bar-text"><strong id="kt-merge-count">0</strong> mails selectionnes</span>
+              <span class="merge-bar-text"><strong id="kt-merge-count">0</strong> mails sélectionnés</span>
               <div style="display:flex;align-items:center;gap:10px;">
                 <div class="merge-spinner" id="kt-merge-spin"></div>
                 <button class="btn-merge" id="kt-merge-btn" onclick="mergeMails()">Regrouper en 1 mail</button>
@@ -695,11 +719,11 @@ textarea::placeholder { color: var(--g4); }
       <div class="panel" id="panel-quotes">
         <div class="input-card">
           <div class="input-label">Brief client</div>
-          <textarea id="qt-input" placeholder="Coller ici le brief recu (Kensington, autre agence, client direct). Anglais ou francais accepte..."></textarea>
+          <textarea id="qt-input" placeholder="Coller ici le brief reçu (Kensington, autre agence, client direct). Anglais ou français accepté..."></textarea>
           <div class="actions">
             <button class="btn-gen" id="qt-btn" onclick="runQuotes()">
               <div class="spinner" id="qt-spin"></div>
-              <span id="qt-lbl">Generer l'itineraire</span>
+              <span id="qt-lbl">Générer l'itinéraire</span>
             </button>
             <span class="hint" id="qt-hint"></span>
           </div>
@@ -751,8 +775,8 @@ textarea::placeholder { color: var(--g4); }
             <button class="type-btn" id="mt-autre" onclick="setMailType('autre')">Autre</button>
           </div>
           <div class="type-row">
-            <button class="type-btn" id="mt-hotel-c" onclick="setMailType('hotel_contracte')">Hotel contracte</button>
-            <button class="type-btn" id="mt-hotel-nc" onclick="setMailType('hotel_non_contracte')">Hotel non contracte</button>
+            <button class="type-btn" id="mt-hotel-c" onclick="setMailType('hotel_contracte')">Hôtel contracté</button>
+            <button class="type-btn" id="mt-hotel-nc" onclick="setMailType('hotel_non_contracte')">Hôtel non contracté</button>
           </div>
           <hr class="form-divider">
           <div class="form-row-2">
@@ -780,20 +804,55 @@ textarea::placeholder { color: var(--g4); }
               <div><label class="form-label" for="htl-depart">Date de depart</label><input class="form-input" type="date" id="htl-depart"></div>
             </div>
             <div class="form-row"><label class="form-label" for="htl-noms">Noms des voyageurs</label><input class="form-input" type="text" id="htl-noms" placeholder="Ex : M. et Mme Sardella"></div>
-            <div class="form-row"><label class="form-label" for="htl-notes">Notes / demandes speciales</label><input class="form-input" type="text" id="htl-notes" placeholder="Ex : chambre haute, vue degagee..."></div>
+            <div class="form-row"><label class="form-label" for="htl-notes">Notes / demandes spéciales</label><input class="form-input" type="text" id="htl-notes" placeholder="Ex : chambre haute, vue dégagée..."></div>
           </div>
           <hr class="form-divider">
           <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-            <button class="btn-send" id="mail-preview-btn" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Apercu</button>
+            <button class="btn-send" id="mail-preview-btn" style="background:transparent;border:0.5px solid var(--g4);color:var(--g6);" onclick="previewMail()">Aperçu</button>
             <button class="btn-send" id="mail-send-btn" onclick="sendMail()">
               <div class="send-spinner" id="mail-spin"></div>
               <span id="mail-lbl">Envoyer</span>
             </button>
           </div>
           <div class="mail-preview-box" id="mail-preview-box">
-            <div class="mail-preview-label">Apercu du mail</div>
-            <div class="mail-preview-content" id="mail-preview-content"></div>
-            <div class="panel-footer" style="margin-top:12px;padding-top:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div class="mail-preview-label" style="margin-bottom:0;" id="mail-preview-label">Aperçu du mail</div>
+              <button class="btn-edit-toggle" id="mail-edit-toggle-btn" onclick="toggleMailEditor()">
+                <span class="edit-pencil">✏</span><span id="mail-edit-toggle-lbl">Modifier</span>
+              </button>
+            </div>
+            <!-- READ MODE -->
+            <div id="mail-read-view">
+              <div style="font-size:11px;color:var(--g6);margin-bottom:6px;" id="mail-preview-dest-line"></div>
+              <div style="font-size:11px;color:var(--g6);margin-bottom:10px;" id="mail-preview-objet-line"></div>
+              <div class="mail-preview-content" id="mail-preview-content"></div>
+            </div>
+            <!-- EDIT MODE -->
+            <div class="rich-editor-wrap" id="mail-rich-editor">
+              <div class="rich-editor-objet-row">
+                <label class="rich-editor-objet-label">Objet</label>
+                <input class="rich-editor-objet" type="text" id="mail-rich-objet" placeholder="Objet du mail">
+              </div>
+              <div class="rich-toolbar" id="mail-rich-toolbar">
+                <button class="rich-toolbar-btn" title="Gras" onmousedown="event.preventDefault();applyRichFmt('bold','mail-rich-body')"><strong>B</strong></button>
+                <button class="rich-toolbar-btn" title="Italique" onmousedown="event.preventDefault();applyRichFmt('italic','mail-rich-body')"><em>I</em></button>
+                <button class="rich-toolbar-btn" title="Souligné" onmousedown="event.preventDefault();applyRichFmt('underline','mail-rich-body')"><u>U</u></button>
+                <div class="rich-toolbar-sep"></div>
+                <button class="rich-toolbar-btn" title="Liste à puces" onmousedown="event.preventDefault();applyRichFmt('insertUnorderedList','mail-rich-body')">≡</button>
+                <button class="rich-toolbar-btn" title="Liste numérotée" onmousedown="event.preventDefault();applyRichFmt('insertOrderedList','mail-rich-body')">1≡</button>
+                <div class="rich-toolbar-sep"></div>
+                <button class="rich-toolbar-btn" title="Supprimer la mise en forme" onmousedown="event.preventDefault();applyRichFmt('removeFormat','mail-rich-body')" style="font-size:11px;">Tx</button>
+              </div>
+              <div class="rich-body" id="mail-rich-body" contenteditable="true" data-placeholder="Corps du mail..."></div>
+              <div class="rich-editor-footer">
+                <button class="btn-send-rich" id="mail-rich-send-btn" onclick="sendMailRich()">
+                  <div class="send-rich-spinner" id="mail-rich-spin"></div>
+                  <span id="mail-rich-send-lbl">Envoyer</span>
+                </button>
+                <button class="btn-copy" id="mail-rich-copy-btn" onclick="copyRichMail()">Copier</button>
+              </div>
+            </div>
+            <div class="panel-footer" id="mail-preview-footer" style="margin-top:12px;padding-top:12px;">
               <button class="btn-copy" id="mail-copy-btn" onclick="copyPreview()">Copier</button>
             </div>
           </div>
@@ -816,21 +875,21 @@ textarea::placeholder { color: var(--g4); }
           </div>
           <div class="form-row-2">
             <div><label class="form-label" for="qd-date-devis">Date du devis</label><input class="form-input" type="date" id="qd-date-devis"></div>
-            <div><label class="form-label" for="qd-validite">Validite (jours)</label><input class="form-input" type="number" id="qd-validite" value="15" min="1"></div>
+            <div><label class="form-label" for="qd-validite">Validité (jours)</label><input class="form-input" type="number" id="qd-validite" value="15" min="1"></div>
           </div>
-          <div class="form-row"><label class="form-label" for="qd-intro">Message d'introduction (optionnel)</label><input class="form-input" type="text" id="qd-intro" placeholder="Ex : Suite a votre demande, veuillez trouver notre proposition..."></div>
+          <div class="form-row"><label class="form-label" for="qd-intro">Message d'introduction (optionnel)</label><input class="form-input" type="text" id="qd-intro" placeholder="Ex : Suite à votre demande, veuillez trouver notre proposition..."></div>
           <hr class="form-divider">
           <div style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g6);font-weight:500;margin-bottom:14px;">Services</div>
           <div id="qdsvcs-container"></div>
           <button class="btn-add-svc" onclick="addQdSvc()">+ Ajouter un service</button>
           <hr class="form-divider">
-          <div style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g6);font-weight:500;margin-bottom:14px;">Conditions generales</div>
-          <div class="form-row"><label class="form-label" for="qd-cond-resa">Conditions de reservation</label><input class="form-input" type="text" id="qd-cond-resa" placeholder="Ex : Aucun service n'est reserve a ce stade. Tarifs valides a la date du devis, sous reserve de disponibilite."></div>
-          <div class="form-row"><label class="form-label" for="qd-cond-annul">Conditions d'annulation</label><input class="form-input" type="text" id="qd-cond-annul" placeholder="Ex : Annulation sans frais jusqu'a 30 jours avant le debut du sejour."></div>
-          <div class="form-row"><label class="form-label" for="qd-notes">Notes supplementaires (optionnel)</label><input class="form-input" type="text" id="qd-notes" placeholder="Ex : Taxes de sejour non incluses. Repas non mentionnes non inclus."></div>
+          <div style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g6);font-weight:500;margin-bottom:14px;">Conditions générales</div>
+          <div class="form-row"><label class="form-label" for="qd-cond-resa">Conditions de réservation</label><input class="form-input" type="text" id="qd-cond-resa" placeholder="Ex : Aucun service n'est réservé à ce stade. Tarifs valides à la date du devis, sous réserve de disponibilité."></div>
+          <div class="form-row"><label class="form-label" for="qd-cond-annul">Conditions d'annulation</label><input class="form-input" type="text" id="qd-cond-annul" placeholder="Ex : Annulation sans frais jusqu'à 30 jours avant le début du séjour."></div>
+          <div class="form-row"><label class="form-label" for="qd-notes">Notes supplémentaires (optionnel)</label><input class="form-input" type="text" id="qd-notes" placeholder="Ex : Taxes de séjour non incluses. Repas non mentionnés non inclus."></div>
           <div class="form-actions" style="margin-top:20px;">
             <button class="btn-gen-docx" id="qd-btn" onclick="generateDocx()">
-              <span id="qd-lbl">Generer le devis DOCX</span>
+              <span id="qd-lbl">Générer le devis DOCX</span>
             </button>
           </div>
           <div class="msg-error" id="qd-err"></div>
@@ -847,13 +906,13 @@ textarea::placeholder { color: var(--g4); }
           </div>
           <div class="form-row-2">
             <div><label class="form-label" for="ct-date">Date</label><input class="form-input" type="date" id="ct-date"></div>
-            <div><label class="form-label" for="ct-detenteur">Detenteur</label><input class="form-input" type="text" id="ct-detenteur" placeholder="Ex : Antoine Fonfreyde"></div>
+            <div><label class="form-label" for="ct-detenteur">Détenteur</label><input class="form-input" type="text" id="ct-detenteur" placeholder="Ex : Antoine Fonfreyde"></div>
           </div>
           <div class="form-row">
             <label class="form-label">Facture (PDF)</label>
             <div class="file-drop" id="ct-drop" ondragover="event.preventDefault();this.style.borderColor='#F5E642'" ondragleave="this.style.borderColor=''" ondrop="handleDrop(event)">
               <input type="file" id="ct-file" accept=".pdf" onchange="handleFile(event)">
-              <div class="file-drop-text"><strong>Cliquer pour selectionner</strong> ou glisser-deposer<br>PDF uniquement</div>
+              <div class="file-drop-text"><strong>Cliquer pour sélectionner</strong> ou glisser-deposer<br>PDF uniquement</div>
             </div>
             <div class="file-name-display" id="ct-filename">
               <span>📎</span><span id="ct-fname"></span>
@@ -876,7 +935,7 @@ textarea::placeholder { color: var(--g4); }
         <div class="form-card">
           <div class="type-row">
             <button class="type-btn active" id="comms-type-presta" onclick="setCommsType('presta')">Info presta</button>
-            <button class="type-btn" id="comms-type-astreinte" onclick="setCommsType('astreinte')">Recap astreinte</button>
+            <button class="type-btn" id="comms-type-astreinte" onclick="setCommsType('astreinte')">Récap astreinte</button>
           </div>
           <hr class="form-divider">
           <div id="comms-presta-fields">
@@ -888,38 +947,73 @@ textarea::placeholder { color: var(--g4); }
                 <option value="Nouveau tarif">Nouveau tarif</option>
                 <option value="Travaux / Fermeture">Travaux / Fermeture</option>
                 <option value="Nouveau fournisseur">Nouveau fournisseur</option>
-                <option value="Info operationnelle">Info operationnelle</option>
+                <option value="Info opérationnelle">Info opérationnelle</option>
                 <option value="Autre">Autre</option>
               </select>
             </div>
-            <div class="form-row"><label class="form-label" for="cp-contenu">Contenu</label><textarea class="form-input" id="cp-contenu" rows="4" placeholder="Decris l'information a communiquer a l'equipe..."></textarea></div>
+            <div class="form-row"><label class="form-label" for="cp-contenu">Contenu</label><textarea class="form-input" id="cp-contenu" rows="4" placeholder="Décris l'information à communiquer à l'équipe..."></textarea></div>
             <div class="form-row"><label class="form-label" for="cp-emplacement">Emplacement serveur / BDD <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><input class="form-input" type="text" id="cp-emplacement" placeholder="Ex : FOURNISSEUR_BDD / 14 PACA / SAINT-TROPEZ"></div>
           </div>
           <div id="comms-astreinte-fields" style="display:none;">
-            <div class="form-row"><label class="form-label" for="ca-periode">Periode d'astreinte</label><input class="form-input" type="text" id="ca-periode" placeholder="Ex : Vendredi 1 - Lundi 4 mai 2026"></div>
+            <div class="form-row"><label class="form-label" for="ca-periode">Période d'astreinte</label><input class="form-input" type="text" id="ca-periode" placeholder="Ex : Vendredi 1 - Lundi 4 mai 2026"></div>
             <hr class="form-divider">
             <div style="font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--g5);font-weight:500;margin-bottom:12px;">Incidents</div>
             <div id="comms-incidents-container"></div>
             <button class="btn-add-svc" onclick="addIncident()">+ Ajouter un incident</button>
             <hr class="form-divider">
-            <div class="form-row"><label class="form-label" for="ca-note">Note generale <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><textarea class="form-input" id="ca-note" rows="3" placeholder="Ex : point d'amelioration, observation generale..."></textarea></div>
+            <div class="form-row"><label class="form-label" for="ca-note">Note générale <span style="color:var(--g5);font-weight:400;">(optionnel)</span></label><textarea class="form-input" id="ca-note" rows="3" placeholder="Ex : point d'amélioration, observation générale..."></textarea></div>
           </div>
           <hr class="form-divider">
           <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
             <button class="btn-gen" id="comms-btn" onclick="runComms()">
               <div class="spinner" id="comms-spin"></div>
-              <span id="comms-lbl">Generer le mail</span>
+              <span id="comms-lbl">Générer le mail</span>
             </button>
           </div>
           <div class="error-box" id="comms-err"></div>
         </div>
         <div class="output-section" id="comms-output" style="display:none;">
           <div class="output-hdr">
-            <span class="output-title">Resultats</span>
-            <span class="output-mode-tag">Comms internes</span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="output-title">Resultats</span>
+              <span class="output-mode-tag">Comms internes</span>
+            </div>
+            <button class="btn-edit-toggle" id="comms-edit-toggle-btn" onclick="toggleCommsEditor()">
+              <span class="edit-pencil">✏</span><span id="comms-edit-toggle-lbl">Modifier</span>
+            </button>
           </div>
-          <div class="content-block" id="comms-result"></div>
-          <div class="panel-footer">
+          <!-- READ MODE -->
+          <div id="comms-read-view">
+            <div class="content-block" id="comms-result"></div>
+          </div>
+          <!-- EDIT MODE -->
+          <div class="rich-editor-wrap" id="comms-rich-editor">
+            <div class="rich-editor-objet-row">
+              <label class="rich-editor-objet-label">Objet</label>
+              <input class="rich-editor-objet" type="text" id="comms-rich-objet" placeholder="Objet du mail">
+            </div>
+            <div class="rich-toolbar" id="comms-rich-toolbar">
+              <button class="rich-toolbar-btn" title="Gras" onmousedown="event.preventDefault();applyRichFmt('bold','comms-rich-body')"><strong>B</strong></button>
+              <button class="rich-toolbar-btn" title="Italique" onmousedown="event.preventDefault();applyRichFmt('italic','comms-rich-body')"><em>I</em></button>
+              <button class="rich-toolbar-btn" title="Souligné" onmousedown="event.preventDefault();applyRichFmt('underline','comms-rich-body')"><u>U</u></button>
+              <div class="rich-toolbar-sep"></div>
+              <button class="rich-toolbar-btn" title="Liste à puces" onmousedown="event.preventDefault();applyRichFmt('insertUnorderedList','comms-rich-body')">≡</button>
+              <button class="rich-toolbar-btn" title="Liste numérotée" onmousedown="event.preventDefault();applyRichFmt('insertOrderedList','comms-rich-body')">1≡</button>
+              <div class="rich-toolbar-sep"></div>
+              <button class="rich-toolbar-btn" title="Supprimer la mise en forme" onmousedown="event.preventDefault();applyRichFmt('removeFormat','comms-rich-body')" style="font-size:11px;">Tx</button>
+            </div>
+            <div class="rich-body" id="comms-rich-body" contenteditable="true" data-placeholder="Corps du mail..."></div>
+            <div class="rich-editor-footer">
+              <button class="btn-send-rich" id="comms-rich-send-btn" onclick="sendCommsRich()">
+                <div class="send-rich-spinner" id="comms-rich-spin"></div>
+                <span id="comms-rich-send-lbl">Envoyer a l'equipe</span>
+              </button>
+              <button class="btn-copy" id="comms-rich-copy-btn" onclick="copyRichComms()">Copier</button>
+              <button class="btn-reset" onclick="resetComms()" style="margin-left:auto;">Nouveau message</button>
+            </div>
+          </div>
+          <!-- READ FOOTER -->
+          <div class="panel-footer" id="comms-read-footer">
             <button class="btn-copy" id="comms-copy-btn" onclick="copyEl('comms-result','comms-copy-btn','Copier')">Copier</button>
             <button class="btn-send" id="comms-send-btn" onclick="sendComms()" style="margin-left:8px;">
               <div class="send-spinner" id="comms-send-spin"></div>
@@ -935,7 +1029,7 @@ textarea::placeholder { color: var(--g4); }
       <!-- ADMIN -->
       <div class="panel" id="panel-admin" style="display:none;">
         <div class="admin-card">
-          <div class="admin-title">Gestion des acces</div>
+          <div class="admin-title">Gestion des accès</div>
           <div id="admin-users-list"></div>
         </div>
         <div class="admin-card">
@@ -957,7 +1051,7 @@ textarea::placeholder { color: var(--g4); }
     </div>
     <div class="footer-right">
       <div class="footer-version">ROB v2.1</div>
-      <button class="btn-logout" onclick="logout()">Deconnexion</button>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
       <button class="btn-logout" id="admin-btn" onclick="goAdmin()" style="display:none;color:var(--rob-yellow);border-color:rgba(245,230,66,0.3);">Admin</button>
     </div>
   </div>
@@ -1035,7 +1129,7 @@ async function doLogin() {
   errEl.className = 'login-msg';
   lockEl.className = 'login-msg';
   if (!user || !pwd) { errEl.className = 'login-msg error'; return; }
-  btn.textContent = 'Verification...';
+  btn.textContent = 'Vérification...';
   btn.disabled = true;
   try {
     const rows = await sbFetch('rob_users?username=eq.' + encodeURIComponent(user) + '&select=username,active,level,permissions,password_hash,display_name,role_label');
@@ -1068,7 +1162,7 @@ async function loadLoginUsers() {
   try {
     const rows = await sbFetch('rob_users?select=username,display_name&order=username');
     if (rows && rows.length > 0) {
-      select.innerHTML = '<option value="">Selectionner...</option>';
+      select.innerHTML = '<option value="">Sélectionner...</option>';
       rows.forEach(row => {
         const opt = document.createElement('option');
         opt.value = row.username;
@@ -1077,7 +1171,7 @@ async function loadLoginUsers() {
       });
     }
   } catch(e) {
-    select.innerHTML = '<option value="">Selectionner...</option>';
+    select.innerHTML = '<option value="">Sélectionner...</option>';
     Object.keys(ACCOUNTS).forEach(u => {
       const opt = document.createElement('option');
       opt.value = u; opt.textContent = u;
@@ -1133,7 +1227,7 @@ function applyPermissions(perms) {
     const banner = document.createElement('div');
     banner.id = 'readonly-banner';
     banner.style.cssText = 'background:var(--amberbg);border-bottom:0.5px solid var(--amber);padding:9px 28px;font-size:11px;color:var(--amberborder);letter-spacing:0.5px;text-align:center;';
-    banner.textContent = 'Certaines fonctionnalites sont desactivees sur ce compte';
+    banner.textContent = 'Certaines fonctionnalités sont désactivées sur ce compte';
     document.querySelector('.app-header').after(banner);
   }
   Object.entries(PERM_BUTTONS).forEach(([key, { id }]) => {
@@ -1187,13 +1281,13 @@ async function runAlfred() {
     if (!res.ok) { showAlfredError('Erreur Make ' + res.status + ' - verifiez que le webhook Alfred est actif.'); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
-    if (!text || text.trim().length < 20) { showAlfredError("La reponse d'Alfred est vide. Verifiez le scenario Make."); return; }
+    if (!text || text.trim().length < 20) { showAlfredError("La réponse d'Alfred est vide. Vérifiez le scénario Make."); return; }
     alfredRawText = text;
     renderAlfred(text);
     document.getElementById('alfred-results').style.display = 'block';
     document.getElementById('alfred-hero-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (e) {
-    showAlfredError('Erreur reseau : ' + e.message);
+    showAlfredError('Erreur réseau : ' + e.message);
   } finally {
     btn.disabled = false; spin.style.display = 'none'; lbl.textContent = 'Nouvelle analyse';
     if (iconWrap) iconWrap.classList.add('idle');
@@ -1308,7 +1402,7 @@ function buildAlfredTaskCard(rawTask, dotCls) {
     if (replyText.length > 5) {
       const replyWrap = document.createElement('div'); replyWrap.className = 'alfred-reply-box';
       const replyLabel = document.createElement('div'); replyLabel.className = 'alfred-reply-label';
-      replyLabel.textContent = 'Reponse suggeree'; replyWrap.appendChild(replyLabel);
+      replyLabel.textContent = 'Réponse suggérée'; replyWrap.appendChild(replyLabel);
       const replyContent = document.createElement('div'); replyContent.textContent = replyText;
       replyWrap.appendChild(replyContent);
       const copyBtn = document.createElement('button'); copyBtn.className = 'alfred-copy-reply';
@@ -1349,7 +1443,7 @@ function resetAlfred() {
 async function runKensington() {
   const input = document.getElementById('kt-input').value.trim();
   if (!input) { showErr('kt-err','Veuillez coller le contenu du TMT.'); return; }
-  setLoading('kt-btn','kt-spin','kt-lbl','Generation en cours...','kt-hint','Cela peut prendre 30 a 60 secondes...');
+  setLoading('kt-btn','kt-spin','kt-lbl','Génération en cours...','kt-hint','Cela peut prendre 30 à 60 secondes...');
   document.getElementById('kt-output').style.display = 'none';
   hideErr('kt-err');
   try {
@@ -1357,12 +1451,12 @@ async function runKensington() {
     if (!res.ok) { showErr('kt-err','Erreur Make : ' + res.status); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
-    if (!text || text.length < 50) { showErr('kt-err','Reponse vide ou trop courte.'); return; }
+    if (!text || text.length < 50) { showErr('kt-err','Réponse vide ou trop courte.'); return; }
     renderKensington(text);
     document.getElementById('kt-output').style.display = 'block';
     document.getElementById('kt-output').scrollIntoView({behavior:'smooth',block:'start'});
-  } catch(e) { showErr('kt-err','Erreur reseau : ' + e.message);
-  } finally { clearLoading('kt-btn','kt-spin','kt-lbl','Generer la fiche et les mails','kt-hint'); }
+  } catch(e) { showErr('kt-err','Erreur réseau : ' + e.message);
+  } finally { clearLoading('kt-btn','kt-spin','kt-lbl','Générer la fiche et les mails','kt-hint'); }
 }
 
 function renderKensington(fullText) {
@@ -1397,7 +1491,7 @@ function renderKensington(fullText) {
       container.appendChild(div);
     });
   } else {
-    container.innerHTML = '<p style="font-size:13px;color:var(--g6);padding:8px 0;">Aucun mail a generer pour ce dossier.</p>';
+    container.innerHTML = '<p style="font-size:13px;color:var(--g6);padding:8px 0;">Aucun mail à générer pour ce dossier.</p>';
   }
   document.getElementById('kt-mailcount').textContent = count;
   document.getElementById('kt-merge-bar').classList.remove('visible');
@@ -1420,7 +1514,7 @@ async function mergeMails() {
   const sel = Array.from(selectedMails).sort((a,b)=>a-b);
   const data = sel.map(i => mailBlocks[i]);
   const liste = data.map((m,i)=>`PRESTATION ${i+1}\nService : ${m.svc}\nJour : ${m.jour}\nDestinataire : ${m.dest}\n\n${m.body}`).join('\n\n---\n\n');
-  const instruction = `Tu es un assistant operationnel pour Liberty Incentives & Congresses France.\nRegroupe les mails prestataires suivants en un seul mail adresse au meme prestataire.\nLe mail fusionne doit :\n- Avoir pour objet : Demande de disponibilite - Plusieurs prestations - Ref. [reprendre la reference si visible]\n- Mentionner "les services suivants" dans l'introduction\n- Presenter chaque prestation dans une section numerotee PRESTATION 1, PRESTATION 2, etc.\n- Conclure par : Merci pour votre retour.\n- Garder la signature Liberty standard\n\nVoici les mails a fusionner :\n\n${liste}\n\nReponds uniquement avec le mail fusionne, sans commentaire.`;
+  const instruction = `Tu es un assistant operationnel pour Liberty Incentives & Congresses France.\nRegroupe les mails prestataires suivants en un seul mail adresse au meme prestataire.\nLe mail fusionne doit :\n- Avoir pour objet : Demande de disponibilité - Plusieurs prestations - Ref. [reprendre la reference si visible]\n- Mentionner "les services suivants" dans l'introduction\n- Presenter chaque prestation dans une section numerotee PRESTATION 1, PRESTATION 2, etc.\n- Conclure par : Merci pour votre retour.\n- Garder la signature Liberty standard\n\nVoici les mails a fusionner :\n\n${liste}\n\nReponds uniquement avec le mail fusionne, sans commentaire.`;
   try {
     const res = await fetch(WEBHOOKS.kensington, {method:'POST',headers:{'Content-Type':'text/plain'},body:instruction});
     if (!res.ok) { alert('Erreur regroupement : ' + res.status); return; }
@@ -1440,7 +1534,7 @@ async function mergeMails() {
     selectedMails.clear();
     document.getElementById('kt-merge-bar').classList.remove('visible');
     document.getElementById('kt-mailcount').textContent = container.querySelectorAll('.mail-block').length;
-  } catch(e) { alert('Erreur reseau : ' + e.message);
+  } catch(e) { alert('Erreur réseau : ' + e.message);
   } finally { btn.disabled = false; spin.style.display = 'none'; }
 }
 
@@ -1462,7 +1556,7 @@ function resetKT() {
 async function runQuotes() {
   const input = document.getElementById('qt-input').value.trim();
   if (!input) { showErr('qt-err','Veuillez coller le brief client.'); return; }
-  setLoading('qt-btn','qt-spin','qt-lbl',"Generation en cours...",'qt-hint','Cela peut prendre 30 a 60 secondes...');
+  setLoading('qt-btn','qt-spin','qt-lbl',"Génération en cours...",'qt-hint','Cela peut prendre 30 à 60 secondes...');
   document.getElementById('qt-output').style.display = 'none';
   hideErr('qt-err');
   try {
@@ -1470,12 +1564,12 @@ async function runQuotes() {
     if (!res.ok) { showErr('qt-err','Erreur Make : ' + res.status); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
-    if (!text || text.length < 50) { showErr('qt-err','Reponse vide.'); return; }
+    if (!text || text.length < 50) { showErr('qt-err','Réponse vide.'); return; }
     renderQuotes(text);
     document.getElementById('qt-output').style.display = 'block';
     document.getElementById('qt-output').scrollIntoView({behavior:'smooth',block:'start'});
-  } catch(e) { showErr('qt-err','Erreur reseau : ' + e.message);
-  } finally { clearLoading('qt-btn','qt-spin','qt-lbl',"Generer l'itineraire",'qt-hint'); }
+  } catch(e) { showErr('qt-err','Erreur réseau : ' + e.message);
+  } finally { clearLoading('qt-btn','qt-spin','qt-lbl',"Générer l'itinéraire",'qt-hint'); }
 }
 
 function renderQuotes(fullText) {
@@ -1586,7 +1680,7 @@ function buildCommsPayload() {
 async function runComms() {
   const payload = buildCommsPayload();
   if (!payload) { showErr('comms-err', 'Veuillez remplir les champs obligatoires.'); return; }
-  setLoading('comms-btn','comms-spin','comms-lbl','Generation en cours...','','');
+  setLoading('comms-btn','comms-spin','comms-lbl','Génération en cours...','','');
   document.getElementById('comms-output').style.display = 'none';
   hideErr('comms-err');
   try {
@@ -1594,12 +1688,47 @@ async function runComms() {
     if (!res.ok) { showErr('comms-err', 'Erreur Make : ' + res.status); return; }
     const raw = await res.text();
     const text = parseWebhookText(raw);
-    if (!text || text.length < 10) { showErr('comms-err', 'Reponse vide.'); return; }
+    if (!text || text.length < 10) { showErr('comms-err', 'Réponse vide.'); return; }
     document.getElementById('comms-result').innerHTML = mdToHtml(text);
+    // Pre-populate rich editor
+    const subjectMatch = text.match(/^Objet\s*:\s*(.+)/m);
+    const subject = subjectMatch ? subjectMatch[1].trim() : 'Information équipe FIT';
+    const bodyClean = text.replace(/^Objet\s*:.*(\r?\n)+/m, '').trim();
+    document.getElementById('comms-rich-objet').value = subject;
+    document.getElementById('comms-rich-body').innerHTML = textToHtml(bodyClean);
+    commsEdited = false;
+    // Show read mode
+    setCommsEditorMode(false);
     document.getElementById('comms-output').style.display = 'block';
     document.getElementById('comms-output').scrollIntoView({behavior:'smooth', block:'start'});
-  } catch(e) { showErr('comms-err', 'Erreur reseau : ' + e.message);
-  } finally { clearLoading('comms-btn','comms-spin','comms-lbl','Generer le mail',''); }
+  } catch(e) { showErr('comms-err', 'Erreur réseau : ' + e.message);
+  } finally { clearLoading('comms-btn','comms-spin','comms-lbl','Générer le mail',''); }
+}
+
+let commsEdited = false;
+
+function toggleCommsEditor() {
+  const isEdit = document.getElementById('comms-rich-editor').classList.contains('visible');
+  setCommsEditorMode(!isEdit);
+}
+
+function setCommsEditorMode(editMode) {
+  const readView  = document.getElementById('comms-read-view');
+  const editView  = document.getElementById('comms-rich-editor');
+  const readFoot  = document.getElementById('comms-read-footer');
+  const toggleLbl = document.getElementById('comms-edit-toggle-lbl');
+  if (editMode) {
+    readView.style.display = 'none';
+    editView.classList.add('visible');
+    readFoot.style.display = 'none';
+    toggleLbl.textContent  = 'Aperçu';
+    document.getElementById('comms-rich-body').focus();
+  } else {
+    readView.style.display = 'block';
+    editView.classList.remove('visible');
+    readFoot.style.display = 'flex';
+    toggleLbl.textContent  = 'Modifier';
+  }
 }
 
 function resetComms() {
@@ -1611,6 +1740,10 @@ function resetComms() {
   document.getElementById('ca-note').value = '';
   document.getElementById('comms-incidents-container').innerHTML = '';
   incidentCount = 0;
+  commsEdited = false;
+  document.getElementById('comms-rich-body').innerHTML = '';
+  document.getElementById('comms-rich-objet').value = '';
+  setCommsEditorMode(false);
   document.getElementById('comms-output').style.display = 'none';
   window.scrollTo(0,0);
 }
@@ -1620,7 +1753,7 @@ async function sendComms() {
   const body = resultEl.textContent.trim();
   if (!body) return;
   const subjectMatch = body.match(/^Objet\s*:\s*(.+)/m);
-  const subject = subjectMatch ? subjectMatch[1].trim() : 'Information equipe FIT';
+  const subject = subjectMatch ? subjectMatch[1].trim() : 'Information équipe FIT';
   const bodyClean = body.replace(/^Objet\s*:.*(\r?\n)+/m, '').trim();
   const btn = document.getElementById('comms-send-btn');
   const spin = document.getElementById('comms-send-spin');
@@ -1635,11 +1768,46 @@ async function sendComms() {
     if (!res.ok) { showErr('comms-send-err', 'Erreur envoi : ' + res.status); return; }
     const successEl = document.getElementById('comms-success');
     const successTxt = document.getElementById('comms-success-txt');
-    successTxt.textContent = "Mail envoye a l'equipe.";
+    successTxt.textContent = "Mail envoyé à l'équipe.";
     successEl.style.display = 'flex'; btn.style.display = 'none';
     setTimeout(() => { successEl.style.display = 'none'; }, 4000);
-  } catch(e) { showErr('comms-send-err', 'Erreur reseau : ' + e.message);
-  } finally { btn.disabled = false; if (spin) spin.style.display = 'none'; lbl.textContent = "Envoyer a l'equipe"; }
+  } catch(e) { showErr('comms-send-err', 'Erreur réseau : ' + e.message);
+  } finally { btn.disabled = false; if (spin) spin.style.display = 'none'; lbl.textContent = "Envoyer à l'équipe"; }
+}
+
+async function sendCommsRich() {
+  const btn  = document.getElementById('comms-rich-send-btn');
+  const spin = document.getElementById('comms-rich-spin');
+  const lbl  = document.getElementById('comms-rich-send-lbl');
+  btn.disabled = true; spin.style.display = 'block'; lbl.textContent = 'Envoi en cours...';
+  hideErr('comms-send-err');
+  const subject = document.getElementById('comms-rich-objet').value.trim() || 'Information équipe FIT';
+  const bodyHtml = document.getElementById('comms-rich-body').innerHTML;
+  try {
+    const res = await fetch(WEBHOOKS.commsSend, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ subject, body: bodyHtml, sender: userRecord ? userRecord.display : '' })
+    });
+    if (!res.ok) { showErr('comms-send-err', 'Erreur envoi : ' + res.status); return; }
+    const successEl = document.getElementById('comms-success');
+    const successTxt = document.getElementById('comms-success-txt');
+    successTxt.textContent = "Mail envoyé à l'équipe.";
+    successEl.style.display = 'flex';
+    setTimeout(() => { successEl.style.display = 'none'; }, 4000);
+    setCommsEditorMode(false);
+    commsEdited = false;
+  } catch(e) { showErr('comms-send-err', 'Erreur réseau : ' + e.message);
+  } finally { btn.disabled = false; spin.style.display = 'none'; lbl.textContent = "Envoyer à l'équipe"; }
+}
+
+function copyRichComms() {
+  const html = document.getElementById('comms-rich-body').innerHTML;
+  const text = htmlToPlainText(html);
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('comms-rich-copy-btn');
+    btn.textContent = 'Copie'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
 }
 
 // MAILS DISPO
@@ -1668,7 +1836,7 @@ function addSvc() {
     <div class="form-row"><label class="form-label">Date</label><input class="form-input" type="date" id="svc-date-${i}"></div>
     <div class="form-row"><label class="form-label">Description</label><input class="form-input" type="text" id="svc-desc-${i}" placeholder="Ex : Private - 1/2 Day City Tour (4 hrs)"></div>
     <div class="form-row-2">
-      <div><label class="form-label">Heure de debut / Pick-up</label><input class="form-input" type="text" id="svc-debut-${i}" placeholder="Ex : 09h00 P/U Hotel de Crillon"></div>
+      <div><label class="form-label">Heure de debut / Pick-up</label><input class="form-input" type="text" id="svc-debut-${i}" placeholder="Ex : 09h00 P/U Hôtel de Crillon"></div>
       <div><label class="form-label">Heure de fin</label><input class="form-input" type="text" id="svc-fin-${i}" placeholder="Ex : Fin a 13h"></div>
     </div>
     <div class="form-row"><label class="form-label">Prix TTC</label><input class="form-input" type="text" id="svc-prix-${i}" placeholder="Ex : 300 EUR TTC"></div>`;
@@ -1701,14 +1869,14 @@ function buildMailBody() {
     const notes   = document.getElementById('htl-notes').value.trim();
     let nuits = '';
     if (arrivee && depart) { const diff=Math.round((new Date(depart)-new Date(arrivee))/86400000); if(diff>0) nuits=diff+' nuit'+(diff>1?'s':''); }
-    const intro = currentMailType==='hotel_contracte' ? "Pourriez-vous me confirmer la disponibilite au tarif contrat selon les details suivants :" : "Pourriez-vous m'indiquer la disponibilite et votre meilleur tarif net de commission selon les details suivants :";
+    const intro = currentMailType==='hotel_contracte' ? "Pourriez-vous me confirmer la disponibilité au tarif contrat selon les détails suivants :" : "Pourriez-vous m'indiquer la disponibilité et votre meilleur tarif net de commission selon les détails suivants :";
     let c = `Bonjour${destNom?' '+destNom:''},\n\n${intro}\n\n`;
     if (pax) c += `${pax} pax\n`;
     if (chambre) c += `${chambre}\n`;
     if (arrivee||depart) { c += `\nDATES : ${fmtDate(arrivee)} - ${fmtDate(depart)}`; if(nuits) c+=` - ${nuits}`; c+='\n'; }
     if (noms) c += `\nNoms : ${noms}\n`;
     if (notes) c += `\n${notes}\n`;
-    if (currentMailType==='hotel_non_contracte') { c += `\nConditions flexibles pour annulation sans frais.\n\nMerci de me detailler le prix net par chambre par nuit incluant le petit-dejeuner.\n`; }
+    if (currentMailType==='hotel_non_contracte') { c += `\nConditions flexibles pour annulation sans frais.\n\nMerci de me détailler le prix net par chambre par nuit incluant le petit-déjeuner.\n`; }
     return c + `\nJe vous remercie par avance pour votre retour.\n\n${getSig()}`;
   } else {
     const pax  = document.getElementById('mail-pax').value.trim();
@@ -1732,9 +1900,9 @@ function buildMailBody() {
 
 function buildMailObjet() {
   const isHotel = currentMailType.startsWith('hotel');
-  const typeLabel = { guide:'Guide', assistant:'Assistant', autre:'Prestataire', hotel_contracte:'Hotel contracte', hotel_non_contracte:'Hotel non contracte' }[currentMailType]||'';
-  if (isHotel) { const a=document.getElementById('htl-arrivee').value; return `Demande de disponibilite - ${typeLabel}${a?' - '+fmtDate(a):''}`;
-  } else { const svcs=getServices(); const d=svcs[0]?.date?fmtDate(svcs[0].date):''; return `Demande de disponibilite - ${typeLabel}${d?' - '+d:''}`;
+  const typeLabel = { guide:'Guide', assistant:'Assistant', autre:'Prestataire', hotel_contracte:'Hôtel contracté', hotel_non_contracte:'Hôtel non contracté' }[currentMailType]||'';
+  if (isHotel) { const a=document.getElementById('htl-arrivee').value; return `Demande de disponibilité - ${typeLabel}${a?' - '+fmtDate(a):''}`;
+  } else { const svcs=getServices(); const d=svcs[0]?.date?fmtDate(svcs[0].date):''; return `Demande de disponibilité - ${typeLabel}${d?' - '+d:''}`;
   }
 }
 
@@ -1747,12 +1915,29 @@ function validateMailForm() {
   const email = document.getElementById('mail-dest-email').value.trim();
   if (!email) { showMsg('mail-error',"L'email du destinataire est obligatoire."); return false; }
   if (currentMailType.startsWith('hotel')) {
-    if (!document.getElementById('htl-arrivee').value) { showMsg('mail-error',"La date d'arrivee est obligatoire."); return false; }
-    if (!document.getElementById('htl-depart').value)  { showMsg('mail-error',"La date de depart est obligatoire.");  return false; }
+    if (!document.getElementById('htl-arrivee').value) { showMsg('mail-error',"La date d'arrivée est obligatoire."); return false; }
+    if (!document.getElementById('htl-depart').value)  { showMsg('mail-error',"La date de départ est obligatoire.");  return false; }
   } else {
     if (getServices().length === 0) { showMsg('mail-error','Ajoutez au moins un service.'); return false; }
   }
   return true;
+}
+
+// Per-type editor state persistence
+const mailEditorState = {};
+
+function textToHtml(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .split('\n')
+    .map(line => line === '' ? '<br>' : `<span>${line}</span><br>`)
+    .join('');
+}
+
+function htmlToPlainText(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.innerText || tmp.textContent || '';
 }
 
 function previewMail() {
@@ -1761,14 +1946,92 @@ function previewMail() {
   const corps = buildMailBody();
   const objet = buildMailObjet();
   const dest  = document.getElementById('mail-dest-email').value.trim();
-  document.getElementById('mail-preview-content').textContent = `A : ${dest}\nObjet : ${objet}\n\n${corps}`;
+  // Store into state for this type
+  mailEditorState[currentMailType] = mailEditorState[currentMailType] || {};
+  mailEditorState[currentMailType].objet = objet;
+  mailEditorState[currentMailType].corps = corps;
+  mailEditorState[currentMailType].inEditMode = false;
+  // Populate read view
+  document.getElementById('mail-preview-dest-line').textContent = 'A : ' + dest;
+  document.getElementById('mail-preview-objet-line').textContent = 'Objet : ' + objet;
+  document.getElementById('mail-preview-content').textContent = corps;
+  // Populate editor fields (keeps edits if already modified)
+  if (!mailEditorState[currentMailType].edited) {
+    document.getElementById('mail-rich-objet').value = objet;
+    document.getElementById('mail-rich-body').innerHTML = textToHtml(corps);
+  }
+  // Show read mode
+  setMailEditorMode(false);
   document.getElementById('mail-preview-box').classList.add('visible');
+  document.getElementById('mail-preview-box').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleMailEditor() {
+  const state = mailEditorState[currentMailType] || {};
+  setMailEditorMode(!state.inEditMode);
+}
+
+function setMailEditorMode(editMode) {
+  mailEditorState[currentMailType] = mailEditorState[currentMailType] || {};
+  mailEditorState[currentMailType].inEditMode = editMode;
+  const readView   = document.getElementById('mail-read-view');
+  const editView   = document.getElementById('mail-rich-editor');
+  const footer     = document.getElementById('mail-preview-footer');
+  const toggleLbl  = document.getElementById('mail-edit-toggle-lbl');
+  const label      = document.getElementById('mail-preview-label');
+  if (editMode) {
+    readView.style.display  = 'none';
+    editView.classList.add('visible');
+    footer.style.display    = 'none';
+    toggleLbl.textContent   = 'Aperçu';
+    label.textContent       = 'Editeur';
+    document.getElementById('mail-rich-body').focus();
+  } else {
+    readView.style.display  = 'block';
+    editView.classList.remove('visible');
+    footer.style.display    = 'flex';
+    toggleLbl.textContent   = 'Modifier';
+    label.textContent       = 'Aperçu du mail';
+  }
+}
+
+// Mark mail as edited when user types in rich editor
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.getElementById('mail-rich-body');
+  if (body) body.addEventListener('input', () => {
+    mailEditorState[currentMailType] = mailEditorState[currentMailType] || {};
+    mailEditorState[currentMailType].edited = true;
+  });
+  const objet = document.getElementById('mail-rich-objet');
+  if (objet) objet.addEventListener('input', () => {
+    mailEditorState[currentMailType] = mailEditorState[currentMailType] || {};
+    mailEditorState[currentMailType].edited = true;
+  });
+  const commsBody = document.getElementById('comms-rich-body');
+  if (commsBody) commsBody.addEventListener('input', () => { commsEdited = true; });
+  const commsObjet = document.getElementById('comms-rich-objet');
+  if (commsObjet) commsObjet.addEventListener('input', () => { commsEdited = true; });
+});
+
+function applyRichFmt(cmd, bodyId) {
+  document.getElementById(bodyId).focus();
+  document.execCommand(cmd, false, null);
 }
 
 function copyPreview() {
   const text = document.getElementById('mail-preview-content').textContent;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('mail-copy-btn');
+    btn.textContent = 'Copie'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyRichMail() {
+  const html = document.getElementById('mail-rich-body').innerHTML;
+  const text = htmlToPlainText(html);
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('mail-rich-copy-btn');
     btn.textContent = 'Copie'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
   });
@@ -1785,8 +2048,29 @@ async function sendMail() {
   try {
     const res = await fetch(WEBHOOKS.mails, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type: currentMailType, destinataire_email: dest, expediteur_email: currentUser + '@liberty-int.com', objet: buildMailObjet(), corps: buildMailBody() }) });
     if (!res.ok) { showMsg('mail-error','Erreur Make : ' + res.status); return; }
-    showMsgSuccess('mail-success','mail-success-txt','Mail envoye avec succes a ' + dest);
-  } catch(e) { showMsg('mail-error','Erreur reseau : ' + e.message);
+    showMsgSuccess('mail-success','mail-success-txt','Mail envoyé avec succès à ' + dest);
+  } catch(e) { showMsg('mail-error','Erreur réseau : ' + e.message);
+  } finally { btn.disabled=false; spin.style.display='none'; lbl.textContent='Envoyer'; }
+}
+
+async function sendMailRich() {
+  hideMsgs('mail-success','mail-error');
+  if (!validateMailForm()) return;
+  const btn  = document.getElementById('mail-rich-send-btn');
+  const spin = document.getElementById('mail-rich-spin');
+  const lbl  = document.getElementById('mail-rich-send-lbl');
+  btn.disabled=true; spin.style.display='block'; lbl.textContent='Envoi...';
+  const dest  = document.getElementById('mail-dest-email').value.trim();
+  const objet = document.getElementById('mail-rich-objet').value.trim() || buildMailObjet();
+  const corps = document.getElementById('mail-rich-body').innerHTML;
+  try {
+    const res = await fetch(WEBHOOKS.mails, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type: currentMailType, destinataire_email: dest, expediteur_email: currentUser + '@liberty-int.com', objet, corps }) });
+    if (!res.ok) { showMsg('mail-error','Erreur Make : ' + res.status); return; }
+    showMsgSuccess('mail-success','mail-success-txt','Mail envoyé avec succès à ' + dest);
+    setMailEditorMode(false);
+    // Reset edited flag after successful send
+    if (mailEditorState[currentMailType]) mailEditorState[currentMailType].edited = false;
+  } catch(e) { showMsg('mail-error','Erreur réseau : ' + e.message);
   } finally { btn.disabled=false; spin.style.display='none'; lbl.textContent='Envoyer'; }
 }
 
@@ -1848,9 +2132,9 @@ async function generateDocx() {
   if (svcs.length === 0) { showErr('qd-err','Ajoutez au moins un service.'); return; }
   const btn = document.getElementById('qd-btn');
   const lbl = document.getElementById('qd-lbl');
-  btn.disabled = true; lbl.textContent = 'Generation...';
+  btn.disabled = true; lbl.textContent = 'Génération...';
   try {
-    if (typeof docx === 'undefined') { showErr('qd-err','Librairie docx non chargee. Verifiez votre connexion internet.'); return; }
+    if (typeof docx === 'undefined') { showErr('qd-err','Librairie docx non chargée. Vérifiez votre connexion internet.'); return; }
     const {
       Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
       AlignmentType, BorderStyle, WidthType, ShadingType, VerticalAlign, PageBreak
@@ -1935,8 +2219,8 @@ async function generateDocx() {
     const a = document.createElement('a');
     a.href=url; a.download=`Devis_Liberty_${(client||'Client').replace(/\s+/g,'_')}_${ref||'REF'}.docx`;
     a.click(); URL.revokeObjectURL(url);
-  } catch(e) { showErr('qd-err','Erreur generation : '+e.message); console.error(e);
-  } finally { btn.disabled=false; lbl.textContent='Generer le devis DOCX'; }
+  } catch(e) { showErr('qd-err','Erreur génération : '+e.message); console.error(e);
+  } finally { btn.disabled=false; lbl.textContent='Générer le devis DOCX'; }
 }
 
 // COMPTA
@@ -1945,7 +2229,7 @@ function handleDrop(e) {
   e.preventDefault(); document.getElementById('ct-drop').style.borderColor='';
   const f=e.dataTransfer.files[0];
   if(f&&f.type==='application/pdf') setFile(f);
-  else showMsg('ct-err','Seuls les fichiers PDF sont acceptes.');
+  else showMsg('ct-err','Seuls les fichiers PDF sont acceptés.');
 }
 function setFile(file) {
   comptaFile=file;
@@ -1977,8 +2261,8 @@ async function sendCompta() {
     const userEmail=currentUser+'@liberty-int.com';
     const res=await fetch(WEBHOOKS.compta,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({objet,dossier,montant,date,detenteur,expediteur_email:userEmail,fichier_nom:comptaFile.name,fichier_base64:base64})});
     if(!res.ok){showMsg('ct-err','Erreur Make : '+res.status);return;}
-    showMsgSuccess('ct-success','ct-success-txt','Facture envoyee vers invoices.france@liberty-int.com (CC : '+userEmail+')');
-  } catch(e){showMsg('ct-err','Erreur reseau : '+e.message);
+    showMsgSuccess('ct-success','ct-success-txt','Facture envoyée vers invoices.france@liberty-int.com (CC : '+userEmail+')');
+  } catch(e){showMsg('ct-err','Erreur réseau : '+e.message);
   } finally{btn.disabled=false;spin.style.display='none';lbl.textContent='Envoyer la facture';}
 }
 function fileToB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('Lecture impossible'));r.readAsDataURL(file);});}
