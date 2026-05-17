@@ -452,6 +452,72 @@ textarea::placeholder { color: var(--g4); }
 .alfred-copy-reply.copied { border-color: #4CAF50; color: #4CAF50; }
 .alfred-results-footer { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--g4); }
 .alfred-raw { background: var(--g2); border: 0.5px solid var(--g4); border-radius: 8px; padding: 18px; font-size: 12px; color: var(--g8); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
+
+/* CHECKLIST */
+.checklist-wrap { margin-top: 14px; }
+.checklist-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--g4); }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-cb { width: 15px; height: 15px; accent-color: var(--rob-yellow); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+.checklist-label { font-size: 12px; color: var(--g9); line-height: 1.55; transition: color 0.2s; }
+.checklist-item.done .checklist-label { color: var(--g5); text-decoration: line-through; }
+
+/* ACTE 2 — Reprendre dossier */
+.acte2-bar {
+  display: none; margin-top: 20px; background: var(--g2);
+  border: 0.5px solid rgba(245,230,66,0.25); border-left: 3px solid var(--rob-yellow);
+  border-radius: 0 10px 10px 0; padding: 16px 20px;
+}
+.acte2-bar.visible { display: block; }
+.acte2-title { font-family: var(--font-title); font-size: 11px; font-weight: 700; color: var(--rob-yellow); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+.acte2-sub { font-size: 11px; color: var(--g6); margin-bottom: 14px; line-height: 1.5; }
+.acte2-textarea {
+  width: 100%; min-height: 110px; border: 0.5px solid var(--g4); border-radius: 8px;
+  padding: 12px 14px; font-family: var(--font-body); font-size: 13px;
+  color: var(--g9); line-height: 1.7; resize: vertical; background: var(--g1);
+  outline: none; transition: border-color 0.2s; margin-bottom: 12px;
+}
+.acte2-textarea:focus { border-color: var(--rob-yellow); }
+.acte2-textarea::placeholder { color: var(--g4); }
+.acte2-actions { display: flex; align-items: center; gap: 12px; }
+.btn-acte2 {
+  background: var(--rob-yellow); color: var(--g2); border: none; border-radius: 8px;
+  padding: 10px 22px; font-family: var(--font-title); font-size: 12px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; letter-spacing: 0.5px;
+}
+.btn-acte2:hover { background: var(--rob-yellow-dark); }
+.btn-acte2:disabled { background: var(--g4); color: var(--g6); cursor: not-allowed; }
+.acte2-spinner { width: 13px; height: 13px; border: 2px solid rgba(26,25,24,0.2); border-top-color: var(--g2); border-radius: 50%; animation: spin 0.75s linear infinite; display: none; }
+
+/* COTATION OUTPUT */
+.cotation-output { margin-top: 14px; background: var(--g1); border: 0.5px solid var(--g4); border-radius: 8px; padding: 16px; display: none; }
+.cotation-output.visible { display: block; }
+.cotation-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--g6); font-weight: 500; margin-bottom: 10px; }
+.cotation-body { font-size: 13px; color: var(--g9); line-height: 1.85; white-space: pre-wrap; word-break: break-word; }
+.cotation-footer { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--g4); }
+
+/* SESSION HISTORY */
+.session-history {
+  margin-top: 20px; background: var(--g0); border: 0.5px solid var(--g4);
+  border-radius: 8px; padding: 12px 16px;
+}
+.session-history-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.session-history-title { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--g5); font-weight: 500; }
+.session-history-clear { background: none; border: none; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--g5); cursor: pointer; font-family: var(--font-body); padding: 0; transition: color 0.2s; }
+.session-history-clear:hover { color: var(--g7); }
+.session-history-list { display: flex; flex-direction: column; gap: 6px; }
+.session-entry {
+  display: flex; align-items: center; gap: 10px; padding: 7px 10px;
+  border: 0.5px solid var(--g4); border-radius: 6px; background: var(--g2);
+  cursor: pointer; transition: border-color 0.2s;
+}
+.session-entry:hover { border-color: var(--g6); }
+.session-entry-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.dot-kensington { background: #4CAF50; }
+.dot-quotes     { background: var(--rob-yellow); }
+.session-entry-mod  { font-size: 10px; font-weight: 600; color: var(--g8); letter-spacing: 0.5px; min-width: 80px; }
+.session-entry-client { font-size: 11px; color: var(--g6); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.session-entry-time { font-size: 10px; color: var(--g5); flex-shrink: 0; }
+.session-empty { font-size: 11px; color: var(--g5); padding: 4px 0; }
 </style>
 </head>
 <body>
@@ -662,6 +728,15 @@ textarea::placeholder { color: var(--g4); }
       </button>
     </div>
 
+    <!-- SESSION HISTORY -->
+    <div class="session-history" id="session-history-wrap" style="display:none;">
+      <div class="session-history-hdr">
+        <span class="session-history-title">Dossiers de la session</span>
+        <button class="session-history-clear" onclick="clearSessionHistory()">Effacer</button>
+      </div>
+      <div class="session-history-list" id="session-history-list"></div>
+    </div>
+
     <!-- PANEL AREA -->
     <div class="panel-area">
 
@@ -732,7 +807,7 @@ textarea::placeholder { color: var(--g4); }
         <div class="output-section" id="qt-output">
           <div class="output-hdr">
             <div style="display:flex;align-items:baseline;gap:8px;">
-              <span class="output-title">Resultats</span>
+              <span class="output-title">Résultats</span>
               <span class="output-mode-tag">Quote FIT</span>
             </div>
             <span class="output-badge" id="qt-ref"></span>
@@ -740,7 +815,9 @@ textarea::placeholder { color: var(--g4); }
           <div class="tabs">
             <div class="tab active" id="qtab-interne" onclick="switchQT('interne')">Fiche interne</div>
             <div class="tab" id="qtab-client" onclick="switchQT('client')">Programme client</div>
-            <div class="tab" id="qtab-email" onclick="switchQT('email')">Email questions<span class="alert-tag" id="qt-alert" style="display:none;">Incomplet</span></div>
+            <div class="tab" id="qtab-reponse" onclick="switchQT('reponse')">Réponse client</div>
+            <div class="tab" id="qtab-checklist" onclick="switchQT('checklist')">Checklist</div>
+            <div class="tab" id="qtab-email" onclick="switchQT('email')">Questions<span class="alert-tag" id="qt-alert" style="display:none;">Incomplet</span></div>
           </div>
           <div class="t-panel active" id="qtp-interne">
             <div class="content-block" id="qt-interne"></div>
@@ -756,11 +833,47 @@ textarea::placeholder { color: var(--g4); }
               <button class="btn-reset" onclick="resetQT()">Nouveau brief</button>
             </div>
           </div>
+          <div class="t-panel" id="qtp-reponse">
+            <div style="font-size:11px;color:var(--g6);margin-bottom:12px;line-height:1.6;">Mail prêt à copier-coller dans Outlook pour accuser réception du brief.</div>
+            <div class="content-block" id="qt-reponse"></div>
+            <div class="panel-footer">
+              <button class="btn-copy" id="qcp-r" onclick="copyEl('qt-reponse','qcp-r','Copier')">Copier</button>
+              <button class="btn-reset" onclick="resetQT()">Nouveau brief</button>
+            </div>
+          </div>
+          <div class="t-panel" id="qtp-checklist">
+            <div style="font-size:11px;color:var(--g6);margin-bottom:4px;line-height:1.6;">Actions spécifiques à ce dossier, déduites par Rob.</div>
+            <div class="checklist-wrap" id="qt-checklist"></div>
+            <div class="panel-footer">
+              <button class="btn-reset" onclick="resetQT()">Nouveau brief</button>
+            </div>
+          </div>
           <div class="t-panel" id="qtp-email">
             <div class="content-block" id="qt-email"></div>
             <div class="panel-footer">
               <button class="btn-copy" id="qcp-e" onclick="copyEl('qt-email','qcp-e','Copier')">Copier</button>
               <button class="btn-reset" onclick="resetQT()">Nouveau brief</button>
+            </div>
+          </div>
+        </div>
+        <!-- ACTE 2 -->
+        <div class="acte2-bar" id="qt-acte2">
+          <div class="acte2-title">Reprendre ce dossier</div>
+          <div class="acte2-sub">Tarifs rassemblés ? Collez-les ici, Rob génère le mail de cotation finale à envoyer au client.</div>
+          <textarea class="acte2-textarea" id="qt-tarifs" placeholder="Ex : Guide J1-J2 : 480 EUR / Transfert CDG : 220 EUR / Entrée musée : 25 EUR PAX..."></textarea>
+          <div class="acte2-actions">
+            <button class="btn-acte2" id="qt-acte2-btn" onclick="runCotation()">
+              <div class="acte2-spinner" id="qt-acte2-spin"></div>
+              <span id="qt-acte2-lbl">Générer la cotation</span>
+            </button>
+            <span class="hint" id="qt-acte2-hint"></span>
+          </div>
+          <div class="error-box" id="qt-acte2-err"></div>
+          <div class="cotation-output" id="qt-cotation-wrap">
+            <div class="cotation-label">Mail de cotation finale</div>
+            <div class="cotation-body" id="qt-cotation-body"></div>
+            <div class="cotation-footer">
+              <button class="btn-copy" id="qcp-cot" onclick="copyElRaw('qt-cotation-body','qcp-cot','Copier')">Copier</button>
             </div>
           </div>
         </div>
@@ -1113,6 +1226,8 @@ let currentMailType = 'guide';
 let svcCount = 0;
 let qdSvcCount = 0;
 let alfredRawText = '';
+let currentQuoteSession = null;  // { brief, client, o1, o2, o3, o4, sessionId }
+let sessionHistory = [];         // [{ mod, client, time, data }] — courant navigateur
 
 // AUTH
 async function sha256(str) {
@@ -1195,6 +1310,7 @@ function launchApp() {
   if (svcCount === 0) addSvc();
   if (qdSvcCount === 0) addQdSvc();
   setTimeout(() => applyPermissions(userRecord.permissions), 150);
+  loadSessionHistory();
   permissionsPolling = setInterval(async () => {
     if (!currentUser) return;
     try {
@@ -1496,6 +1612,11 @@ function renderKensington(fullText) {
   document.getElementById('kt-mailcount').textContent = count;
   document.getElementById('kt-merge-bar').classList.remove('visible');
   switchKT('fiche');
+  // Session history
+  const brief = document.getElementById('kt-input').value.trim();
+  const clientMatch = ficheText.match(/[Cc]lient\s*:\s*([^\n]+)/);
+  const clientLabel = clientMatch ? clientMatch[1].trim() : (document.getElementById('kt-ref').textContent || 'Dossier Kensington');
+  addToSessionHistory('Kensington', clientLabel, { brief, fullText, ficheText });
 }
 
 function toggleMailSel(idx) {
@@ -1577,17 +1698,50 @@ function renderQuotes(fullText) {
   const o0 = extract('===OUTPUT0_START===','===OUTPUT0_END===');
   const o1 = extract('===OUTPUT1_START===','===OUTPUT1_END===');
   const o2 = extract('===OUTPUT2_START===','===OUTPUT2_END===');
+  const o3 = extract('===OUTPUT3_START===','===OUTPUT3_END===');
+  const o4 = extract('===OUTPUT4_START===','===OUTPUT4_END===');
   const insuff = o0 && (!o1 && !o2);
-  document.getElementById('qt-interne').innerHTML = mdToHtml(o1 || '(Aucune fiche interne generee.)');
-  document.getElementById('qt-client').innerHTML  = mdToHtml(o2 || '(Aucun programme client genere.)');
-  document.getElementById('qt-email').innerHTML   = mdToHtml(o0 || '(Aucun email de questions.)');
+  document.getElementById('qt-interne').innerHTML  = mdToHtml(o1 || '(Aucune fiche interne générée.)');
+  document.getElementById('qt-client').innerHTML   = mdToHtml(o2 || '(Aucun programme client généré.)');
+  document.getElementById('qt-email').innerHTML    = mdToHtml(o0 || '(Aucun email de questions.)');
+  document.getElementById('qt-reponse').innerHTML  = mdToHtml(o3 || '(Aucun mail de réponse généré.)');
+  renderChecklist(o4);
   document.getElementById('qt-alert').style.display = insuff ? 'inline-block' : 'none';
-  if (o1) { const m = o1.match(/Client final\s*:\s*([^\n]+)/); if(m) document.getElementById('qt-ref').textContent = m[1].trim(); }
+  let client = '';
+  if (o1) { const m = o1.match(/Client final\s*:\s*([^\n]+)/); if(m) { client = m[1].trim(); document.getElementById('qt-ref').textContent = client; } }
+  // Acte 2
+  const acte2 = document.getElementById('qt-acte2');
+  if (!insuff && o1) { acte2.classList.add('visible'); } else { acte2.classList.remove('visible'); }
+  // Session
+  const brief = document.getElementById('qt-input').value.trim();
+  currentQuoteSession = { brief, client, o1, o2, o3, o4, sessionId: Date.now() };
+  saveQuoteSession(currentQuoteSession);
+  addToSessionHistory('Quotes', client || 'Brief sans nom', currentQuoteSession);
   insuff ? switchQT('email') : switchQT('interne');
 }
 
+function renderChecklist(raw) {
+  const wrap = document.getElementById('qt-checklist');
+  wrap.innerHTML = '';
+  if (!raw || raw.trim().length < 5) {
+    wrap.innerHTML = '<p style="font-size:12px;color:var(--g6);padding:8px 0;">Aucune checklist générée pour ce dossier.</p>';
+    return;
+  }
+  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l.replace(/^[-*]\s*/,'').length > 2);
+  lines.forEach((line, i) => {
+    const text = line.replace(/^[-*•]\s*/,'');
+    const item = document.createElement('div');
+    item.className = 'checklist-item'; item.dataset.idx = i;
+    const cb = document.createElement('input'); cb.type='checkbox'; cb.className='checklist-cb';
+    cb.addEventListener('change', () => item.classList.toggle('done', cb.checked));
+    const lbl = document.createElement('span'); lbl.className='checklist-label'; lbl.textContent=text;
+    item.appendChild(cb); item.appendChild(lbl);
+    wrap.appendChild(item);
+  });
+}
+
 function switchQT(tab) {
-  ['interne','client','email'].forEach(t => {
+  ['interne','client','reponse','checklist','email'].forEach(t => {
     document.getElementById('qtab-'+t).classList.toggle('active', t===tab);
     document.getElementById('qtp-'+t).classList.toggle('active', t===tab);
   });
@@ -1596,7 +1750,155 @@ function switchQT(tab) {
 function resetQT() {
   document.getElementById('qt-input').value = '';
   document.getElementById('qt-output').style.display = 'none';
+  document.getElementById('qt-acte2').classList.remove('visible');
+  document.getElementById('qt-cotation-wrap').classList.remove('visible');
+  document.getElementById('qt-tarifs').value = '';
+  currentQuoteSession = null;
   window.scrollTo(0,0);
+}
+
+// ACTE 2 — Cotation finale
+async function runCotation() {
+  if (!currentQuoteSession) return;
+  const tarifs = document.getElementById('qt-tarifs').value.trim();
+  if (!tarifs) { showErr('qt-acte2-err', 'Veuillez coller les tarifs rassemblés.'); return; }
+  const btn  = document.getElementById('qt-acte2-btn');
+  const spin = document.getElementById('qt-acte2-spin');
+  const lbl  = document.getElementById('qt-acte2-lbl');
+  const hint = document.getElementById('qt-acte2-hint');
+  btn.disabled=true; spin.style.display='block'; lbl.textContent='Génération...'; hint.textContent='Cela peut prendre 20 à 40 secondes...';
+  hideErr('qt-acte2-err');
+  document.getElementById('qt-cotation-wrap').classList.remove('visible');
+  const payload =
+`===COTATION===
+BRIEF ORIGINAL :
+${currentQuoteSession.brief}
+
+FICHE INTERNE GÉNÉRÉE :
+${currentQuoteSession.o1}
+
+TARIFS RASSEMBLÉS :
+${tarifs}
+
+Génère uniquement le mail de cotation finale à envoyer au client (dans la langue du brief), présentant les services et leurs tarifs, ton Liberty premium. Pas de mentions internes. Propose un objet en première ligne (format : Objet : [...]).`;
+  try {
+    const res = await fetch(WEBHOOKS.quotes, {method:'POST',headers:{'Content-Type':'text/plain'},body:payload});
+    if (!res.ok) { showErr('qt-acte2-err','Erreur Make : '+res.status); return; }
+    const raw = await res.text();
+    const text = parseWebhookText(raw);
+    if (!text || text.length < 20) { showErr('qt-acte2-err','Réponse vide.'); return; }
+    document.getElementById('qt-cotation-body').textContent = text;
+    document.getElementById('qt-cotation-wrap').classList.add('visible');
+    document.getElementById('qt-cotation-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+    // Mise à jour session Supabase
+    if (currentQuoteSession.sessionId) {
+      sbFetch('rob_quotes_sessions?session_id=eq.'+currentQuoteSession.sessionId, {
+        method:'PATCH', body:JSON.stringify({tarifs_raw:tarifs, output_cotation:text, updated_at:new Date().toISOString()})
+      }).catch(()=>{});
+    }
+  } catch(e) { showErr('qt-acte2-err','Erreur réseau : '+e.message);
+  } finally { btn.disabled=false; spin.style.display='none'; lbl.textContent='Générer la cotation'; hint.textContent=''; }
+}
+
+function copyElRaw(contentId,btnId,defaultLabel){
+  const el=document.getElementById(contentId);
+  const text=el.textContent||el.innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById(btnId);btn.textContent='Copié';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent=defaultLabel;btn.classList.remove('copied');},2000);
+  });
+}
+
+// SESSION HISTORY
+function loadSessionHistory() {
+  try {
+    const raw = localStorage.getItem('rob_session_history_' + currentUser);
+    sessionHistory = raw ? JSON.parse(raw) : [];
+  } catch(e) { sessionHistory = []; }
+  renderSessionHistory();
+}
+
+function addToSessionHistory(mod, client, data) {
+  const entry = {
+    mod, client,
+    time: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'}),
+    data: JSON.parse(JSON.stringify(data))
+  };
+  sessionHistory.unshift(entry);
+  if (sessionHistory.length > 8) sessionHistory = sessionHistory.slice(0, 8);
+  try { localStorage.setItem('rob_session_history_' + currentUser, JSON.stringify(sessionHistory)); } catch(e) {}
+  renderSessionHistory();
+}
+
+function renderSessionHistory() {
+  const wrap = document.getElementById('session-history-wrap');
+  const list = document.getElementById('session-history-list');
+  if (!sessionHistory || sessionHistory.length === 0) { wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  list.innerHTML = '';
+  sessionHistory.forEach((entry, i) => {
+    const div = document.createElement('div');
+    div.className = 'session-entry';
+    div.onclick = () => restoreSession(i);
+    const dotCls = entry.mod === 'Kensington' ? 'dot-kensington' : 'dot-quotes';
+    div.innerHTML = `<div class="session-entry-dot ${dotCls}"></div><div class="session-entry-mod">${entry.mod}</div><div class="session-entry-client">${entry.client || 'Sans nom'}</div><div class="session-entry-time">${entry.time}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function restoreSession(i) {
+  const entry = sessionHistory[i];
+  if (!entry || !entry.data) return;
+  if (entry.mod === 'Quotes') {
+    setMod('quotes');
+    const d = entry.data;
+    document.getElementById('qt-input').value = d.brief || '';
+    document.getElementById('qt-interne').innerHTML  = mdToHtml(d.o1 || '');
+    document.getElementById('qt-client').innerHTML   = mdToHtml(d.o2 || '');
+    document.getElementById('qt-email').innerHTML    = mdToHtml('');
+    document.getElementById('qt-reponse').innerHTML  = mdToHtml(d.o3 || '');
+    renderChecklist(d.o4 || '');
+    if (d.client) document.getElementById('qt-ref').textContent = d.client;
+    document.getElementById('qt-output').style.display = 'block';
+    if (d.o1) document.getElementById('qt-acte2').classList.add('visible');
+    currentQuoteSession = d;
+    switchQT('interne');
+    document.getElementById('qt-output').scrollIntoView({behavior:'smooth',block:'start'});
+  } else if (entry.mod === 'Kensington') {
+    setMod('kensington');
+    if (entry.data.ficheText) {
+      document.getElementById('kt-input').value = entry.data.brief || '';
+      renderKensington(entry.data.fullText || '');
+      document.getElementById('kt-output').style.display='block';
+      document.getElementById('kt-output').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  }
+}
+
+function clearSessionHistory() {
+  sessionHistory = [];
+  try { localStorage.removeItem('rob_session_history_' + currentUser); } catch(e) {}
+  renderSessionHistory();
+}
+
+// QUOTE SESSION PERSISTENCE (Supabase)
+async function saveQuoteSession(session) {
+  if (!currentUser || !session) return;
+  const payload = {
+    username:    currentUser,
+    client:      session.client || '',
+    brief_raw:   session.brief  || '',
+    output1:     session.o1     || '',
+    output2:     session.o2     || '',
+    output3:     session.o3     || '',
+    output4:     session.o4     || '',
+    session_id:  session.sessionId,
+    created_at:  new Date().toISOString(),
+    updated_at:  new Date().toISOString(),
+  };
+  try {
+    await sbFetch('rob_quotes_sessions', { method:'POST', body: JSON.stringify(payload) });
+  } catch(e) { /* silencieux — localStorage reste valide */ }
 }
 
 // COMMS INTERNES
