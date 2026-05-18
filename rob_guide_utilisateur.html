@@ -1,0 +1,1121 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --rob-y:#F5E642;--rob-yd:#EDD820;--rob-yb:rgba(245,230,66,0.12);
+    --g0:#0D0D0C;--g1:#111110;--g2:#1A1918;--g3:#222220;--g4:#2C2C2A;
+    --g5:#3D3C3A;--g6:#5F5E5A;--g7:#888780;--g8:#B4B2A9;--g9:#D3D1C7;
+    --ga:#F2F0EA;--gw:#FAFAF7;
+    --red:#F09595;--redbg:#2A1010;--green:#A8CC80;--greenbg:#1A2A10;
+    --amber:#FAC775;--amberbg:#1F1C10;
+    --ft:'Space Grotesk',sans-serif;--fb:'DM Sans',sans-serif;
+  }
+  body{font-family:var(--fb);background:var(--g0);color:var(--g9);min-height:100vh;line-height:1.6}
+  .guide-wrap{display:flex;min-height:100vh}
+
+  /* SIDEBAR */
+  .sidebar{
+    width:240px;flex-shrink:0;background:var(--g1);border-right:0.5px solid var(--g4);
+    position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;
+  }
+  .sb-logo{padding:24px 20px 16px;border-bottom:0.5px solid var(--g4)}
+  .sb-diamond{
+    width:36px;height:36px;background:var(--rob-y);transform:rotate(45deg);
+    border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:14px
+  }
+  .sb-diamond svg{transform:rotate(-45deg)}
+  .sb-title{font-family:var(--ft);font-size:13px;font-weight:700;color:var(--rob-y);letter-spacing:4px}
+  .sb-sub{font-size:9px;color:var(--g6);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+  .lang-row{display:flex;gap:6px;padding:12px 20px;border-bottom:0.5px solid var(--g4)}
+  .lang-btn{
+    flex:1;padding:6px;border:0.5px solid var(--g4);border-radius:5px;
+    background:transparent;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--g6);cursor:pointer;font-family:var(--fb);transition:all 0.2s;text-align:center
+  }
+  .lang-btn.active{background:var(--rob-yb);border-color:var(--rob-y);color:var(--rob-y)}
+  .sb-nav{flex:1;padding:12px 0}
+  .sb-section{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--g5);padding:14px 20px 6px;font-weight:600}
+  .sb-item{
+    display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;
+    font-size:12px;color:var(--g7);transition:all 0.15s;position:relative;font-family:var(--fb)
+  }
+  .sb-item:hover{color:var(--g9);background:var(--g3)}
+  .sb-item.active{color:var(--rob-y);background:var(--rob-yb)}
+  .sb-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--rob-y);border-radius:0 2px 2px 0}
+  .sb-dot{width:6px;height:6px;border-radius:50%;background:var(--g5);flex-shrink:0}
+  .sb-item.active .sb-dot{background:var(--rob-y)}
+  .sb-footer{padding:16px 20px;border-top:0.5px solid var(--g4);font-size:9px;color:var(--g5);letter-spacing:1px}
+
+  /* MAIN */
+  .main{flex:1;overflow-y:auto;padding:48px 56px 80px}
+
+  /* SECTIONS */
+  .guide-section{display:none;animation:fadeIn 0.3s ease}
+  .guide-section.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .section-eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--g6);margin-bottom:12px}
+  .section-title{font-family:var(--ft);font-size:28px;font-weight:700;color:var(--gw);margin-bottom:10px;line-height:1.2}
+  .section-desc{font-size:14px;color:var(--g8);line-height:1.7;max-width:600px;margin-bottom:36px}
+
+  /* DIVIDER */
+  .divider{border:none;border-top:0.5px solid var(--g4);margin:32px 0}
+
+  /* CARDS */
+  .card{background:var(--g2);border:0.5px solid var(--g4);border-radius:10px;padding:20px 24px;margin-bottom:14px}
+  .card-title{font-family:var(--ft);font-size:13px;font-weight:600;color:var(--gw);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .card-body{font-size:13px;color:var(--g8);line-height:1.7}
+  .card.yellow{border-color:rgba(245,230,66,0.3);background:rgba(245,230,66,0.05)}
+  .card.yellow .card-title{color:var(--rob-y)}
+  .card.red{border-color:rgba(240,149,149,0.3);background:var(--redbg)}
+  .card.green{border-color:rgba(168,204,128,0.3);background:var(--greenbg)}
+
+  /* STEP */
+  .steps{display:flex;flex-direction:column;gap:0}
+  .step{display:flex;gap:16px;position:relative}
+  .step:not(:last-child)::before{content:'';position:absolute;left:15px;top:36px;bottom:0;width:0.5px;background:var(--g4)}
+  .step-num{
+    width:32px;height:32px;border-radius:50%;border:0.5px solid var(--g5);
+    display:flex;align-items:center;justify-content:center;font-family:var(--ft);
+    font-size:12px;font-weight:600;color:var(--g7);flex-shrink:0;background:var(--g2);
+    position:relative;z-index:1
+  }
+  .step.done .step-num{background:var(--rob-yb);border-color:var(--rob-y);color:var(--rob-y)}
+  .step-content{flex:1;padding-bottom:24px}
+  .step-title{font-family:var(--ft);font-size:13px;font-weight:600;color:var(--gw);margin-bottom:6px;margin-top:6px}
+  .step-body{font-size:13px;color:var(--g8);line-height:1.7}
+
+  /* BADGE */
+  .badge{display:inline-flex;align-items:center;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;margin-right:4px}
+  .badge.y{background:rgba(245,230,66,0.12);color:var(--rob-y);border:0.5px solid rgba(245,230,66,0.3)}
+  .badge.a{background:var(--amberbg);color:var(--amber);border:0.5px solid rgba(250,199,117,0.3)}
+  .badge.g{background:var(--greenbg);color:var(--green);border:0.5px solid rgba(168,204,128,0.3)}
+  .badge.r{background:var(--redbg);color:var(--red);border:0.5px solid rgba(240,149,149,0.3)}
+
+  /* MODULE GRID (welcome) */
+  .mod-grid-preview{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+  .mod-card{
+    background:var(--g3);border:0.5px solid var(--g4);border-radius:8px;
+    padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;
+    transition:border-color 0.2s,background 0.2s
+  }
+  .mod-card:hover{border-color:var(--rob-y);background:var(--g4)}
+  .mod-card-icon{width:32px;height:32px;border-radius:7px;background:var(--g4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .mod-card-name{font-family:var(--ft);font-size:12px;font-weight:600;color:var(--g9)}
+  .mod-card-desc{font-size:11px;color:var(--g6);margin-top:2px}
+
+  /* TAB OUTPUT */
+  .output-tabs{display:flex;border-bottom:0.5px solid var(--g4);margin-top:20px}
+  .output-tab{padding:9px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:500;color:var(--g6);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;transition:all 0.15s}
+  .output-tab.active{color:var(--rob-y);border-bottom-color:var(--rob-y)}
+  .output-panel{background:var(--g2);border:0.5px solid var(--g4);border-top:none;border-radius:0 0 8px 8px;padding:18px}
+
+  /* PERM TABLE */
+  .perm-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+  .perm-table th{text-align:left;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--g6);padding:8px 10px;border-bottom:0.5px solid var(--g4);font-weight:500}
+  .perm-table td{padding:8px 10px;border-bottom:0.5px solid var(--g4);color:var(--g8);vertical-align:middle}
+  .perm-table tr:last-child td{border-bottom:none}
+  .check{color:var(--green);font-size:14px}
+  .cross{color:var(--red);font-size:14px}
+
+  /* CODE PILL */
+  .code{font-family:monospace;font-size:11px;background:var(--g3);color:var(--amber);padding:2px 7px;border-radius:4px;white-space:nowrap}
+
+  /* TIP */
+  .tip{background:rgba(245,230,66,0.06);border-left:2px solid var(--rob-y);border-radius:0 6px 6px 0;padding:12px 16px;margin:16px 0;font-size:13px;color:var(--g8);line-height:1.6}
+  .tip strong{color:var(--rob-y)}
+  .warn{background:var(--amberbg);border-left:2px solid var(--amber);border-radius:0 6px 6px 0;padding:12px 16px;margin:16px 0;font-size:13px;color:var(--amber);line-height:1.6}
+
+  /* OUTPUTS MOCK */
+  .mock-output{background:var(--g1);border:0.5px solid var(--g4);border-radius:8px;padding:16px;margin:12px 0;font-size:12px;color:var(--g9);line-height:1.8;font-family:var(--fb)}
+  .mock-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--g6);margin-bottom:8px;font-weight:600}
+  .mock-bold{font-weight:600;color:var(--gw)}
+
+  /* WELCOME HERO */
+  .hero-bar{height:2px;background:var(--rob-y);margin-bottom:40px;border-radius:1px}
+  .hero-diamond-wrap{display:flex;align-items:center;gap:20px;margin-bottom:32px}
+  .hero-diamond{width:64px;height:64px;background:var(--rob-y);transform:rotate(45deg);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .hero-diamond svg{transform:rotate(-45deg)}
+  .hero-name{font-family:var(--ft);font-size:36px;font-weight:700;color:var(--rob-y);letter-spacing:6px}
+  .hero-tagline{font-size:11px;color:var(--g6);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+
+  /* SCROLL TARGET smoothing */
+  html{scroll-behavior:smooth}
+
+  /* PROGRESS BAR */
+  .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--rob-y);transition:width 0.3s;z-index:999;pointer-events:none}
+</style>
+
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+<h2 class="sr-only">Guide d'utilisation interactif de Rob, l'agent IA Liberty FIT</h2>
+
+<div class="guide-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-diamond">
+        <svg width="22" height="22" viewBox="0 0 22 22">
+          <circle cx="7.5" cy="8.5" r="2.2" fill="#1A1918"/>
+          <circle cx="14.5" cy="8.5" r="2.2" fill="#1A1918"/>
+          <circle cx="8.2" cy="7.6" r="0.9" fill="#F5E642"/>
+          <circle cx="15.2" cy="7.6" r="0.9" fill="#F5E642"/>
+          <path d="M7 13.5 Q11 16.5 15 13.5" fill="none" stroke="#1A1918" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="11" y1="2.5" x2="11" y2="5.5" stroke="#1A1918" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="11" cy="1.8" r="1.5" fill="#1A1918"/>
+        </svg>
+      </div>
+      <div class="sb-title">ROB</div>
+      <div class="sb-sub" id="sb-sub-text">Guide d'utilisation</div>
+    </div>
+    <div class="lang-row">
+      <button class="lang-btn active" id="lang-fr" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section" id="sb-s1">Introduction</div>
+      <div class="sb-item active" onclick="showSection('welcome')" id="nav-welcome">
+        <div class="sb-dot"></div>
+        <span id="n-welcome">Bienvenue</span>
+      </div>
+      <div class="sb-item" onclick="showSection('connexion')" id="nav-connexion">
+        <div class="sb-dot"></div>
+        <span id="n-connexion">Connexion</span>
+      </div>
+      <div class="sb-item" onclick="showSection('interface')" id="nav-interface">
+        <div class="sb-dot"></div>
+        <span id="n-interface">Interface</span>
+      </div>
+      <div class="sb-section" id="sb-s2">Modules</div>
+      <div class="sb-item" onclick="showSection('alfred')" id="nav-alfred">
+        <div class="sb-dot"></div>
+        <span id="n-alfred">Alfred</span>
+      </div>
+      <div class="sb-item" onclick="showSection('kensington')" id="nav-kensington">
+        <div class="sb-dot"></div>
+        <span id="n-kensington">Agent Kensington</span>
+      </div>
+      <div class="sb-item" onclick="showSection('quotes')" id="nav-quotes">
+        <div class="sb-dot"></div>
+        <span id="n-quotes">Agent Quotes</span>
+      </div>
+      <div class="sb-item" onclick="showSection('mails')" id="nav-mails">
+        <div class="sb-dot"></div>
+        <span id="n-mails">Mails dispo</span>
+      </div>
+      <div class="sb-item" onclick="showSection('quotesdocx')" id="nav-quotesdocx">
+        <div class="sb-dot"></div>
+        <span id="n-quotesdocx">Quotes DOCX</span>
+      </div>
+      <div class="sb-item" onclick="showSection('compta')" id="nav-compta">
+        <div class="sb-dot"></div>
+        <span id="n-compta">Compta</span>
+      </div>
+      <div class="sb-item" onclick="showSection('comms')" id="nav-comms">
+        <div class="sb-dot"></div>
+        <span id="n-comms">Comms internes</span>
+      </div>
+      <div class="sb-section" id="sb-s3">Gestion</div>
+      <div class="sb-item" onclick="showSection('permissions')" id="nav-permissions">
+        <div class="sb-dot"></div>
+        <span id="n-permissions">Permissions</span>
+      </div>
+      <div class="sb-item" onclick="showSection('faq')" id="nav-faq">
+        <div class="sb-dot"></div>
+        <span id="n-faq">FAQ</span>
+      </div>
+    </div>
+    <div class="sb-footer">ROB v2.1 · Liberty FIT</div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- WELCOME -->
+    <section class="guide-section active" id="section-welcome">
+      <div class="hero-bar"></div>
+      <div class="hero-diamond-wrap">
+        <div class="hero-diamond">
+          <svg width="34" height="34" viewBox="0 0 34 34">
+            <circle cx="11" cy="13" r="3.5" fill="#1A1918"/>
+            <circle cx="23" cy="13" r="3.5" fill="#1A1918"/>
+            <circle cx="12.4" cy="11.8" r="1.4" fill="#F5E642"/>
+            <circle cx="24.4" cy="11.8" r="1.4" fill="#F5E642"/>
+            <path d="M10 21 Q17 26.5 24 21" fill="none" stroke="#1A1918" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="10" cy="21" r="2" fill="#EDD820" opacity="0.5"/>
+            <circle cx="24" cy="21" r="2" fill="#EDD820" opacity="0.5"/>
+            <line x1="17" y1="4" x2="17" y2="8" stroke="#1A1918" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="17" cy="2.5" r="2.5" fill="#1A1918"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hero-name">ROB</div>
+          <div class="hero-tagline" id="ht-tagline">Agent IA · Liberty Incentives & Congresses France</div>
+        </div>
+      </div>
+      <div class="section-eyebrow" id="we-eyebrow">Guide d'utilisation</div>
+      <div class="section-title" id="we-title">Bienvenue sur Rob</div>
+      <div class="section-desc" id="we-desc">Rob est l'outil IA interne du pôle FIT de Liberty Incentives & Congresses. Il automatise les tâches répétitives liées à la gestion de dossiers, de la lecture de TMT à l'envoi de mails prestataires, pour libérer du temps sur les tâches à forte valeur ajoutée.</div>
+      <div class="card yellow">
+        <div class="card-title" id="we-ct1">Ce que Rob fait pour vous</div>
+        <div class="card-body">
+          <div class="mod-grid-preview">
+            <div class="mod-card" onclick="showSection('alfred')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="#F5E642" stroke-width="1"/><polyline points="2,5 8,10 14,5" stroke="#F5E642" stroke-width="0.75" fill="none"/></svg>
+              </div>
+              <div><div class="mod-card-name">Alfred</div><div class="mod-card-desc" id="wm-alfred">Analyse emails · tâches prioritaires</div></div>
+            </div>
+            <div class="mod-card" onclick="showSection('kensington')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="3" rx="1" fill="#F5E642"/><rect x="2" y="7" width="9" height="1.5" rx="0.75" fill="#888780"/><rect x="2" y="10" width="7" height="1.5" rx="0.75" fill="#888780"/><rect x="2" y="13" width="10" height="1.5" rx="0.75" fill="#888780"/></svg>
+              </div>
+              <div><div class="mod-card-name">Agent Kensington</div><div class="mod-card-desc" id="wm-kensington">TMT → fiche + mails prestataires</div></div>
+            </div>
+            <div class="mod-card" onclick="showSection('quotes')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L14.5 8L8 14.5L1.5 8Z" stroke="#888780" stroke-width="1" fill="none"/><circle cx="8" cy="8" r="2.5" fill="#888780"/></svg>
+              </div>
+              <div><div class="mod-card-name">Agent Quotes</div><div class="mod-card-desc" id="wm-quotes">Brief → itinéraire + programme client</div></div>
+            </div>
+            <div class="mod-card" onclick="showSection('mails')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#888780" stroke-width="1"/><polyline points="1,4 8,9 15,4" stroke="#888780" stroke-width="0.75" fill="none"/></svg>
+              </div>
+              <div><div class="mod-card-name">Mails dispo</div><div class="mod-card-desc" id="wm-mails">Guides, hôtels · envoi automatique</div></div>
+            </div>
+            <div class="mod-card" onclick="showSection('quotesdocx')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="1" width="10" height="14" rx="2" stroke="#888780" stroke-width="1"/><line x1="5.5" y1="5" x2="10.5" y2="5" stroke="#888780" stroke-width="0.75"/><line x1="5.5" y1="7.5" x2="9" y2="7.5" stroke="#888780" stroke-width="0.75"/></svg>
+              </div>
+              <div><div class="mod-card-name">Quotes DOCX</div><div class="mod-card-desc" id="wm-docx">Devis standardisé Word · charte Liberty</div></div>
+            </div>
+            <div class="mod-card" onclick="showSection('compta')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="2" stroke="#888780" stroke-width="1"/><line x1="4.5" y1="5" x2="11.5" y2="5" stroke="#888780" stroke-width="0.75"/><line x1="4.5" y1="7.5" x2="11.5" y2="7.5" stroke="#888780" stroke-width="0.75"/></svg>
+              </div>
+              <div><div class="mod-card-name">Compta</div><div class="mod-card-desc" id="wm-compta">Envoi factures · invoices.france</div></div>
+            </div>
+            <div class="mod-card" onclick="showSection('comms')">
+              <div class="mod-card-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3h12v8H9l-3 2v-2H2V3z" stroke="#888780" stroke-width="1" fill="none" stroke-linejoin="round"/></svg>
+              </div>
+              <div><div class="mod-card-name">Comms internes</div><div class="mod-card-desc" id="wm-comms">Info presta · récap astreinte</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip"><strong id="tip-nav-label">Navigation :</strong> <span id="tip-nav-text">Utilisez le menu de gauche pour accéder directement au module qui vous intéresse. Le guide est disponible en français et en anglais.</span></div>
+    </section>
+
+    <!-- CONNEXION -->
+    <section class="guide-section" id="section-connexion">
+      <div class="section-eyebrow" id="co-eyebrow">Accès</div>
+      <div class="section-title" id="co-title">Se connecter à Rob</div>
+      <div class="section-desc" id="co-desc">Rob est accessible via un navigateur, sans installation. Un identifiant et un mot de passe vous sont attribués par l'administrateur.</div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="co-s1t">Accéder à l'URL</div>
+            <div class="step-body" id="co-s1b">Rendez-vous sur <span class="code">fonfreydeantoine.github.io/liberty-fit-agent/</span> depuis n'importe quel navigateur. Pas d'installation requise.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="co-s2t">Sélectionner votre identifiant</div>
+            <div class="step-body" id="co-s2b">Dans la liste déroulante, choisissez votre nom d'utilisateur (format <span class="code">prenom.nom</span>).</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="co-s3t">Entrer votre mot de passe</div>
+            <div class="step-body" id="co-s3b">Saisissez votre mot de passe et validez avec Entrée ou en cliquant sur "Se connecter". En cas d'oubli, contactez Antoine.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" id="co-s4t">Interface chargée</div>
+            <div class="step-body" id="co-s4b">Vous accédez directement à la grille des modules. Votre nom apparait en bas de page. Les modules accessibles varient selon vos permissions.</div>
+          </div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="card red">
+        <div class="card-title" id="co-err-title">Messages d'erreur</div>
+        <div class="card-body">
+          <div style="margin-bottom:10px"><span class="badge r" id="co-err1-badge">Incorrect</span> <span id="co-err1-text">Identifiant ou mot de passe non reconnu. Vérifiez la saisie ou contactez l'admin.</span></div>
+          <div><span class="badge a" id="co-err2-badge">Inactif</span> <span id="co-err2-text">Compte non encore activé. L'administrateur doit activer votre compte depuis la console admin.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERFACE -->
+    <section class="guide-section" id="section-interface">
+      <div class="section-eyebrow" id="if-eyebrow">Prise en main</div>
+      <div class="section-title" id="if-title">L'interface Rob</div>
+      <div class="section-desc" id="if-desc">L'interface se divise en quatre zones : le bandeau supérieur (statut), la grille de modules (navigation), la zone de résultats (sorties générées), et l'historique de session.</div>
+      <div class="card">
+        <div class="card-title" id="if-header-title">Bandeau supérieur</div>
+        <div class="card-body" id="if-header-body">Le logo Rob est affiché en haut à gauche. Le point vert "En ligne" confirme la connexion aux services IA. En bas de page, votre nom, votre rôle, et le bouton de déconnexion.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="if-grid-title">Grille de modules</div>
+        <div class="card-body" id="if-grid-body">Chaque bouton de la grille active un module et affiche son panneau de saisie en dessous. Le module actif est surligné en jaune. Alfred apparait en carte héro au-dessus de la grille.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="if-panel-title">Zone de résultats</div>
+        <div class="card-body" id="if-panel-body">Après génération, les résultats s'affichent en onglets directement sous la zone de saisie. Un bouton "Copier" permet de transférer le contenu. "Nouveau dossier" remet le module à zéro.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="if-history-title">Historique de session</div>
+        <div class="card-body" id="if-history-body">Rob conserve un historique persistant de vos 8 derniers dossiers traités (Agent Kensington et Agent Quotes). Cet historique est lié à votre identifiant : il survit à la fermeture de l'onglet et est accessible depuis n'importe quel poste connecté avec le même compte. Cliquez sur une entrée pour recharger les résultats du dossier sans avoir à relancer l'analyse.</div>
+      </div>
+      <div class="tip"><strong id="tip-if-label">Bon à savoir :</strong> <span id="tip-if-text">Les modules sont indépendants. Vous pouvez switcher de l'un à l'autre sans perdre les résultats déjà générés dans la session en cours.</span></div>
+    </section>
+
+    <!-- ALFRED -->
+    <section class="guide-section" id="section-alfred">
+      <div class="section-eyebrow" id="al-eyebrow">Module · Alfred</div>
+      <div class="section-title">Alfred</div>
+      <div class="section-desc" id="al-desc">Alfred se connecte à votre boite mail et analyse vos emails non lus. Il génère une liste de tâches priorisées avec des réponses suggérées, directement dans Rob. C'est le point d'entrée recommandé en début de journée.</div>
+      <div class="card yellow">
+        <div class="card-title" id="al-use-title">Quand l'utiliser</div>
+        <div class="card-body" id="al-use-body">En début de journée ou après une période d'absence. Alfred vous donne en quelques secondes une vue claire sur ce qui nécessite action urgente, ce qui peut attendre, et ce qui peut être ignoré. Il remplace la lecture linéaire de votre boite de réception.</div>
+      </div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="al-s1t">Cliquer sur "Analyser mes emails"</div>
+            <div class="step-body" id="al-s1b">Le bouton CTA est dans la carte Alfred, en haut de l'interface. L'analyse démarre automatiquement, sans saisie requise. L'icône pulse pendant le traitement.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="al-s2t">Patienter 10 à 20 secondes</div>
+            <div class="step-body" id="al-s2b">Alfred interroge votre boite mail via Make, analyse le contenu de chaque email avec Claude, et structure les résultats par niveau de priorité. La durée dépend du volume de messages non lus.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="al-s3t">Lire l'analyse par niveaux de priorité</div>
+            <div class="step-body" id="al-s3b">Les résultats s'affichent en sections colorées. Une synthèse globale apparait en tête d'analyse, suivie des emails classés en 4 niveaux.</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <span class="badge r" style="flex-shrink:0;margin-top:1px">🔴 Urgent</span>
+                <span id="al-p1b" style="font-size:13px;color:var(--g8);line-height:1.6">Action requise dans la journée. Ce sont typiquement des relances client en attente de confirmation, des questions opérationnelles bloquantes, ou des emails dont l'absence de réponse aurait un impact direct sur un dossier en cours.</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <span class="badge a" style="flex-shrink:0;margin-top:1px">🟡 Important</span>
+                <span id="al-p2b" style="font-size:13px;color:var(--g8);line-height:1.6">À traiter dans la journée ou le lendemain. Emails informatifs nécessitant un suivi, nouvelles demandes non urgentes, ou réponses à apporter sans caractère bloquant immédiat.</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <span class="badge g" style="flex-shrink:0;margin-top:1px">🟢 Normal</span>
+                <span id="al-p3b" style="font-size:13px;color:var(--g8);line-height:1.6">Information utile mais sans échéance pressante. Peut être traité en fin de journée ou mis de côté temporairement sans risque opérationnel.</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <span style="display:inline-flex;align-items:center;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--g3);color:var(--g7);border:0.5px solid var(--g4);flex-shrink:0;margin-top:1px">🧹 Ignoré</span>
+                <span id="al-p4b" style="font-size:13px;color:var(--g8);line-height:1.6">Newsletters, notifications automatiques, copies ou accusés de réception sans action requise. Alfred les identifie et les regroupe pour vous éviter de les lire un à un.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" id="al-s4t">Exploiter les suggestions de réponse</div>
+            <div class="step-body" id="al-s4b">Pour les emails classés Urgent ou Important, Alfred propose un draft de réponse adapté au contexte. Ce bloc apparait sous le résumé de l'email, avec un bouton "Copier ce draft". Collez directement le contenu dans votre client mail, ajustez si nécessaire, et envoyez. Les drafts sont rédigés dans le ton attendu pour une communication professionnelle FIT.</div>
+          </div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="card">
+        <div class="card-title" id="al-limits-title">Connexion et évolutions à venir</div>
+        <div class="card-body" id="al-limits-body">Alfred est actuellement connecté à la boite Gmail associée à votre identifiant Liberty. La connexion à la boite Outlook @liberty-int.com est prévue dès que l'autorisation IT sera accordée via Azure AD. Les fonctionnalités resteront identiques, seule la source des emails changera.</div>
+      </div>
+      <div class="tip"><strong id="tip-al-label">Astuce :</strong> <span id="tip-al-text">"Nouvelle analyse" relance Alfred et remet le panneau à zéro. "Copier l'analyse" exporte l'intégralité des résultats en texte brut, utile pour archiver ou partager le triage du jour.</span></div>
+    </section>
+
+    <!-- KENSINGTON -->
+    <section class="guide-section" id="section-kensington">
+      <div class="section-eyebrow" id="kt-eyebrow">Module · Kensington</div>
+      <div class="section-title" id="kt-title">Agent Kensington</div>
+      <div class="section-desc" id="kt-desc">L'agent Kensington lit le contenu d'un TMT (Travel Management Tool) collé en texte brut, et génère automatiquement une fiche de coordination structurée ainsi que les mails prestataires correspondants.</div>
+      <div class="card yellow">
+        <div class="card-title" id="kt-use-title">Ce que le module produit</div>
+        <div class="card-body">
+          <div style="margin-bottom:8px"><span class="badge y" id="kt-o1">Fiche de coordination</span> <span id="kt-o1b">Résumé du séjour structuré par jour : prestataires, horaires, contacts, points d'attention.</span></div>
+          <div><span class="badge y" id="kt-o2">Mails prestataires</span> <span id="kt-o2b">Un mail par prestataire, prêt à envoyer, avec les informations du groupe (PAX, noms, horaires).</span></div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="kt-s1t">Copier le contenu du TMT</div>
+            <div class="step-body" id="kt-s1b">Depuis le document Kensington (Word ou PDF), sélectionnez et copiez l'intégralité du texte concernant les jours France du séjour. Pas besoin de nettoyer le formatage.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="kt-s2t">Coller dans le champ de saisie</div>
+            <div class="step-body" id="kt-s2b">Sélectionnez le module "Agent Kensington" et collez le texte dans la zone de saisie. Cliquez ensuite sur "Générer la fiche et les mails".</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="kt-s3t">Attendre 30 à 60 secondes</div>
+            <div class="step-body" id="kt-s3b">Un indicateur de chargement confirme que Rob traite le document. La durée dépend de la longueur du TMT.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" id="kt-s4t">Consulter la fiche et les mails</div>
+            <div class="step-body" id="kt-s4b">Les résultats s'affichent en 2 onglets : <strong style="color:var(--rob-y)">Fiche de coordination</strong> et <strong style="color:var(--rob-y)">Mails prestataires</strong>. Chaque mail est présenté dans un bloc avec service, destinataire et corps du mail.</div>
+          </div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="card-title" style="margin-bottom:12px;color:var(--gw);font-family:var(--ft);font-size:13px;font-weight:600" id="kt-merge-title">Fonction de regroupement de mails</div>
+      <div class="card-body" style="font-size:13px;color:var(--g8);margin-bottom:12px" id="kt-merge-desc">Si plusieurs services sont assurés par le même prestataire, Rob peut regrouper les mails en un seul envoi cohérent.</div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">A</div>
+          <div class="step-content">
+            <div class="step-title" id="kt-ma-t">Sélectionner les mails à regrouper</div>
+            <div class="step-body" id="kt-ma-b">Cochez les cases à gauche de chaque bloc mail (minimum 2). La barre de regroupement apparait automatiquement.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">B</div>
+          <div class="step-content">
+            <div class="step-title" id="kt-mb-t">Cliquer sur "Regrouper en 1 mail"</div>
+            <div class="step-body" id="kt-mb-b">Rob génère un mail unique adressé au prestataire, mentionnant toutes les prestations sous forme de sections numérotées.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip"><strong id="tip-kt-label">Bonne pratique :</strong> <span id="tip-kt-text">Pour les TMT Kensington, copiez depuis le premier jour France jusqu'au dernier. Plus le contenu est complet, plus la fiche sera précise.</span></div>
+    </section>
+
+    <!-- QUOTES AGENT -->
+    <section class="guide-section" id="section-quotes">
+      <div class="section-eyebrow" id="qt-eyebrow">Module · Quotes</div>
+      <div class="section-title" id="qt-title">Agent Quotes</div>
+      <div class="section-desc" id="qt-desc">L'agent Quotes transforme un brief client, qu'il soit vague ou détaillé, en anglais ou en français, en un ensemble de documents opérationnels : fiche interne, programme client premium, réponse client prête à envoyer, checklist d'actions, et email de questions si le brief est insuffisant.</div>
+      <div class="card yellow">
+        <div class="card-title" id="qt-out-title">Les 5 sorties</div>
+        <div class="card-body">
+          <div style="margin-bottom:8px"><span class="badge y" id="qt-o1">Fiche interne</span> <span id="qt-o1b">Résumé structuré : dates, PAX, demandes, contraintes, besoins de sourcing. Pour le chef de projet.</span></div>
+          <div style="margin-bottom:8px"><span class="badge y" id="qt-o2">Programme client</span> <span id="qt-o2b">Itinéraire day-by-day rédigé en anglais, ton premium, prêt à envoyer à Kensington ou au client final.</span></div>
+          <div style="margin-bottom:8px"><span class="badge y" id="qt-o4">Réponse client</span> <span id="qt-o4b">Mail d'accusé de réception prêt à copier dans Outlook pour confirmer la bonne réception du brief.</span></div>
+          <div style="margin-bottom:8px"><span class="badge y" id="qt-o5">Checklist</span> <span id="qt-o5b">Liste d'actions spécifiques à ce dossier, déduites par Rob. Cochable directement dans l'interface.</span></div>
+          <div><span class="badge a" id="qt-o3">Email de questions</span> <span id="qt-o3b">Si le brief est insuffisant, Rob génère un email de relance ciblé. L'onglet est signalé "Incomplet".</span></div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="qt-s1t">Coller le brief client</div>
+            <div class="step-body" id="qt-s1b">Le brief peut venir de Kensington, d'une autre agence ou d'un client direct. Anglais ou français accepté. Collez-le tel quel dans la zone de saisie.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="qt-s2t">Cliquer sur "Générer l'itinéraire"</div>
+            <div class="step-body" id="qt-s2b">Le traitement prend 30 à 60 secondes. Plus le brief est riche, plus les sorties seront détaillées.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="qt-s3t">Naviguer entre les onglets</div>
+            <div class="step-body" id="qt-s3b">Les sorties sont disponibles en onglets. Si le brief est complet, les onglets Fiche interne, Programme client, Réponse client et Checklist sont renseignés. Sinon, l'onglet "Email de questions" est mis en avant avec le badge Incomplet.</div>
+          </div>
+        </div>
+      </div>
+      <div class="warn" id="qt-warn">Si l'onglet "Email questions" est marqué <span class="badge a">Incomplet</span>, commencez par envoyer cet email au client avant de continuer. Rob a détecté des informations manquantes pour construire un programme complet.</div>
+      <hr class="divider">
+      <div class="card-title" style="margin-bottom:12px;color:var(--gw);font-family:var(--ft);font-size:13px;font-weight:600" id="qt-acte2-title">Reprendre un dossier - Acte 2</div>
+      <div class="card-body" style="font-size:13px;color:var(--g8);margin-bottom:16px;line-height:1.7" id="qt-acte2-desc">Une fois les tarifs collectés auprès de vos prestataires, Rob peut générer le mail de cotation finale à envoyer au client. Ce bloc n'apparait que si le brief initial était suffisant et qu'une fiche interne a bien été générée.</div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">A</div>
+          <div class="step-content">
+            <div class="step-title" id="qt-a2-at">Localiser le bloc "Reprendre ce dossier"</div>
+            <div class="step-body" id="qt-a2-ab">Il apparait sous la zone de résultats, après une génération réussie. Il est affiché avec un liseré jaune à gauche pour le distinguer du flux principal.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">B</div>
+          <div class="step-content">
+            <div class="step-title" id="qt-a2-bt">Coller les tarifs collectés</div>
+            <div class="step-body" id="qt-a2-bb">Collez dans le champ dédié les tarifs que vous avez reçus de vos prestataires. Format libre : vous pouvez coller directement un tableau, une liste ou un email. Exemple : "Guide J1-J2 : 480 EUR / Transfert CDG : 220 EUR / Entrée musée : 25 EUR PAX".</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">C</div>
+          <div class="step-content">
+            <div class="step-title" id="qt-a2-ct">Cliquer sur "Générer la cotation"</div>
+            <div class="step-body" id="qt-a2-cb">Rob produit un mail de cotation finale prêt à envoyer au client ou à Kensington, intégrant les tarifs dans la structure du programme déjà généré. Copiez et ajustez si nécessaire avant envoi.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAILS DISPO -->
+    <section class="guide-section" id="section-mails">
+      <div class="section-eyebrow" id="md-eyebrow">Module · Mails dispo</div>
+      <div class="section-title" id="md-title">Mails dispo</div>
+      <div class="section-desc" id="md-desc">Ce module permet d'envoyer des demandes de disponibilité à des guides, assistants ou hôtels. Le mail est construit automatiquement à partir d'un formulaire structuré, puis envoyé via Gmail.</div>
+      <div class="card">
+        <div class="card-title" id="md-types-title">Types de destinataires</div>
+        <div class="card-body">
+          <div style="margin-bottom:8px"><span class="badge y">Guide</span> <span id="md-t1">Demande de disponibilité pour 1 ou plusieurs services guidés.</span></div>
+          <div style="margin-bottom:8px"><span class="badge y">Assistant</span> <span id="md-t2">Identique au guide, pour un assistant local.</span></div>
+          <div style="margin-bottom:8px"><span class="badge y">Autre</span> <span id="md-t3">Prestataire de type billetterie, transfert, etc.</span></div>
+          <div style="margin-bottom:8px"><span class="badge y">Hôtel contracté</span> <span id="md-t4">Demande au tarif contrat avec les détails du séjour (chambres, dates, noms).</span></div>
+          <div><span class="badge y">Hôtel non contracté</span> <span id="md-t5">Demande de disponibilité et meilleur tarif net, avec conditions d'annulation flexibles.</span></div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="md-s1t">Sélectionner le type</div>
+            <div class="step-body" id="md-s1b">Cliquez sur le type de destinataire. Le formulaire s'adapte (champs guide ou hôtel).</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="md-s2t">Remplir le formulaire</div>
+            <div class="step-body" id="md-s2b">Nom et email du destinataire, PAX, noms des voyageurs, téléphone. Pour les services guidés : ajoutez autant de blocs services que nécessaire via "+ Ajouter un service".</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="md-s3t">Aperçu avant envoi</div>
+            <div class="step-body" id="md-s3b">Le bouton "Aperçu" génère et affiche le mail complet. Vous pouvez le modifier via le bouton ✏ Modifier avant envoi. L'éditeur riche permet de formater le texte (gras, listes).</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" id="md-s4t">Envoyer</div>
+            <div class="step-body" id="md-s4b">Le bouton "Envoyer" déclenche l'envoi via Make et Gmail. Un message de confirmation apparait avec l'adresse destinataire. Le mail est envoyé depuis <span class="code">votre.identifiant@liberty-int.com</span>.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip"><strong id="tip-md-label">Modification :</strong> <span id="tip-md-text">Une fois l'aperçu affiché, cliquez sur ✏ pour entrer en mode éditeur. Vous pouvez modifier l'objet et le corps du mail avant envoi. L'envoi depuis l'éditeur est possible directement avec "Envoyer".</span></div>
+    </section>
+
+    <!-- QUOTES DOCX -->
+    <section class="guide-section" id="section-quotesdocx">
+      <div class="section-eyebrow" id="qd-eyebrow">Module · Quotes DOCX</div>
+      <div class="section-title" id="qd-title">Quotes DOCX</div>
+      <div class="section-desc" id="qd-desc">Ce module génère un devis standardisé au format Word (.docx), dans la charte Liberty. Il est destiné à être transmis directement à l'agence ou au client.</div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="qd-s1t">Renseigner les informations du devis</div>
+            <div class="step-body" id="qd-s1b">Client, référence, destination/titre, PAX, date du devis, durée de validité (en jours), et un message d'introduction optionnel.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="qd-s2t">Ajouter les services</div>
+            <div class="step-body" id="qd-s2b">Pour chaque service : intitulé, catégorie, description, date/jour, prix TTC, inclusions, exclusions. Cliquez sur "+ Ajouter un service" pour en ajouter plusieurs.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="qd-s3t">Renseigner les conditions générales</div>
+            <div class="step-body" id="qd-s3b">Conditions de réservation, conditions d'annulation, et notes supplémentaires. Des valeurs par défaut sont préremplies, modifiables librement.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" id="qd-s4t">Générer le DOCX</div>
+            <div class="step-body" id="qd-s4b">Le fichier est généré côté navigateur et téléchargé automatiquement. Le nom du fichier est du type <span class="code">Devis_Liberty_Client_REF.docx</span>.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip"><strong id="tip-qd-label">Contenu généré :</strong> <span id="tip-qd-text">Le DOCX contient : page de titre avec référence, tableau de services avec prix individuels, budget récapitulatif, conditions générales. Le total TTC est calculé automatiquement.</span></div>
+    </section>
+
+    <!-- COMPTA -->
+    <section class="guide-section" id="section-compta">
+      <div class="section-eyebrow" id="ct-eyebrow">Module · Compta</div>
+      <div class="section-title" id="ct-title">Compta</div>
+      <div class="section-desc" id="ct-desc">Ce module permet d'envoyer une facture PDF au service comptabilité de Liberty, avec les métadonnées du dossier. Le mail est automatiquement envoyé à invoices.france@liberty-int.com, avec une copie à l'expéditeur.</div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="ct-s1t">Remplir les champs</div>
+            <div class="step-body" id="ct-s1b">Objet du mail, numéro de dossier, montant, date, et votre nom en tant que détenteur du dossier.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="ct-s2t">Joindre la facture PDF</div>
+            <div class="step-body" id="ct-s2b">Cliquez sur la zone de dépôt ou glissez-déposez le fichier PDF. Seuls les fichiers PDF sont acceptés. Le nom du fichier s'affiche une fois attaché.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="ct-s3t">Envoyer</div>
+            <div class="step-body" id="ct-s3b">Cliquez sur "Envoyer la facture". Un message de confirmation s'affiche avec les adresses destinataire et copie.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card green">
+        <div class="card-title" id="ct-dest-title">Destinataires automatiques</div>
+        <div class="card-body">
+          <div><span class="badge g" id="ct-d1">Destinataire</span> <span class="code">invoices.france@liberty-int.com</span></div>
+          <div style="margin-top:8px"><span class="badge g" id="ct-d2">Copie</span> <span id="ct-d2b">Votre adresse email @liberty-int.com</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMS INTERNES -->
+    <section class="guide-section" id="section-comms">
+      <div class="section-eyebrow" id="ci-eyebrow">Module · Comms internes</div>
+      <div class="section-title" id="ci-title">Comms internes</div>
+      <div class="section-desc" id="ci-desc">Ce module génère et envoie des emails internes à l'équipe FIT : informations sur un prestataire ou récapitulatif d'astreinte.</div>
+      <div class="card">
+        <div class="card-title" id="ci-types-title">Deux modes</div>
+        <div class="card-body">
+          <div style="margin-bottom:10px">
+            <div style="font-family:var(--ft);font-size:12px;font-weight:600;color:var(--gw);margin-bottom:4px" id="ci-t1">Info prestataire</div>
+            <div style="font-size:13px;color:var(--g8)" id="ci-t1b">Communiquer une information utile sur un prestataire : nouveau tarif, travaux, fermeture, nouvelle info opérationnelle. Avec emplacement sur le serveur si nécessaire.</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ft);font-size:12px;font-weight:600;color:var(--gw);margin-bottom:4px" id="ci-t2">Récap astreinte</div>
+            <div style="font-size:13px;color:var(--g8)" id="ci-t2b">Résumé d'une période d'astreinte avec les incidents traités : date, heure, dossier concerné, description et résolution.</div>
+          </div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title" id="ci-s1t">Choisir le mode</div>
+            <div class="step-body" id="ci-s1b">"Info presta" ou "Récap astreinte". Le formulaire s'adapte.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title" id="ci-s2t">Remplir le formulaire</div>
+            <div class="step-body" id="ci-s2b">Pour un récap astreinte : ajoutez autant d'incidents que nécessaire via "+ Ajouter un incident". Chaque incident comprend date, heure, dossier, description et résolution.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title" id="ci-s3t">Générer le mail</div>
+            <div class="step-body" id="ci-s3b">Rob rédige le mail en langage naturel à partir de vos données. Il est affiché en mode lecture.</div>
+          </div>
+        </div>
+        <div class="step done">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title" id="ci-s4t">Modifier si besoin et envoyer</div>
+            <div class="step-body" id="ci-s4b">Utilisez le bouton ✏ pour modifier l'objet ou le corps du mail avant envoi. Le bouton "Envoyer à l'équipe" déclenche l'envoi à l'équipe FIT.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERMISSIONS -->
+    <section class="guide-section" id="section-permissions">
+      <div class="section-eyebrow" id="pm-eyebrow">Gestion</div>
+      <div class="section-title" id="pm-title">Permissions et accès</div>
+      <div class="section-desc" id="pm-desc">L'accès aux fonctionnalités de Rob est contrôlé par l'administrateur. Chaque utilisateur dispose d'un niveau et de permissions granulaires par module.</div>
+      <div class="card">
+        <div class="card-title" id="pm-levels-title">Niveaux d'accès</div>
+        <div class="card-body">
+          <div style="margin-bottom:8px"><span class="badge y" id="pm-l1">Admin</span> <span id="pm-l1b">Accès complet à tous les modules + console d'administration des utilisateurs.</span></div>
+          <div style="margin-bottom:8px"><span class="badge g" id="pm-l2">Actif</span> <span id="pm-l2b">Accès aux modules autorisés par l'administrateur.</span></div>
+          <div><span class="badge a" id="pm-l3">Explorateur</span> <span id="pm-l3b">Accès limité pour prise en main ou démonstration.</span></div>
+        </div>
+      </div>
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th id="pm-th1">Fonctionnalité</th>
+            <th id="pm-th2">Admin</th>
+            <th id="pm-th3">Actif</th>
+            <th id="pm-th4">Explorateur</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td id="pm-r1">Agent Kensington</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td id="pm-r2">Agent Quotes</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td id="pm-r3">Aperçu mails</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td id="pm-r4">Envoi mails</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td id="pm-r5">Compta</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td id="pm-r6">Quotes DOCX</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td id="pm-r7">Alfred</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+          <tr><td id="pm-r8">Console Admin</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td></tr>
+        </tbody>
+      </table>
+      <div class="tip" style="margin-top:20px"><strong id="tip-pm-label">Modification :</strong> <span id="tip-pm-text">Les permissions sont gérées en temps réel par l'administrateur. Si une fonctionnalité apparait grisée, c'est qu'elle n'est pas activée sur votre compte. Contactez Antoine.</span></div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="guide-section" id="section-faq">
+      <div class="section-eyebrow" id="fq-eyebrow">Support</div>
+      <div class="section-title" id="fq-title">Questions fréquentes</div>
+      <div class="section-desc" id="fq-desc">Réponses aux situations les plus fréquemment rencontrées.</div>
+      <div id="faq-items"></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const lang = { current: 'fr' };
+
+const T = {
+  fr: {
+    'sb-sub-text': "Guide d'utilisation",
+    'sb-s1': 'Introduction', 'sb-s2': 'Modules', 'sb-s3': 'Gestion',
+    'n-welcome': 'Bienvenue', 'n-connexion': 'Connexion', 'n-interface': 'Interface',
+    'n-alfred': 'Alfred', 'n-kensington': 'Agent Kensington', 'n-quotes': 'Agent Quotes',
+    'n-mails': 'Mails dispo', 'n-quotesdocx': 'Quotes DOCX', 'n-compta': 'Compta',
+    'n-comms': 'Comms internes', 'n-permissions': 'Permissions', 'n-faq': 'FAQ',
+    'ht-tagline': 'Agent IA · Liberty Incentives & Congresses France',
+    'we-eyebrow': "Guide d'utilisation", 'we-title': 'Bienvenue sur Rob',
+    'we-desc': "Rob est l'outil IA interne du pôle FIT de Liberty Incentives & Congresses. Il automatise les tâches répétitives liées à la gestion de dossiers, de la lecture de TMT à l'envoi de mails prestataires, pour libérer du temps sur les tâches à forte valeur ajoutée.",
+    'we-ct1': 'Ce que Rob fait pour vous',
+    'wm-alfred': 'Analyse emails · tâches prioritaires', 'wm-kensington': 'TMT → fiche + mails prestataires',
+    'wm-quotes': 'Brief → itinéraire + programme client', 'wm-mails': 'Guides, hôtels · envoi automatique',
+    'wm-docx': 'Devis standardisé Word · charte Liberty', 'wm-compta': 'Envoi factures · invoices.france',
+    'wm-comms': 'Info presta · récap astreinte',
+    'tip-nav-label': 'Navigation :', 'tip-nav-text': "Utilisez le menu de gauche pour accéder directement au module qui vous intéresse. Le guide est disponible en français et en anglais.",
+    'co-eyebrow': 'Accès', 'co-title': 'Se connecter à Rob',
+    'co-desc': "Rob est accessible via un navigateur, sans installation. Un identifiant et un mot de passe vous sont attribués par l'administrateur.",
+    'co-s1t': "Accéder à l'URL", 'co-s1b': "Rendez-vous sur fonfreydeantoine.github.io/liberty-fit-agent/ depuis n'importe quel navigateur. Pas d'installation requise.",
+    'co-s2t': 'Sélectionner votre identifiant', 'co-s2b': "Dans la liste déroulante, choisissez votre nom d'utilisateur (format prenom.nom).",
+    'co-s3t': 'Entrer votre mot de passe', 'co-s3b': "Saisissez votre mot de passe et validez avec Entrée. En cas d'oubli, contactez Antoine.",
+    'co-s4t': 'Interface chargée', 'co-s4b': "Vous accédez directement à la grille des modules. Votre nom apparait en bas de page.",
+    'co-err-title': "Messages d'erreur", 'co-err1-text': "Identifiant ou mot de passe non reconnu. Vérifiez la saisie ou contactez l'admin.",
+    'co-err2-text': "Compte non encore activé. L'administrateur doit activer votre compte depuis la console admin.",
+    'if-eyebrow': 'Prise en main', 'if-title': "L'interface Rob",
+    'if-desc': "L'interface se divise en quatre zones : le bandeau supérieur (statut), la grille de modules (navigation), la zone de résultats (sorties générées), et l'historique de session.",
+    'if-header-title': 'Bandeau supérieur', 'if-header-body': "Le logo Rob est affiché en haut à gauche. Le point vert confirme la connexion aux services IA. En bas de page, votre nom, rôle, et le bouton de déconnexion.",
+    'if-grid-title': 'Grille de modules', 'if-grid-body': "Chaque bouton active un module et affiche son panneau de saisie. Le module actif est surligné en jaune. Alfred apparait en carte héro au-dessus de la grille.",
+    'if-panel-title': 'Zone de résultats', 'if-panel-body': "Après génération, les résultats s'affichent en onglets. Un bouton Copier transfère le contenu. Nouveau dossier remet le module à zéro.",
+    'if-history-title': 'Historique de session', 'if-history-body': "Rob conserve un historique persistant de vos 8 derniers dossiers traités (Agent Kensington et Agent Quotes). Lié à votre identifiant, il survit à la fermeture de l'onglet et est accessible depuis n'importe quel poste connecté avec le même compte. Cliquez sur une entrée pour recharger les résultats.",
+    'tip-if-label': 'Bon à savoir :', 'tip-if-text': "Les modules sont indépendants. Vous pouvez switcher de l'un à l'autre sans perdre les résultats de la session en cours.",
+    'al-eyebrow': 'Module · Alfred', 'al-desc': "Alfred se connecte à votre boite mail et analyse vos emails non lus. Il génère une liste de tâches priorisées avec des réponses suggérées. C'est le point d'entrée recommandé en début de journée.",
+    'al-use-title': "Quand l'utiliser", 'al-use-body': "En début de journée ou après une période d'absence. Alfred remplace la lecture linéaire de votre boite de réception et vous donne en quelques secondes une vue claire sur ce qui nécessite action urgente.",
+    'al-s1t': 'Cliquer sur "Analyser mes emails"', 'al-s1b': "Le bouton CTA est dans la carte Alfred, en haut de l'interface. L'analyse démarre automatiquement. L'icône pulse pendant le traitement.",
+    'al-s2t': 'Patienter 10 à 20 secondes', 'al-s2b': "Alfred interroge votre boite mail via Make, analyse chaque email avec Claude, et structure les résultats. La durée dépend du volume de messages non lus.",
+    'al-s3t': 'Lire l\'analyse par niveaux de priorité', 'al-s3b': "Les résultats s'affichent en sections colorées. Une synthèse globale précède les emails classés en 4 niveaux.",
+    'al-p1b': "Action requise dans la journée. Relances client bloquantes, questions opérationnelles urgentes, tout email dont l'absence de réponse impacte un dossier en cours.",
+    'al-p2b': "À traiter dans la journée ou le lendemain. Suivi nécessaire, nouvelles demandes non urgentes, réponses sans caractère bloquant immédiat.",
+    'al-p3b': "Information utile sans échéance pressante. Peut être traité en fin de journée sans risque opérationnel.",
+    'al-p4b': "Newsletters, notifications automatiques, accusés de réception. Alfred les identifie et les regroupe pour vous éviter de les lire un à un.",
+    'al-s4t': 'Exploiter les suggestions de réponse', 'al-s4b': "Pour les emails Urgent ou Important, Alfred propose un draft de réponse adapté au contexte. Copiez-le via 'Copier ce draft', collez dans votre client mail, ajustez si nécessaire.",
+    'al-limits-title': 'Connexion et évolutions à venir', 'al-limits-body': "Alfred est actuellement connecté à la boite Gmail associée à votre identifiant Liberty. La connexion à la boite Outlook @liberty-int.com est prévue dès autorisation IT via Azure AD.",
+    'tip-al-label': 'Astuce :', 'tip-al-text': '"Nouvelle analyse" relance Alfred. "Copier l\'analyse" exporte l\'intégralité des résultats en texte brut, utile pour archiver le triage du jour.',
+    'kt-eyebrow': 'Module · Kensington', 'kt-title': 'Agent Kensington',
+    'kt-desc': "L'agent Kensington lit le contenu d'un TMT collé en texte brut, et génère automatiquement une fiche de coordination + les mails prestataires.",
+    'kt-use-title': 'Ce que le module produit',
+    'kt-o1': 'Fiche de coordination', 'kt-o1b': "Résumé du séjour structuré par jour : prestataires, horaires, contacts, points d'attention.",
+    'kt-o2': 'Mails prestataires', 'kt-o2b': "Un mail par prestataire, prêt à envoyer, avec les informations du groupe.",
+    'kt-s1t': 'Copier le contenu du TMT', 'kt-s1b': "Depuis le document Kensington, sélectionnez et copiez l'intégralité des jours France. Pas besoin de nettoyer le formatage.",
+    'kt-s2t': 'Coller dans le champ de saisie', 'kt-s2b': 'Sélectionnez le module et collez le texte. Cliquez sur "Générer la fiche et les mails".',
+    'kt-s3t': 'Attendre 30 à 60 secondes', 'kt-s3b': "Un indicateur confirme que Rob traite le document.",
+    'kt-s4t': 'Consulter la fiche et les mails', 'kt-s4b': "Résultats en 2 onglets : Fiche de coordination et Mails prestataires. Chaque mail comprend service, destinataire et corps.",
+    'kt-merge-title': 'Fonction de regroupement de mails', 'kt-merge-desc': "Si plusieurs services sont assurés par le même prestataire, Rob peut regrouper les mails en un seul envoi.",
+    'kt-ma-t': 'Sélectionner les mails', 'kt-ma-b': "Cochez les cases (minimum 2). La barre de regroupement apparait automatiquement.",
+    'kt-mb-t': 'Cliquer sur "Regrouper en 1 mail"', 'kt-mb-b': "Rob génère un mail unique avec toutes les prestations en sections numérotées.",
+    'tip-kt-label': 'Bonne pratique :', 'tip-kt-text': "Copiez depuis le premier jusqu'au dernier jour France. Plus le contenu est complet, plus la fiche sera précise.",
+    'qt-eyebrow': 'Module · Quotes', 'qt-title': 'Agent Quotes',
+    'qt-desc': "L'agent Quotes transforme un brief client en fiche interne, programme client premium, réponse client, checklist et email de questions si le brief est insuffisant.",
+    'qt-out-title': 'Les 5 sorties',
+    'qt-o1': 'Fiche interne', 'qt-o1b': "Résumé structuré : dates, PAX, demandes, contraintes, besoins de sourcing.",
+    'qt-o2': 'Programme client', 'qt-o2b': "Itinéraire day-by-day rédigé en anglais, ton premium, prêt à envoyer.",
+    'qt-o4': 'Réponse client', 'qt-o4b': "Mail d'accusé de réception prêt à copier dans Outlook.",
+    'qt-o5': 'Checklist', 'qt-o5b': "Actions spécifiques à ce dossier, déduites par Rob. Cochable dans l'interface.",
+    'qt-o3': 'Email de questions', 'qt-o3b': "Si le brief est insuffisant, Rob génère un email de relance ciblé.",
+    'qt-s1t': 'Coller le brief client', 'qt-s1b': "Brief Kensington, autre agence ou client direct. Anglais ou français accepté.",
+    'qt-s2t': 'Cliquer sur "Générer l\'itinéraire"', 'qt-s2b': "Traitement en 30 à 60 secondes.",
+    'qt-s3t': 'Naviguer entre les onglets', 'qt-s3b': "Si le brief est complet : Fiche interne, Programme client, Réponse client et Checklist. Sinon, l'onglet Email questions est mis en avant.",
+    'qt-warn': "Si l'onglet \"Email questions\" est marqué Incomplet, envoyez d'abord cet email au client. Rob a détecté des informations manquantes.",
+    'qt-acte2-title': 'Reprendre un dossier - Acte 2',
+    'qt-acte2-desc': "Une fois les tarifs collectés, Rob génère le mail de cotation finale. Ce bloc n'apparait que si le brief initial était suffisant et qu'une fiche interne a bien été générée.",
+    'qt-a2-at': 'Localiser le bloc "Reprendre ce dossier"', 'qt-a2-ab': "Il apparait sous la zone de résultats, après une génération réussie, avec un liseré jaune à gauche.",
+    'qt-a2-bt': 'Coller les tarifs collectés', 'qt-a2-bb': "Format libre : tableau, liste ou email reçu des prestataires. Ex : Guide J1-J2 : 480 EUR / Transfert CDG : 220 EUR.",
+    'qt-a2-ct': 'Cliquer sur "Générer la cotation"', 'qt-a2-cb': "Rob produit un mail de cotation finale intégrant les tarifs dans la structure du programme. Copiez et ajustez avant envoi.",
+    'md-eyebrow': 'Module · Mails dispo', 'md-title': 'Mails dispo',
+    'md-desc': "Envoi de demandes de disponibilité à des guides, assistants ou hôtels. Mail construit automatiquement à partir du formulaire, envoyé via Gmail.",
+    'md-types-title': 'Types de destinataires',
+    'md-t1': 'Demande de dispo pour 1 ou plusieurs services guidés.', 'md-t2': 'Identique au guide, pour un assistant local.',
+    'md-t3': 'Prestataire de type billetterie, transfert, etc.', 'md-t4': "Demande au tarif contrat avec les détails du séjour.",
+    'md-t5': "Demande de disponibilité et meilleur tarif net, avec conditions d'annulation flexibles.",
+    'md-s1t': 'Sélectionner le type', 'md-s1b': "Cliquez sur le type de destinataire. Le formulaire s'adapte.",
+    'md-s2t': 'Remplir le formulaire', 'md-s2b': "Nom, email, PAX, noms, téléphone. Ajoutez autant de blocs services que nécessaire.",
+    'md-s3t': 'Aperçu avant envoi', 'md-s3b': '"Aperçu" génère et affiche le mail. Modifiez via ✏ avant envoi.',
+    'md-s4t': 'Envoyer', 'md-s4b': "Envoi via Make/Gmail. Confirmation avec adresse destinataire.",
+    'tip-md-label': 'Modification :', 'tip-md-text': "Cliquez sur ✏ pour entrer en mode éditeur. Modifiez l'objet et le corps avant envoi.",
+    'qd-eyebrow': 'Module · Quotes DOCX', 'qd-title': 'Quotes DOCX',
+    'qd-desc': "Génère un devis standardisé Word (.docx) dans la charte Liberty.",
+    'qd-s1t': 'Renseigner les informations', 'qd-s1b': "Client, référence, destination, PAX, date, validité et introduction optionnelle.",
+    'qd-s2t': 'Ajouter les services', 'qd-s2b': "Intitulé, catégorie, description, date, prix TTC, inclusions, exclusions.",
+    'qd-s3t': 'Conditions générales', 'qd-s3b': "Conditions de réservation et d'annulation, notes. Valeurs par défaut préremplies.",
+    'qd-s4t': 'Générer le DOCX', 'qd-s4b': "Fichier généré côté navigateur et téléchargé automatiquement.",
+    'tip-qd-label': 'Contenu généré :', 'tip-qd-text': "Page de titre, tableau services avec prix, budget récap, conditions générales. Total TTC calculé automatiquement.",
+    'ct-eyebrow': 'Module · Compta', 'ct-title': 'Compta',
+    'ct-desc': "Envoi de factures PDF au service comptabilité avec les métadonnées du dossier.",
+    'ct-s1t': 'Remplir les champs', 'ct-s1b': "Objet, numéro de dossier, montant, date, détenteur.",
+    'ct-s2t': 'Joindre la facture PDF', 'ct-s2b': "Cliquez ou glissez-déposez. PDF uniquement.",
+    'ct-s3t': 'Envoyer', 'ct-s3b': "Confirmation avec adresses destinataire et copie.",
+    'ct-dest-title': 'Destinataires automatiques', 'ct-d2b': 'Votre adresse email @liberty-int.com',
+    'ci-eyebrow': 'Module · Comms internes', 'ci-title': 'Comms internes',
+    'ci-desc': "Génère et envoie des emails internes à l'équipe FIT : info prestataire ou récap astreinte.",
+    'ci-types-title': 'Deux modes', 'ci-t1': 'Info prestataire',
+    'ci-t1b': "Communiquer une information sur un prestataire : tarif, fermeture, info opérationnelle.",
+    'ci-t2': 'Récap astreinte', 'ci-t2b': "Résumé d'astreinte avec incidents : date, dossier, description, résolution.",
+    'ci-s1t': 'Choisir le mode', 'ci-s1b': '"Info presta" ou "Récap astreinte". Le formulaire s\'adapte.',
+    'ci-s2t': 'Remplir le formulaire', 'ci-s2b': "Pour le récap : ajoutez les incidents via '+ Ajouter un incident'.",
+    'ci-s3t': 'Générer le mail', 'ci-s3b': "Rob rédige le mail à partir de vos données.",
+    'ci-s4t': 'Modifier et envoyer', 'ci-s4b': "Utilisez ✏ pour modifier. Cliquez sur 'Envoyer à l'équipe'.",
+    'pm-eyebrow': 'Gestion', 'pm-title': 'Permissions et accès',
+    'pm-desc': "L'accès aux fonctionnalités est contrôlé par l'administrateur. Chaque utilisateur a un niveau et des permissions granulaires.",
+    'pm-levels-title': "Niveaux d'accès",
+    'pm-l1b': 'Accès complet + console d\'administration.', 'pm-l2b': 'Accès aux modules autorisés.', 'pm-l3b': 'Accès limité pour démonstration.',
+    'pm-th1': 'Fonctionnalité', 'pm-th2': 'Admin', 'pm-th3': 'Actif', 'pm-th4': 'Explorateur',
+    'pm-r1': 'Agent Kensington', 'pm-r2': 'Agent Quotes', 'pm-r3': 'Aperçu mails', 'pm-r4': 'Envoi mails',
+    'pm-r5': 'Compta', 'pm-r6': 'Quotes DOCX', 'pm-r7': 'Alfred', 'pm-r8': 'Console Admin',
+    'tip-pm-label': 'Modification :', 'tip-pm-text': "Les permissions sont gérées en temps réel. Si une fonctionnalité est grisée, elle n'est pas activée sur votre compte. Contactez Antoine.",
+    'fq-eyebrow': 'Support', 'fq-title': 'Questions fréquentes', 'fq-desc': "Réponses aux situations les plus fréquemment rencontrées.",
+    'co-err1-badge': 'Incorrect', 'co-err2-badge': 'Inactif',
+    'pm-l1': 'Admin', 'pm-l2': 'Actif', 'pm-l3': 'Explorateur',
+    'ct-d1': 'Destinataire', 'ct-d2': 'Copie',
+  },
+  en: {
+    'sb-sub-text': 'User guide',
+    'sb-s1': 'Introduction', 'sb-s2': 'Modules', 'sb-s3': 'Management',
+    'n-welcome': 'Welcome', 'n-connexion': 'Sign in', 'n-interface': 'Interface',
+    'n-alfred': 'Alfred', 'n-kensington': 'Kensington Agent', 'n-quotes': 'Quotes Agent',
+    'n-mails': 'Availability emails', 'n-quotesdocx': 'Quotes DOCX', 'n-compta': 'Accounting',
+    'n-comms': 'Internal comms', 'n-permissions': 'Permissions', 'n-faq': 'FAQ',
+    'ht-tagline': 'AI Agent · Liberty Incentives & Congresses France',
+    'we-eyebrow': 'User guide', 'we-title': 'Welcome to Rob',
+    'we-desc': 'Rob is the internal AI tool of the Liberty Incentives & Congresses FIT team. It automates repetitive tasks — from reading TMTs to sending supplier emails — freeing up time for higher-value work.',
+    'we-ct1': 'What Rob does for you',
+    'wm-alfred': 'Email analysis · prioritised tasks', 'wm-kensington': 'TMT → coordination sheet + supplier emails',
+    'wm-quotes': 'Brief → itinerary + client programme', 'wm-mails': 'Guides, hotels · automatic sending',
+    'wm-docx': 'Standardised Word quote · Liberty branding', 'wm-compta': 'Invoice sending · invoices.france',
+    'wm-comms': 'Supplier info · on-call recap',
+    'tip-nav-label': 'Navigation:', 'tip-nav-text': 'Use the left menu to go directly to any module. The guide is available in French and English.',
+    'co-eyebrow': 'Access', 'co-title': 'Signing into Rob',
+    'co-desc': 'Rob is accessible via any browser, no installation required. Your login and password are assigned by the administrator.',
+    'co-s1t': 'Go to the URL', 'co-s1b': 'Open fonfreydeantoine.github.io/liberty-fit-agent/ in any browser. No installation needed.',
+    'co-s2t': 'Select your login', 'co-s2b': 'Use the dropdown to choose your username (format firstname.lastname).',
+    'co-s3t': 'Enter your password', 'co-s3b': 'Type your password and press Enter or click Sign in. Contact Antoine if you forget it.',
+    'co-s4t': 'Interface loaded', 'co-s4b': 'You land directly on the module grid. Your name appears at the bottom. Available modules depend on your permissions.',
+    'co-err-title': 'Error messages', 'co-err1-text': 'Unrecognised login or password. Check the input or contact the admin.',
+    'co-err2-text': 'Account not yet activated. The administrator must enable your account from the admin console.',
+    'if-eyebrow': 'Getting started', 'if-title': 'The Rob interface',
+    'if-desc': 'The interface has four areas: the top bar (status), the module grid (navigation), the results area (generated outputs), and the session history.',
+    'if-header-title': 'Top bar', 'if-header-body': "Rob's logo is shown top left. The green dot confirms connection to AI services. Your name, role, and sign-out button are at the bottom.",
+    'if-grid-title': 'Module grid', 'if-grid-body': 'Each button activates a module and shows its input panel below. The active module is highlighted in yellow. Alfred appears as a hero card above the grid.',
+    'if-panel-title': 'Results area', 'if-panel-body': 'After generation, results appear in tabs below the input. A Copy button transfers the content. New file resets the module.',
+    'if-history-title': 'Session history', 'if-history-body': 'Rob keeps a persistent history of your last 8 processed files (Kensington Agent and Quotes Agent). Tied to your login, it survives tab closure and is accessible from any device using the same account. Click an entry to reload the file results.',
+    'tip-if-label': 'Good to know:', 'tip-if-text': 'Modules are independent. You can switch between them without losing results already generated in the current session.',
+    'al-eyebrow': 'Module · Alfred', 'al-desc': 'Alfred connects to your mailbox and analyses unread emails. It generates a prioritised task list with suggested replies, directly in Rob. It is the recommended starting point at the beginning of each day.',
+    'al-use-title': 'When to use it', 'al-use-body': 'At the start of the day or after time away. Alfred replaces linear inbox reading and gives you a clear view in seconds of what needs urgent action.',
+    'al-s1t': 'Click "Analyse my emails"', 'al-s1b': 'The CTA button is in the Alfred card at the top of the interface. The analysis starts automatically. The icon pulses during processing.',
+    'al-s2t': 'Wait 10 to 20 seconds', 'al-s2b': 'Alfred queries your mailbox via Make, analyses each email with Claude, and structures the results. Duration depends on the volume of unread messages.',
+    'al-s3t': 'Read the analysis by priority level', 'al-s3b': 'Results appear in colour-coded sections. A global summary precedes the emails sorted into 4 levels.',
+    'al-p1b': 'Action required today. Blocking client follow-ups, urgent operational questions, any email whose unanswered status impacts an active file.',
+    'al-p2b': 'To be handled today or tomorrow. Requires follow-up, new non-urgent requests, replies with no immediate blocking impact.',
+    'al-p3b': 'Useful information with no pressing deadline. Can be handled at end of day without operational risk.',
+    'al-p4b': 'Newsletters, automated notifications, acknowledgements. Alfred groups them so you do not have to read each one.',
+    'al-s4t': 'Use the suggested replies', 'al-s4b': "For Urgent or Important emails, Alfred suggests a draft reply. Copy it via 'Copy this draft', paste into your email client, and adjust as needed.",
+    'al-limits-title': 'Connection and upcoming changes', 'al-limits-body': 'Alfred is currently connected to the Gmail inbox linked to your Liberty login. Connection to the Outlook @liberty-int.com mailbox is planned once IT authorisation is granted via Azure AD.',
+    'tip-al-label': 'Tip:', 'tip-al-text': '"New analysis" resets Alfred. "Copy analysis" exports all results as plain text, useful for archiving the day\'s triage.',
+    'kt-eyebrow': 'Module · Kensington', 'kt-title': 'Kensington Agent',
+    'kt-desc': 'The Kensington agent reads a pasted TMT (Travel Management Tool), and automatically generates a structured coordination sheet plus the corresponding supplier emails.',
+    'kt-use-title': 'What the module produces',
+    'kt-o1': 'Coordination sheet', 'kt-o1b': 'Day-by-day summary: suppliers, schedules, contacts, watch points.',
+    'kt-o2': 'Supplier emails', 'kt-o2b': 'One email per supplier, ready to send, with group details (PAX, names, schedules).',
+    'kt-s1t': 'Copy the TMT content', 'kt-s1b': 'From the Kensington document, select and copy all text for the France days. No need to clean the formatting.',
+    'kt-s2t': 'Paste into the input field', 'kt-s2b': 'Select the module and paste. Click "Generate sheet and emails".',
+    'kt-s3t': 'Wait 30 to 60 seconds', 'kt-s3b': 'A loading indicator confirms Rob is processing the document.',
+    'kt-s4t': 'Review the sheet and emails', 'kt-s4b': 'Results in 2 tabs: Coordination sheet and Supplier emails. Each email shows the service, recipient, and body.',
+    'kt-merge-title': 'Email merge feature', 'kt-merge-desc': 'If multiple services are handled by the same supplier, Rob can merge the emails into a single coherent message.',
+    'kt-ma-t': 'Select the emails', 'kt-ma-b': 'Check the boxes (minimum 2). The merge bar appears automatically.',
+    'kt-mb-t': 'Click "Merge into 1 email"', 'kt-mb-b': 'Rob generates a single email with all services as numbered sections.',
+    'tip-kt-label': 'Best practice:', 'tip-kt-text': 'Copy from the first to the last France day. The more complete the content, the more accurate the sheet.',
+    'qt-eyebrow': 'Module · Quotes', 'qt-title': 'Quotes Agent',
+    'qt-desc': 'The Quotes agent turns a client brief — however vague or detailed, in English or French — into an internal sheet, a premium client programme, a client reply email, a checklist, and a questions email if the brief is insufficient.',
+    'qt-out-title': 'The 5 outputs',
+    'qt-o1': 'Internal sheet', 'qt-o1b': 'Structured summary: dates, PAX, requests, constraints, sourcing needs.',
+    'qt-o2': 'Client programme', 'qt-o2b': 'Day-by-day itinerary in English, premium tone, ready to send.',
+    'qt-o4': 'Client reply', 'qt-o4b': 'Acknowledgement email ready to paste into Outlook.',
+    'qt-o5': 'Checklist', 'qt-o5b': 'File-specific actions deduced by Rob. Tickable directly in the interface.',
+    'qt-o3': 'Questions email', 'qt-o3b': 'If the brief is insufficient, Rob generates a targeted follow-up email.',
+    'qt-s1t': 'Paste the client brief', 'qt-s1b': 'Kensington, other agency, or direct client. English or French accepted.',
+    'qt-s2t': 'Click "Generate itinerary"', 'qt-s2b': 'Processing takes 30 to 60 seconds.',
+    'qt-s3t': 'Navigate between tabs', 'qt-s3b': 'If the brief is complete: Internal sheet, Client programme, Client reply and Checklist. Otherwise, the Questions email tab is highlighted.',
+    'qt-warn': 'If the "Questions email" tab is marked Incomplete, send that email to the client first. Rob has detected missing information.',
+    'qt-acte2-title': 'Resuming a file — Act 2',
+    'qt-acte2-desc': 'Once supplier rates are collected, Rob generates the final quote email. This block only appears when the initial brief was sufficient and an internal sheet was generated.',
+    'qt-a2-at': 'Find the "Resume this file" block', 'qt-a2-ab': 'It appears below the results area after a successful generation, with a yellow left border.',
+    'qt-a2-bt': 'Paste the collected rates', 'qt-a2-bb': 'Free format: table, list, or supplier email. E.g. Guide D1-D2: EUR 480 / CDG transfer: EUR 220.',
+    'qt-a2-ct': 'Click "Generate quote"', 'qt-a2-cb': 'Rob produces a final quote email integrating rates into the programme structure. Copy and adjust before sending.',
+    'md-eyebrow': 'Module · Availability emails', 'md-title': 'Availability emails',
+    'md-desc': 'Send availability requests to guides, assistants, or hotels. The email is built automatically from a structured form and sent via Gmail.',
+    'md-types-title': 'Recipient types',
+    'md-t1': 'Availability request for one or more guided services.', 'md-t2': 'Same as guide, for a local assistant.',
+    'md-t3': 'Supplier such as ticketing, transfers, etc.', 'md-t4': 'Request at contracted rate with stay details.',
+    'md-t5': 'Availability and best net rate request, with flexible cancellation terms.',
+    'md-s1t': 'Select the type', 'md-s1b': 'Click the recipient type. The form adapts accordingly.',
+    'md-s2t': 'Fill in the form', 'md-s2b': 'Name, email, PAX, traveller names, phone. Add as many service blocks as needed.',
+    'md-s3t': 'Preview before sending', 'md-s3b': '"Preview" generates and shows the email. Edit via ✏ before sending.',
+    'md-s4t': 'Send', 'md-s4b': 'Sent via Make/Gmail. Confirmation message with recipient address.',
+    'tip-md-label': 'Editing:', 'tip-md-text': "Click ✏ to enter edit mode. Modify the subject and body before sending.",
+    'qd-eyebrow': 'Module · Quotes DOCX', 'qd-title': 'Quotes DOCX',
+    'qd-desc': 'Generates a standardised Word quote (.docx) in the Liberty brand template.',
+    'qd-s1t': 'Fill in quote details', 'qd-s1b': 'Client, reference, destination/title, PAX, date, validity, optional intro message.',
+    'qd-s2t': 'Add services', 'qd-s2b': 'Label, category, description, date, all-inclusive price, inclusions, exclusions.',
+    'qd-s3t': 'Terms and conditions', 'qd-s3b': 'Booking and cancellation terms, notes. Default values are pre-filled.',
+    'qd-s4t': 'Generate DOCX', 'qd-s4b': 'File generated in the browser and downloaded automatically.',
+    'tip-qd-label': 'Generated content:', 'tip-qd-text': 'Title page, services table with individual prices, budget summary, T&Cs. Total calculated automatically.',
+    'ct-eyebrow': 'Module · Accounting', 'ct-title': 'Accounting',
+    'ct-desc': 'Send PDF invoices to the Liberty accounting department with file metadata.',
+    'ct-s1t': 'Fill in the fields', 'ct-s1b': 'Subject, file number, amount, date, holder name.',
+    'ct-s2t': 'Attach the PDF invoice', 'ct-s2b': 'Click or drag and drop. PDF only.',
+    'ct-s3t': 'Send', 'ct-s3b': 'Confirmation shows recipient and CC addresses.',
+    'ct-dest-title': 'Automatic recipients', 'ct-d2b': 'Your @liberty-int.com email address',
+    'ci-eyebrow': 'Module · Internal comms', 'ci-title': 'Internal comms',
+    'ci-desc': 'Generates and sends internal emails to the FIT team: supplier info or on-call recap.',
+    'ci-types-title': 'Two modes', 'ci-t1': 'Supplier info',
+    'ci-t1b': 'Share information about a supplier: new rate, closure, operational update.',
+    'ci-t2': 'On-call recap', 'ci-t2b': 'On-call summary with incidents: date, file number, description, resolution.',
+    'ci-s1t': 'Choose the mode', 'ci-s1b': '"Supplier info" or "On-call recap". The form adapts.',
+    'ci-s2t': 'Fill in the form', 'ci-s2b': 'For a recap: add incidents via "+ Add incident".',
+    'ci-s3t': 'Generate the email', 'ci-s3b': 'Rob writes the email from your data.',
+    'ci-s4t': 'Edit and send', 'ci-s4b': 'Use ✏ to edit. Click "Send to team".',
+    'pm-eyebrow': 'Management', 'pm-title': 'Permissions and access',
+    'pm-desc': 'Access to features is controlled by the administrator. Each user has a level and granular per-module permissions.',
+    'pm-levels-title': 'Access levels',
+    'pm-l1b': 'Full access + admin console.', 'pm-l2b': 'Access to permitted modules.', 'pm-l3b': 'Limited access for onboarding or demo.',
+    'pm-th1': 'Feature', 'pm-th2': 'Admin', 'pm-th3': 'Active', 'pm-th4': 'Explorer',
+    'pm-r1': 'Kensington Agent', 'pm-r2': 'Quotes Agent', 'pm-r3': 'Email preview', 'pm-r4': 'Email sending',
+    'pm-r5': 'Accounting', 'pm-r6': 'Quotes DOCX', 'pm-r7': 'Alfred', 'pm-r8': 'Admin console',
+    'tip-pm-label': 'Changes:', 'tip-pm-text': 'Permissions are managed in real time. If a feature is greyed out, it is not enabled on your account. Contact Antoine.',
+    'fq-eyebrow': 'Support', 'fq-title': 'Frequently asked questions', 'fq-desc': 'Answers to the most common situations.',
+    'co-err1-badge': 'Incorrect', 'co-err2-badge': 'Inactive',
+    'pm-l1': 'Admin', 'pm-l2': 'Active', 'pm-l3': 'Explorer',
+    'ct-d1': 'Recipient', 'ct-d2': 'CC',
+  }
+};
+
+const FAQ = {
+  fr: [
+    { q: "Rob ne répond pas après 2 minutes", a: "Vérifiez votre connexion internet. Si le problème persiste, le scénario Make est peut-être inactif. Contactez Antoine." },
+    { q: "La fiche Kensington est vide ou incomplète", a: "Le TMT doit contenir les jours France complets. Vérifiez que vous avez bien copié depuis le début du séjour France. Certains formats de TMT peuvent nécessiter un copier-coller manuel depuis Word." },
+    { q: "Mon mail n'est pas arrivé chez le destinataire", a: "Vérifiez l'adresse email saisie. Les mails sont envoyés depuis l'adresse @liberty-int.com associée à votre identifiant. Vérifiez les spams du destinataire si nécessaire." },
+    { q: "Je vois 'Certaines fonctionnalités sont désactivées'", a: "Une bannière orange s'affiche si votre compte ne dispose pas de toutes les permissions. Les modules ou boutons concernés sont grisés. Contactez Antoine pour les activer." },
+    { q: "Le fichier DOCX ne se télécharge pas", a: "Assurez-vous que les popups ne sont pas bloqués dans votre navigateur. Le téléchargement est déclenché directement depuis le navigateur, sans passer par Make." },
+    { q: "Comment réinitialiser un module ?", a: "Chaque module dispose d'un bouton 'Nouveau dossier' ou 'Nouveau brief' qui remet le formulaire et les résultats à zéro." },
+    { q: "Comment modifier un mail avant envoi ?", a: "Dans les modules Mails dispo et Comms internes, cliquez sur ✏ Modifier après avoir généré l'aperçu. Un éditeur riche permet de modifier l'objet et le corps." },
+    { q: "L'historique de session ne montre pas mon dernier dossier", a: "L'historique est mis à jour après chaque génération réussie. Si un dossier n'apparait pas, vérifiez que la génération s'est bien terminée (résultats affichés dans les onglets). L'historique est limité aux 8 derniers dossiers par identifiant." },
+  ],
+  en: [
+    { q: "Rob is not responding after 2 minutes", a: "Check your internet connection. If the issue persists, the Make scenario may be inactive. Contact Antoine." },
+    { q: "The Kensington sheet is empty or incomplete", a: "The TMT must contain the complete France days. Make sure you copied from the start of the France stay. Some TMT formats may require a manual copy-paste from Word." },
+    { q: "My email did not reach the recipient", a: "Check the email address entered. Emails are sent from the @liberty-int.com address linked to your login. Check the recipient's spam folder if needed." },
+    { q: "I see 'Some features are disabled'", a: "An orange banner appears if your account does not have all permissions. Affected modules or buttons are greyed out. Contact Antoine to enable them." },
+    { q: "The DOCX file is not downloading", a: "Make sure pop-ups are not blocked in your browser. The download is triggered directly by the browser, without going through Make." },
+    { q: "How do I reset a module?", a: "Each module has a 'New file' or 'New brief' button that clears the form and results." },
+    { q: "How do I edit an email before sending?", a: "In the Availability emails and Internal comms modules, click ✏ Edit after generating the preview. A rich editor lets you modify the subject and body." },
+    { q: "The session history is not showing my last file", a: "The history updates after each successful generation. If a file is missing, check that generation completed fully (results visible in tabs). History is limited to the last 8 files per login." },
+  ]
+};
+
+function setLang(l) {
+  lang.current = l;
+  document.getElementById('lang-fr').classList.toggle('active', l === 'fr');
+  document.getElementById('lang-en').classList.toggle('active', l === 'en');
+  const t = T[l];
+  Object.entries(t).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  });
+  renderFAQ();
+}
+
+function renderFAQ() {
+  const container = document.getElementById('faq-items');
+  container.innerHTML = '';
+  FAQ[lang.current].forEach((item, i) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'background:var(--g2);border:0.5px solid var(--g4);border-radius:10px;margin-bottom:10px;overflow:hidden';
+    div.innerHTML = `
+      <div onclick="toggleFaq(${i})" style="padding:16px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <span style="font-family:var(--ft);font-size:13px;font-weight:600;color:var(--gw)">${item.q}</span>
+        <span id="faq-icon-${i}" style="font-size:16px;color:var(--g6);flex-shrink:0;transition:transform 0.2s">+</span>
+      </div>
+      <div id="faq-body-${i}" style="display:none;padding:0 20px 16px;font-size:13px;color:var(--g8);line-height:1.7">${item.a}</div>`;
+    container.appendChild(div);
+  });
+}
+
+function toggleFaq(i) {
+  const body = document.getElementById('faq-body-' + i);
+  const icon = document.getElementById('faq-icon-' + i);
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  icon.textContent = open ? '+' : '−';
+}
+
+function showSection(id) {
+  document.querySelectorAll('.guide-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById('section-' + id);
+  const nav = document.getElementById('nav-' + id);
+  if (sec) sec.classList.add('active');
+  if (nav) nav.classList.add('active');
+  document.querySelector('.main').scrollTop = 0;
+  updateProgress(id);
+}
+
+const sectionOrder = ['welcome','connexion','interface','alfred','kensington','quotes','mails','quotesdocx','compta','comms','permissions','faq'];
+
+function updateProgress(id) {
+  const idx = sectionOrder.indexOf(id);
+  const pct = Math.round(((idx + 1) / sectionOrder.length) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+renderFAQ();
+updateProgress('welcome');
+</script>
