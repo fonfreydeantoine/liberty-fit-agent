@@ -1,0 +1,7 @@
+# Données sensibles catalogue prestataires
+# Ces fichiers contiennent des credentials acces_plateforme en clair
+tools/catalog_import/batch_*.sql
+tools/catalog_import/catalog_normalized.json
+
+# Dépendances Node
+node_modules/

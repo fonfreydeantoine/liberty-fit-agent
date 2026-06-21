@@ -1,0 +1,210 @@
+[
+  {
+    "location": "Paris",
+    "region": "Meet & Greet"
+  },
+  {
+    "location": "Bordeaux",
+    "region": "Meet & Greet"
+  },
+  {
+    "location": "Lyon",
+    "region": "Meet & Greet"
+  },
+  {
+    "location": "Paris",
+    "region": "Paris"
+  },
+  {
+    "location": "Colmar",
+    "region": "Alsace"
+  },
+  {
+    "location": "Strasbourg",
+    "region": "Alsace"
+  },
+  {
+    "location": "Breisach",
+    "region": "Alsace"
+  },
+  {
+    "location": "Kehl",
+    "region": "Alsace"
+  },
+  {
+    "location": "Bordeaux",
+    "region": "Aquitaine"
+  },
+  {
+    "location": "Sarlat",
+    "region": "Aquitaine"
+  },
+  {
+    "location": "Blaye",
+    "region": "Aquitaine"
+  },
+  {
+    "location": "Bourg",
+    "region": "Aquitaine"
+  },
+  {
+    "location": "Cadillac",
+    "region": "Aquitaine"
+  },
+  {
+    "location": "Lyon",
+    "region": "Rhône-Alpes"
+  },
+  {
+    "location": "Vienne",
+    "region": "Rhône-Alpes"
+  },
+  {
+    "location": "Annecy",
+    "region": "Rhône-Alpes"
+  },
+  {
+    "location": "Chamonix",
+    "region": "Rhône-Alpes"
+  },
+  {
+    "location": "Viviers",
+    "region": "Rhône-Alpes"
+  },
+  {
+    "location": "Tournon",
+    "region": "Rhône-Alpes"
+  },
+  {
+    "location": "Beaune",
+    "region": "Bourgogne"
+  },
+  {
+    "location": "Dijon",
+    "region": "Bourgogne"
+  },
+  {
+    "location": "Chalon sur Saône",
+    "region": "Bourgogne"
+  },
+  {
+    "location": "Reims",
+    "region": "Champagne"
+  },
+  {
+    "location": "Amboise",
+    "region": "Loire"
+  },
+  {
+    "location": "Chambord",
+    "region": "Loire"
+  },
+  {
+    "location": "Cheverny",
+    "region": "Loire"
+  },
+  {
+    "location": "Cussac-Fort-Médoc",
+    "region": "Loire"
+  },
+  {
+    "location": "Mâcon",
+    "region": "Loire"
+  },
+  {
+    "location": "Tournus",
+    "region": "Loire"
+  },
+  {
+    "location": "Tours",
+    "region": "Loire"
+  },
+  {
+    "location": "Audrieu",
+    "region": "Normandie"
+  },
+  {
+    "location": "Bayeux",
+    "region": "Normandie"
+  },
+  {
+    "location": "Caen",
+    "region": "Normandie"
+  },
+  {
+    "location": "Deauville",
+    "region": "Normandie"
+  },
+  {
+    "location": "Honfleur",
+    "region": "Normandie"
+  },
+  {
+    "location": "Cabourg",
+    "region": "Normandie"
+  },
+  {
+    "location": "Port en Bessin",
+    "region": "Normandie"
+  },
+  {
+    "location": "Aix en Provence",
+    "region": "Provence"
+  },
+  {
+    "location": "Avignon",
+    "region": "Provence"
+  },
+  {
+    "location": "Marseille",
+    "region": "Provence"
+  },
+  {
+    "location": "Arles",
+    "region": "Provence"
+  },
+  {
+    "location": "Viviers",
+    "region": "Provence"
+  },
+  {
+    "location": "Lourdes",
+    "region": "Roussillon"
+  },
+  {
+    "location": "Toulouse",
+    "region": "Roussillon"
+  },
+  {
+    "location": "Nice",
+    "region": "Sud"
+  },
+  {
+    "location": "Cannes",
+    "region": "Sud"
+  },
+  {
+    "location": "Libourne",
+    "region": "Sud"
+  },
+  {
+    "location": "Tournon",
+    "region": "Sud"
+  },
+  {
+    "location": "Dinard",
+    "region": "Bretagne"
+  },
+  {
+    "location": "Saint-Malo",
+    "region": "Bretagne"
+  },
+  {
+    "location": "Monaco",
+    "region": "Monaco & Saint-Tropez"
+  },
+  {
+    "location": "Saint-Tropez",
+    "region": "Monaco & Saint-Tropez"
+  }
+]
